@@ -1,4 +1,4 @@
-export default function Cell({ cell_index, isJunction, index }) {
+export default function Cell({ cell_index, isJunction, index, test }) {
   return (
     <td className={isJunction ? "junction" : null}>
       <span className="acrossBox"></span>

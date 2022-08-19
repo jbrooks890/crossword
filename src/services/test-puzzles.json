@@ -1,0 +1,309 @@
+{
+  "name": "Space",
+  "type": "Crossword",
+  "gridSize": [20, 20],
+  "version": 0,
+  "createDate": 0,
+  "answerKey": {
+    "H2": "M",
+    "P2": "P",
+    "R2": "E",
+    "G3": "E",
+    "H3": "A",
+    "I3": "R",
+    "J3": "T",
+    "K3": "H",
+    "N3": "G",
+    "O3": "A",
+    "P3": "L",
+    "Q3": "A",
+    "R3": "X",
+    "S3": "Y",
+    "H4": "R",
+    "J4": "I",
+    "P4": "U",
+    "R4": "T",
+    "H5": "S",
+    "I5": "A",
+    "J5": "T",
+    "K5": "U",
+    "L5": "R",
+    "M5": "N",
+    "O5": "S",
+    "P5": "T",
+    "Q5": "A",
+    "R5": "R",
+    "J6": "A",
+    "M6": "E",
+    "P6": "O",
+    "R6": "A",
+    "B7": "G",
+    "C7": "A",
+    "D7": "S",
+    "J7": "N",
+    "M7": "P",
+    "N7": "L",
+    "O7": "A",
+    "P7": "N",
+    "Q7": "E",
+    "R7": "T",
+    "C8": "L",
+    "E8": "S",
+    "F8": "P",
+    "G8": "A",
+    "H8": "C",
+    "I8": "E",
+    "M8": "T",
+    "P8": "I",
+    "R8": "E",
+    "C9": "I",
+    "G9": "R",
+    "K9": "T",
+    "M9": "U",
+    "P9": "A",
+    "R9": "R",
+    "C10": "E",
+    "E10": "A",
+    "G10": "M",
+    "H10": "A",
+    "I10": "R",
+    "J10": "T",
+    "K10": "I",
+    "L10": "A",
+    "M10": "N",
+    "P10": "N",
+    "R10": "R",
+    "A11": "V",
+    "B11": "E",
+    "C11": "N",
+    "D11": "U",
+    "E11": "S",
+    "G11": "S",
+    "K11": "D",
+    "M11": "E",
+    "O11": "U",
+    "R11": "E",
+    "C12": "S",
+    "E12": "T",
+    "G12": "T",
+    "K12": "A",
+    "O12": "R",
+    "R12": "S",
+    "E13": "R",
+    "G13": "R",
+    "I13": "M",
+    "J13": "I",
+    "K13": "L",
+    "L13": "K",
+    "M13": "Y",
+    "N13": "W",
+    "O13": "A",
+    "P13": "Y",
+    "R13": "T",
+    "A14": "A",
+    "B14": "S",
+    "C14": "T",
+    "D14": "R",
+    "E14": "O",
+    "G14": "O",
+    "I14": "E",
+    "L14": "R",
+    "O14": "N",
+    "R14": "R",
+    "C15": "H",
+    "E15": "L",
+    "F15": "U",
+    "G15": "N",
+    "H15": "A",
+    "I15": "R",
+    "L15": "Y",
+    "O15": "U",
+    "R15": "I",
+    "C16": "I",
+    "E16": "O",
+    "G16": "G",
+    "I16": "C",
+    "L16": "P",
+    "O16": "S",
+    "P16": "O",
+    "Q16": "L",
+    "R16": "A",
+    "S16": "R",
+    "C17": "R",
+    "E17": "G",
+    "H17": "J",
+    "I17": "U",
+    "J17": "P",
+    "K17": "I",
+    "L17": "T",
+    "M17": "E",
+    "N17": "R",
+    "R17": "L",
+    "C18": "D",
+    "D18": "A",
+    "E18": "Y",
+    "I18": "R",
+    "L18": "O",
+    "I19": "Y",
+    "L19": "N"
+  },
+  "answers": {
+    "down-H2": {
+      "group": ["H2", "H3", "H4", "H5"],
+      "sum": "MARS",
+      "hint": "The red planet; fourth from the sun."
+    },
+    "down-P2": {
+      "group": ["P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"],
+      "sum": "PLUTONIAN",
+      "hint": "A word to describe things associated with the Underworld."
+    },
+    "down-R2": {
+      "group": [
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "R8",
+        "R9",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17"
+      ],
+      "sum": "EXTRATERRESTRIAL",
+      "hint": "A synonym for alien beings not from planet Earth."
+    },
+    "down-G8": {
+      "group": ["G8", "G9", "G10", "G11", "G12", "G13", "G14", "G15", "G16"],
+      "sum": "ARMSTRONG",
+      "hint": "The last name of the first astronaut to land on the Moon."
+    },
+    "down-I13": {
+      "group": ["I13", "I14", "I15", "I16", "I17", "I18", "I19"],
+      "sum": "MERCURY",
+      "hint": "A liquid metal commonly used in thermometers."
+    },
+    "down-J3": {
+      "group": ["J3", "J4", "J5", "J6", "J7"],
+      "sum": "TITAN",
+      "hint": "Saturn's largest moon; the gods that preceded the Olympian gods of Greek mythology."
+    },
+    "down-K9": {
+      "group": ["K9", "K10", "K11", "K12", "K13"],
+      "sum": "TIDAL",
+      "hint": "The gravitational forces of the moon that are known to cause high tide on Earth."
+    },
+    "down-O11": {
+      "group": ["O11", "O12", "O13", "O14", "O15", "O16"],
+      "sum": "URANUS",
+      "hint": "Seventh planet from the sun."
+    },
+    "down-L13": {
+      "group": ["L13", "L14", "L15", "L16", "L17", "L18", "L19"],
+      "sum": "KRYPTON",
+      "hint": "The fictional home planet of Superman; a chemical element with an atomic number of 36."
+    },
+    "down-M5": {
+      "group": ["M5", "M6", "M7", "M8", "M9", "M10", "M11"],
+      "sum": "NEPTUNE",
+      "hint": "The Roman equivalent of Poseidon."
+    },
+    "down-C7": {
+      "group": ["C7", "C8", "C9", "C10", "C11", "C12"],
+      "sum": "ALIENS",
+      "hint": "Extraterrestrial beings from outer space."
+    },
+    "down-C14": {
+      "group": ["C14", "C15", "C16", "C17", "C18"],
+      "sum": "THIRD",
+      "hint": "The order in which Earth is furthest from the sun."
+    },
+    "down-E10": {
+      "group": ["E10", "E11", "E12", "E13", "E14", "E15", "E16", "E17", "E18"],
+      "sum": "ASTROLOGY",
+      "hint": "The study of the movements and relative positions of celestial bodies."
+    },
+    "across-G3": {
+      "group": ["G3", "H3", "I3", "J3", "K3"],
+      "sum": "EARTH",
+      "hint": "The only planet in the Milky Way currently known to be able to support human life."
+    },
+    "across-N3": {
+      "group": ["N3", "O3", "P3", "Q3", "R3", "S3"],
+      "sum": "GALAXY",
+      "hint": "The Milky Way"
+    },
+    "across-H5": {
+      "group": ["H5", "I5", "J5", "K5", "L5", "M5"],
+      "sum": "SATURN",
+      "hint": "A large gas giant planet circled by rings of asteroids."
+    },
+    "across-O5": {
+      "group": ["O5", "P5", "Q5", "R5"],
+      "sum": "STAR",
+      "hint": "A celestial body that emits light."
+    },
+    "across-B7": {
+      "group": ["B7", "C7", "D7"],
+      "sum": "GAS",
+      "hint": "The largest planets in the Milky Way solar system are known as this type of giant."
+    },
+    "across-M7": {
+      "group": ["M7", "N7", "O7", "P7", "Q7", "R7"],
+      "sum": "PLANET",
+      "hint": "A large celestial body that orbits a star."
+    },
+    "across-E8": {
+      "group": ["E8", "F8", "G8", "H8", "I8"],
+      "sum": "SPACE",
+      "hint": "The highway between planets."
+    },
+    "across-G10": {
+      "group": ["G10", "H10", "I10", "J10", "K10", "L10", "M10"],
+      "sum": "MARTIAN",
+      "hint": "A word to describe anything associated with the planet Mars."
+    },
+    "across-A11": {
+      "group": ["A11", "B11", "C11", "D11", "E11"],
+      "sum": "VENUS",
+      "hint": "The Roman goddess of love."
+    },
+    "across-I13": {
+      "group": ["I13", "J13", "K13", "L13", "M13", "N13", "O13", "P13"],
+      "sum": "MILKYWAY",
+      "hint": "The candy bar that stole its name from our galaxy."
+    },
+    "across-A14": {
+      "group": ["A14", "B14", "C14", "D14", "E14"],
+      "sum": "ASTRO",
+      "hint": "A prefix to describe things associated with space and celestial bodies."
+    },
+    "across-E15": {
+      "group": ["E15", "F15", "G15", "H15", "I15"],
+      "sum": "LUNAR",
+      "hint": "Describes anything associated with the Moon."
+    },
+    "across-O16": {
+      "group": ["O16", "P16", "Q16", "R16", "S16"],
+      "sum": "SOLAR",
+      "hint": "Describes anything associated with the Sun."
+    },
+    "across-H17": {
+      "group": ["H17", "I17", "J17", "K17", "L17", "M17", "N17"],
+      "sum": "JUPITER",
+      "hint": "The largest planet in the Milky Way galaxy; has a giant red spot."
+    },
+    "across-C18": {
+      "group": ["C18", "D18", "E18"],
+      "sum": "DAY",
+      "hint": "One rotation of the Earth."
+    }
+  }
+}

@@ -1,38 +1,99 @@
+@font-face {
+  font-family: 'Russo';
+  src: url(/src/assets/fonts/RussoOne-Regular.ttf);
+}
+
+:root{
+  --grid: 48px;
+  /* --------- COLORS --------- */
+  --lite: white;
+  --faint: hsla(0,0%,0%,0.1);
+  --keyFont: 'Russo', sans-serif;
+  font-size: 18px;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+::-webkit-scrollbar {
+  display: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a, a:visited {
+  text-decoration: none;
+  color: inherit;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+a:hover, a:focus {
+  color: inherit;
+}
+
+h1, h2{
+  font-family: var(--keyFont);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+input {
+  appearance: none;
+  border: 2px solid hsla(0, 0%, 0%, 0.1);
+}
+
+header, footer {
+  background-color: silver;
+  padding: 1rem 2rem;
+  color: var(--lite);
+}
+
+header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  box-shadow: 0 1px 2px var(--faint);
+}
+
+main {
+  padding-block: 2rem;
+}
+
+/* --------- NAV --------- */
+nav a {
+  font-family: var(--keyFont);
+  letter-spacing: 0.1em;
+}
+
+nav a:not(:last-of-type){
+  margin-right: 1em;
+}
+
+#cw-grid {
+  margin: 0 auto;
+  padding: 1rem;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+}
+
+.cell {
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  width: var(--grid);
+  height: var(--grid);
+  caret-color: transparent;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1em;
+  box-sizing: border-box;
+  border-radius: 5px;
 }
 
-.App-link {
-  color: #61dafb;
+input.cell::placeholder {
+  background-color: transparent;
+  color: hsla(0,0%,0%,0.1);
+  font-weight: 600;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cell::selection {
+  background-color: var(--faint);
 }

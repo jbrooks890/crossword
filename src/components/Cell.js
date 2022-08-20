@@ -1,16 +1,19 @@
-export default function Cell({ cell_index, isJunction, index, test }) {
+export default function Cell({ cell_name, isJunction, index, answer }) {
   return (
-    <td className={isJunction ? "junction" : null}>
-      <span className="acrossBox"></span>
-      <span className="downBox"></span>
+    <td id={cell_name} className={isJunction ? "junction" : null + "cell"}>
+      <span className="acrossBox axis-box"></span>
+      <span className="downBox axis-box"></span>
       <input
-        className={`cell ${cell_index}`}
+        className={`cell-input ${cell_name} ${answer ? "show" : null}`}
         type="text"
         size="1"
         maxLength="1"
+        tabIndex="-1"
         // placeholder={index.join("-")}
-        placeholder={cell_index}
+        // placeholder={cell_name}
+        placeholder={answer ? answer : cell_name} // TODO: remove
         onFocus={e => e.currentTarget.select()}
+        data-coords={String(index.join("-"))}
       />
     </td>
   );

@@ -75,6 +75,10 @@ nav a:not(:last-of-type){
 }
 
 .cell {
+  position: relative;
+}
+
+.cell-input {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,12 +92,28 @@ nav a:not(:last-of-type){
   border-radius: 5px;
 }
 
-input.cell::placeholder {
+.cell-input::placeholder {
   background-color: transparent;
-  color: hsla(0,0%,0%,0.1);
+  color: hsla(0, 0%, 0%, 0.1);
   font-weight: 600;
 }
 
-.cell::selection {
+.cell-input::selection {
   background-color: var(--faint);
+}
+
+.cell-input.show::placeholder {
+  color: hsl(240, 100%, 75%);
+}
+
+.axis-box {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  /* border: 2px dashed cyan; */
+  z-index: -1;
 }

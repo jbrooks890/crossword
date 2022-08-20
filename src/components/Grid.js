@@ -10,16 +10,23 @@ export default function Grid({ gridWidth, gridHeight, editorMode, answerKey }) {
     return String.fromCharCode(first + n).toUpperCase();
   };
 
-  // console.log(getLetter(3));
+  console.log(answerKey);
 
   const drawGrid = () => {
     let rows = [];
     let count = 0;
-    for (let x = 0; x < gridHeight; x++) {
+    for (let y = 0; y < gridHeight; y++) {
       let row = [];
-      for (let y = 0; y < gridWidth; y++) {
+      for (let x = 0; x < gridWidth; x++) {
+        const cellName = getLetter(x) + y;
         row.push(
-          <Cell key={count++} cell_index={getLetter(x) + y} index={[x, y]} />
+          <Cell
+            key={count++}
+            cell_name={cellName}
+            isJunction={false}
+            index={[x, y]}
+            answer={answerKey[cellName] ? answerKey[cellName] : null}
+          />
         );
       }
       rows.push(row);

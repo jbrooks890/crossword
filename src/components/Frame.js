@@ -13,6 +13,7 @@ export default function Frame({ puzzle }) {
         gridWidth={gridWidth}
         gridHeight={gridHeight}
         editorMode={editorMode}
+        answerKey={puzzle.answerKey}
       />
       <HintCache />
       <ButtonCache />

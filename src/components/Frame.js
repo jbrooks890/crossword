@@ -6,6 +6,7 @@ import HintCache from "./HintCache";
 export default function Frame({ puzzle }) {
   const [editorMode, setEditorMode] = useState(false);
   const [gridWidth, gridHeight] = puzzle.gridSize;
+  const { answerKey, answers } = puzzle;
 
   return (
     <form id="crossword">
@@ -13,7 +14,8 @@ export default function Frame({ puzzle }) {
         gridWidth={gridWidth}
         gridHeight={gridHeight}
         editorMode={editorMode}
-        answerKey={puzzle.answerKey}
+        answerKey={answerKey}
+        answers={answers}
       />
       <HintCache />
       <ButtonCache />

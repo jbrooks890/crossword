@@ -6,7 +6,18 @@ export default function Grid({
   editorMode,
   answerKey,
   answers,
+  cellClick,
 }) {
+  const activeCells = Object.keys(answerKey);
+  const activeCols = [];
+  const activeRows = [];
+  activeCells.forEach(cell => {
+    const [col, _row] = cell.match(/[\d\.]+|\D+/g);
+    const row = parseInt(_row);
+    !activeCols.includes(col) && activeCols.push(col);
+    !activeRows.includes(row) && activeRows.push(row);
+  });
+
   const getLetter = n => {
     const first = "a".charCodeAt(0);
     const last = "z".charCodeAt(0);
@@ -40,18 +51,37 @@ export default function Grid({
     return rows.map((row, i) => <tr key={i}>{row}</tr>);
   };
 
-  const drawGrid2 = () => {
+  const setTabOrder = () => {
+    let order = 0;
+    const groupNames = Object.keys(answers);
+    groupNames.forEach(name =>
+      answers[name].group.forEach(id => {
+        const cell = document.querySelector(`#${id}.cell`);
+        const xBox = cell.querySelector(".acrossBox");
+        const yBox = cell.querySelector(".downBox");
+        const axis = name.split("-")[0] === "across" ? xBox : yBox;
+        axis.tabIndex = order;
+        order++;
+      })
+    );
+  };
+
+  const drawPuzzle = () => {
     const totalCells = gridWidth * gridHeight;
     let count = 0;
     let cells = [];
-    let allGroups = Object.keys(answers);
+    // let allGroups = answers.map(answer => answer.group);
+    let groupNames = Object.keys(answers);
+
+    // console.log(allGroups);
 
     while (count < totalCells) {
       // 18 --> [0,1], 19 --> [1,1]
       let x = count % gridHeight;
       let y = Math.floor(count / gridWidth);
-      let cellName = getLetter(x) + y;
-      let groups = allGroups.filter(entry =>
+      let col = getLetter(x);
+      let cellName = col + y;
+      let groups = groupNames.filter(entry =>
         answers[entry].group.includes(cellName)
       );
       let display = [];
@@ -75,9 +105,6 @@ export default function Grid({
         }
       });
 
-      // display.length && console.log(cellName, display);
-      // answerKey[cellName] && console.log(groups);
-
       cells.push(
         <Cell
           key={count}
@@ -87,6 +114,8 @@ export default function Grid({
           answer={answerKey[cellName] ? answerKey[cellName] : null}
           groups={groups}
           display={display.length && display}
+          crop={!activeCols.includes(col) || !activeRows.includes(y)}
+          onClick={cellClick}
         />
       );
       count++;
@@ -102,10 +131,10 @@ export default function Grid({
       id="cw-grid"
       className="grid"
       style={{
-        gridTemplate: `repeat(${gridHeight}, 48px) / repeat(${gridWidth}, 48px)`,
+        gridTemplate: `repeat(${activeRows.length}, 48px) / repeat(${activeCols.length}, 48px)`,
       }}
     >
-      {drawGrid2()}
+      {drawPuzzle()}
     </div>
   );
 }

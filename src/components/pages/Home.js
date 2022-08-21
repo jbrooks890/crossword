@@ -4,13 +4,14 @@ import testPuzzle from "../../services/test-puzzles";
 
 export default function Home() {
   const [activePuzzle, setActivePuzzle] = useState({
-    name: "Test",
+    name: "",
     gridSize: [20, 20],
     answerKey: {},
     answers: {},
   });
   const [game, setGame] = useState({
     user: "",
+    input: { ...activePuzzle.answerKey },
     assists: [],
     startTime: 0, // Date obj
     timer: 0,
@@ -18,8 +19,6 @@ export default function Home() {
   });
 
   useEffect(() => setActivePuzzle(testPuzzle), []);
-
-  // console.log(testPuzzle);
 
   return (
     <div id="home-page">

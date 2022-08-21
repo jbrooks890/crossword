@@ -3,12 +3,17 @@
   src: url(/src/assets/fonts/RussoOne-Regular.ttf);
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
+
 :root{
   --grid: 48px;
   /* --------- COLORS --------- */
   --lite: white;
   --faint: hsla(0,0%,0%,0.1);
+  /* --------- FONTS --------- */
   --keyFont: 'Russo', sans-serif;
+  --bodyFont: 'Odibee Sans', cursive;
+  font-family: var(--bodyFont);
   font-size: 18px;
 }
 
@@ -55,7 +60,7 @@ header {
 }
 
 main {
-  padding-block: 2rem;
+  padding: 2rem;
 }
 
 /* --------- NAV --------- */
@@ -65,7 +70,14 @@ nav a {
 }
 
 nav a:not(:last-of-type){
-  margin-right: 1em;
+  margin-right: 1.5em;
+}
+
+/* --------- GRID --------- */
+#crossword {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #cw-grid {
@@ -77,14 +89,19 @@ nav a:not(:last-of-type){
 
 #cw-grid.grid {
   display: grid;
-  grid-gap: 2px;
+  grid-gap: 4px;
   justify-content: center;
 }
 
 .cell {
   position: relative;
   /* display: none; */
-  /* visibility: hidden; */
+  visibility: hidden;
+}
+
+.cell.crop {
+  /* background-color: black; */
+  display: none;
 }
 
 .cell.show {
@@ -93,12 +110,17 @@ nav a:not(:last-of-type){
 }
 
 .cell-input {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   width: var(--grid);
   height: var(--grid);
   caret-color: transparent;
+  color: hsl(215, 50%, 60%);
+  font-family: var(--keyFont);
+  font-size: large;
+  /* font-weight: 600; */
   text-align: center;
   text-transform: uppercase;
   line-height: 1em;
@@ -121,12 +143,13 @@ nav a:not(:last-of-type){
 }
 
 .axis-box {
+  --offset: -2;
   content: '';
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  top: var(--offset);
+  bottom: var(--offset);
+  left: var(--offset);
+  right: var(--offset);
   box-sizing: border-box;
   /* border: 2px dashed cyan; */
   z-index: -1;

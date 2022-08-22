@@ -7,6 +7,8 @@ export default function Grid({
   answerKey,
   answers,
   cellClick,
+  cellKeyDown,
+  controls,
 }) {
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
@@ -116,6 +118,8 @@ export default function Grid({
           display={display.length && display}
           crop={!activeCols.includes(col) || !activeRows.includes(y)}
           onClick={cellClick}
+          onKeyDown={e => cellKeyDown(e)}
+          controls={e => controls(e)}
         />
       );
       count++;

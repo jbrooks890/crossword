@@ -9,6 +9,8 @@ export default function Cell({
   display,
   crop,
   onClick,
+  onKeyDown,
+  controls,
 }) {
   const [coords, setCoords] = useState(index);
   let xGroup;
@@ -27,14 +29,10 @@ export default function Cell({
   return (
     <td
       id={cell_name}
-      // className={`cell ${answer ? "show" : ""} ${
-      //   isJunction ? "junction" : ""
-      // } ${xGroup ? "across" : ""} ${yGroup ? "down" : ""} ${
-      //   display ? display.join(" ") : ""
-      // } ${crop ? "crop" : ""}`.trim()}
       className={[
         "cell",
         answer ? "show" : null,
+        groups.length ? groups.join(" ") : null,
         isJunction ? "junction" : null,
         xGroup ? "across" : null,
         yGroup ? "down" : null,
@@ -55,7 +53,9 @@ export default function Cell({
         maxLength="1"
         tabIndex="-1"
         onFocus={e => e.currentTarget.select()}
-        onClick={() => onClick(groups[0])}
+        onClick={e => onClick(groups[0])}
+        onKeyDown={e => controls(e)}
+        onKeyUp={e => controls(e)}
         // data-coords={String(index.join("-"))}
       />
     </td>

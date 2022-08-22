@@ -8,6 +8,7 @@
 :root{
   --grid: 48px;
   /* --------- COLORS --------- */
+  --pop: hsl(215, 50%, 60%);
   --lite: white;
   --faint: hsla(0,0%,0%,0.1);
   /* --------- FONTS --------- */
@@ -111,11 +112,13 @@ nav a:not(:last-of-type){
 
 .cell-input {
   cursor: pointer;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: var(--grid);
   height: var(--grid);
+  background-color: transparent;
   caret-color: transparent;
   color: hsl(215, 50%, 60%);
   font-family: var(--keyFont);
@@ -126,6 +129,7 @@ nav a:not(:last-of-type){
   line-height: 1em;
   box-sizing: border-box;
   border-radius: 5px;
+  z-index: 1;
 }
 
 .cell-input::placeholder {
@@ -143,14 +147,56 @@ nav a:not(:last-of-type){
 }
 
 .axis-box {
-  --offset: -2;
+  --offset: -4px;
   content: '';
   position: absolute;
+  display: block;
   top: var(--offset);
   bottom: var(--offset);
   left: var(--offset);
   right: var(--offset);
   box-sizing: border-box;
   /* border: 2px dashed cyan; */
+  opacity: 0;
+  /* transition: 0.2s ease; */
   z-index: -1;
+}
+
+.axis-box.active {
+  opacity: 1;
+}
+
+/*  --------- DOWN (VERTICAL) --------- */
+
+form#crossword .down .downBox {
+  border-left: 3px solid var(--pop);
+  border-right: 3px solid var(--pop);
+}
+
+form#crossword .down.top .downBox {
+  border-top: 3px solid var(--pop);
+  border-radius: 8px 8px 0 0;
+}
+
+form#crossword .down.bottom .downBox {
+  border-bottom: 3px solid var(--pop);
+  border-radius: 0 0 8px 8px;
+}
+
+
+/*  --------- ACROSS (HORIZONTAL) --------- */
+
+form#crossword .across .acrossBox {
+  border-top: 3px solid var(--pop);
+  border-bottom: 3px solid var(--pop);
+}
+
+form#crossword .across.first .acrossBox {
+  border-left: 3px solid var(--pop);
+  border-radius: 8px 0 0 8px;
+}
+
+form#crossword .across.last .acrossBox {
+  border-right: 3px solid var(--pop);
+  border-radius: 0 8px 8px 0;
 }

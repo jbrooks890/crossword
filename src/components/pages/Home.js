@@ -3,12 +3,8 @@ import Frame from "../Frame";
 import testPuzzle from "../../services/test-puzzles";
 
 export default function Home() {
-  const [activePuzzle, setActivePuzzle] = useState({
-    name: "",
-    gridSize: [20, 20],
-    answerKey: {},
-    answers: {},
-  });
+  // useEffect(() => setActivePuzzle(testPuzzle), []);
+  const [activePuzzle, setActivePuzzle] = useState(testPuzzle);
   const [game, setGame] = useState({
     user: "",
     input: { ...activePuzzle.answerKey },
@@ -17,8 +13,6 @@ export default function Home() {
     timer: 0,
     completed: false,
   });
-
-  useEffect(() => setActivePuzzle(testPuzzle), []);
 
   return (
     <div id="home-page">

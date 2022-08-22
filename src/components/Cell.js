@@ -26,7 +26,7 @@ export default function Cell({
   });
 
   return (
-    <td
+    <div
       id={cell_name}
       className={[
         "cell",
@@ -52,17 +52,12 @@ export default function Cell({
         size="1"
         maxLength="1"
         tabIndex="-1"
-        pattern="[A-Za-z]"
-        onFocus={e => {
-          // console.log("Focus:", cell_name);
-          e.currentTarget.select();
-          setGroup(groups[0]);
-        }}
+        onFocus={e => e.currentTarget.select()}
         onClick={e => setGroup(groups[0])}
         onKeyDown={e => controls(e)}
         onKeyUp={e => controls(e)}
         // data-coords={String(index.join("-"))}
       />
-    </td>
+    </div>
   );
 }

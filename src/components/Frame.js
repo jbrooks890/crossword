@@ -7,8 +7,8 @@ import HintCache from "./HintCache";
 export default function Frame({ puzzle }) {
   const [editorMode, setEditorMode] = useState(false);
   const [gridWidth, gridHeight] = puzzle.gridSize;
-  const [activeGroup, setActiveGroup] = useState("");
   const { answerKey, answers } = puzzle;
+  const [activeGroup, setActiveGroup] = useState(Object.keys(answers)[0]);
 
   // =========== SET GROUP ===========
   const setGroup = (name, focusFirst = false) => {
@@ -22,9 +22,9 @@ export default function Frame({ puzzle }) {
       .forEach(cell => cell.classList.add("active"));
     document.querySelector(`#hint-${name}`).classList.add("active");
 
-    setActiveGroup(name);
     focusFirst &&
       document.querySelector(`#${answers[name].group[0]} .cell-input`).focus();
+    setActiveGroup(name);
   };
 
   // =========== BUTTON CONTROLS ===========
@@ -129,7 +129,6 @@ export default function Frame({ puzzle }) {
         answerKey={answerKey}
         answers={answers}
         setGroup={setGroup}
-        // cellKeyDown={e => keyDown(e)}
         controls={e => buttonControls(e)}
       />
       <HintCache hints={getHints()} onClick={setGroup} />

@@ -7,7 +7,6 @@ export default function Grid({
   answerKey,
   answers,
   setGroup,
-  cellKeyDown,
   controls,
 }) {
   const activeCells = Object.keys(answerKey);
@@ -49,7 +48,6 @@ export default function Grid({
       rows.push(row);
     }
 
-    // console.log(rows);
     return rows.map((row, i) => <tr key={i}>{row}</tr>);
   };
 
@@ -128,9 +126,6 @@ export default function Grid({
   };
 
   return (
-    // <table id="cw-grid" className={editorMode ? "ready" : null}>
-    //   <tbody>{drawGrid()}</tbody>
-    // </table>
     <div
       id="cw-grid"
       className="grid"

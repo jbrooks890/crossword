@@ -9,6 +9,7 @@
   --grid: 48px;
   /* --------- COLORS --------- */
   --pop: hsl(215, 50%, 60%);
+  --pop-alt: hsl(120, 75%, 60%);
   --lite: white;
   --faint: hsla(0,0%,0%,0.1);
   /* --------- FONTS --------- */
@@ -36,7 +37,7 @@ a:hover, a:focus {
   outline: none;
 }
 
-h1, h2{
+h1, h2, h3{
   font-family: var(--keyFont);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -146,6 +147,8 @@ nav a:not(:last-of-type){
   color: hsl(240, 100%, 75%);
 }
 
+.cell.assisted .cell-input {color: var(--pop-alt)}
+
 .axis-box {
   --offset: -4px;
   content: '';
@@ -158,7 +161,7 @@ nav a:not(:last-of-type){
   box-sizing: border-box;
   /* border: 2px dashed cyan; */
   opacity: 0;
-  /* transition: 0.2s ease; */
+  transition: 0.2s ease;
   z-index: -1;
 }
 
@@ -199,4 +202,47 @@ form#crossword .across.first .acrossBox {
 form#crossword .across.last .acrossBox {
   border-right: 3px solid var(--pop);
   border-radius: 0 8px 8px 0;
+}
+
+/*  --------- HINT CACHE --------- */
+#hint-cache-wrap {
+  display: flex;
+  width: 75vw;
+}
+
+.hint-cache {
+  counter-reset: hint;
+  list-style-position: inside;
+  list-style-type: none;
+}
+
+.hint-cache li {
+  cursor: pointer;
+  display: flex;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  text-align: left;
+  border: 2px solid var(--faint);
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: 0.1s ease-out;
+}
+
+.hint-cache li.active,
+.hint-cache li:hover {
+  border-color: var(--pop);
+}
+
+.hint-cache li::before {
+  counter-increment: hint;
+  content: counter(hint)'.';
+  display: block;
+  margin-right: 0.5rem;
+  width: 2ch;
+  color: silver;
+  text-align: right;
+  font-weight: 600;
+  /* font-family: var(--bodyFont); */
+  /* border: 1px solid red; */
+  box-sizing: border-box;
 }

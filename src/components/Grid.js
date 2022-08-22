@@ -6,7 +6,7 @@ export default function Grid({
   editorMode,
   answerKey,
   answers,
-  cellClick,
+  setGroup,
   cellKeyDown,
   controls,
 }) {
@@ -117,8 +117,8 @@ export default function Grid({
           groups={groups}
           display={display.length && display}
           crop={!activeCols.includes(col) || !activeRows.includes(y)}
-          onClick={cellClick}
-          onKeyDown={e => cellKeyDown(e)}
+          setGroup={setGroup}
+          // onKeyDown={e => cellKeyDown(e)}
           controls={e => controls(e)}
         />
       );

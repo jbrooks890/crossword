@@ -8,8 +8,7 @@ export default function Cell({
   groups,
   display,
   crop,
-  onClick,
-  onKeyDown,
+  setGroup,
   controls,
 }) {
   const [coords, setCoords] = useState(index);
@@ -42,6 +41,7 @@ export default function Cell({
         .join(" ")
         .replace(/\s+/g, " ")
         .trim()}
+      data-groups={groups.join(" ")}
     >
       <span className={`acrossBox axis-box ${xGroup ? xGroup : ""}`}></span>
       <span className={`downBox axis-box ${yGroup ? yGroup : ""}`}></span>
@@ -52,8 +52,13 @@ export default function Cell({
         size="1"
         maxLength="1"
         tabIndex="-1"
-        onFocus={e => e.currentTarget.select()}
-        onClick={e => onClick(groups[0])}
+        pattern="[A-Za-z]"
+        onFocus={e => {
+          // console.log("Focus:", cell_name);
+          e.currentTarget.select();
+          setGroup(groups[0]);
+        }}
+        onClick={e => setGroup(groups[0])}
         onKeyDown={e => controls(e)}
         onKeyUp={e => controls(e)}
         // data-coords={String(index.join("-"))}

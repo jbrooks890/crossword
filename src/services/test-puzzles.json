@@ -3,7 +3,6 @@
   "type": "Crossword",
   "gridSize": [20, 20],
   "version": 0,
-  "createDate": 0,
   "answerKey": {
     "H2": "M",
     "P2": "P",

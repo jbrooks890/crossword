@@ -36,8 +36,11 @@ export default function Frame({ puzzle }) {
     const id = cell.parentElement.id;
     const content = e.currentTarget.value;
     const printable = e.which >= 65 && e.which <= 90;
+    const isJunction = document
+      .getElementById(id)
+      .classList.contains("junction");
 
-    // console.log({ press, type });
+    // console.log({ e, press, type });
 
     switch (type) {
       // ++++++ KEY UP ++++++
@@ -68,6 +71,10 @@ export default function Frame({ puzzle }) {
           case "Enter":
             focusNextGroup();
             break;
+          case " ":
+            e.preventDefault();
+            isJunction && console.log("toggle direction");
+            break;
         }
         break;
     }
@@ -91,7 +98,7 @@ export default function Frame({ puzzle }) {
         const altGroupName = cell
           .getAttribute("data-groups")
           .split(" ")
-          .find(name => name != activeGroup);
+          .find(name => name !== activeGroup);
         const altGroup = answers[altGroupName].group;
 
         let next = altGroup.indexOf(id) + 1;
@@ -111,13 +118,33 @@ export default function Frame({ puzzle }) {
     setGroup(next, true);
   };
 
-  // console.log(answers);
+  // =========== FOCUS NEAREST ===========
+  const focusNearest = (id, [xDiff, yDiff]) => {};
+
+  // =========== GET HINTS ===========
   const getHints = () => {
     let list = new Map();
     Object.keys(answers).forEach(entry => list.set(entry, answers[entry].hint));
     // console.log(list);
     return list;
   };
+
+  // =========== ON HOVER ===========
+  const hoverGroup = (name, direction) => {
+    // [...document.querySelectorAll(".preview")].forEach(x =>
+    //   x.classList.remove("preview")
+    // );
+
+    answers[name].group.forEach(id => {
+      const axis = direction === "across" ? ".acrossBox" : ".downBox";
+      const cell = document.querySelector(`#${id} ${axis}`);
+      cell.classList.toggle("preview");
+    });
+    document.getElementById("hint-" + name).classList.toggle("preview");
+  };
+
+  // --------------------------------
+  // :::::::::::: RENDER ::::::::::::
 
   return (
     <form id="crossword">
@@ -130,6 +157,7 @@ export default function Frame({ puzzle }) {
         answers={answers}
         setGroup={setGroup}
         controls={e => buttonControls(e)}
+        onHover={hoverGroup}
       />
       <HintCache hints={getHints()} onClick={setGroup} />
       <ButtonCache />

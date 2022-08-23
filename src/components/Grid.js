@@ -8,6 +8,7 @@ export default function Grid({
   answers,
   setGroup,
   controls,
+  onHover,
 }) {
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
@@ -116,6 +117,7 @@ export default function Grid({
           display={display.length && display}
           crop={!activeCols.includes(col) || !activeRows.includes(y)}
           setGroup={setGroup}
+          onHover={onHover}
           // onKeyDown={e => cellKeyDown(e)}
           controls={e => controls(e)}
         />

@@ -37,6 +37,12 @@ a:hover, a:focus {
   outline: none;
 }
 
+button {
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+}
+
 h1, h2, h3{
   font-family: var(--keyFont);
   letter-spacing: 0.1em;
@@ -128,6 +134,7 @@ nav a:not(:last-of-type){
   text-align: center;
   text-transform: uppercase;
   line-height: 1em;
+  outline-color: var(--pop);
   box-sizing: border-box;
   border-radius: 5px;
   z-index: 1;
@@ -165,8 +172,82 @@ nav a:not(:last-of-type){
   z-index: -1;
 }
 
+.axis-box.preview,
 .axis-box.active {
   opacity: 1;
+}
+
+.axis-select {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* border: 1px solid red; */
+  box-sizing: border-box;
+  transition: 0.1s ease-out;
+  opacity: 0;
+  z-index: -1;
+}
+
+.cell.junction:hover .axis-select{
+  opacity: 1;
+  z-index: 2;
+}
+
+.axis-select button {
+  cursor: pointer;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50%;
+  /* background-color: hlsa(0,0%,0%,0.05); */
+  background-color: transparent;
+  font-size: 2rem;
+  line-height: 1em;
+  border: none;
+  box-sizing: border-box;
+  transition: 0.1s ease-out;
+  z-index: 2;
+}
+
+.axis-select button:hover {
+  z-index: 3;
+}
+
+.axis-select button::before,
+.axis-select button::after {
+  --offset: 2px;
+  content: '';
+  position: absolute;
+  display: block;
+  width: 25%;
+  height: 100%;
+  background-color: hsl(0,0%,90%);
+  transition: 0.1s ease-out;
+}
+
+.axis-select button:hover::before,
+.axis-select button:hover::after{
+  background-color: var(--pop-alt);
+}
+
+.axis-select button::before {
+  left: 0;
+  clip-path: polygon(0 50%, 100% 100%, 60% 50%, 100% 0);
+}
+
+.axis-select button::after {
+  right: 0;
+  clip-path: polygon(0 0, 40% 50%, 0 100%, 100% 50%);
+}
+
+.axis-select button.select-down {
+  transform: rotate(90deg);
 }
 
 /*  --------- DOWN (VERTICAL) --------- */
@@ -229,7 +310,8 @@ form#crossword .across.last .acrossBox {
 }
 
 .hint-cache li.active,
-.hint-cache li:hover {
+.hint-cache li:hover,
+.hint-cache li.preview {
   border-color: var(--pop);
 }
 

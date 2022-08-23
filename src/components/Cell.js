@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function Cell({
-  cell_name,
+  cell_name: id,
   isJunction,
   index,
   answer,
@@ -14,12 +14,14 @@ export default function Cell({
 }) {
   const [coords, setCoords] = useState(index);
   const [axis, setAxis] = useState();
+  const cell = document.getElementById(id);
+  const cellInput = cell.querySelector(".cell-input");
 
   let xGroup;
   let yGroup;
   const axisGroups = new Map();
 
-  // console.log(cell_name, crop);
+  // console.log(id, crop);
 
   groups.forEach(group => {
     if (group.split("-")[0] === "across") {
@@ -36,13 +38,12 @@ export default function Cell({
     e.preventDefault();
     setAxis(dir);
     setGroup(axisGroups.get(dir));
-    console.log();
-    document.querySelector(`#${cell_name} .cell-input`).focus();
+    cellInput.focus();
   };
 
   return (
     <div
-      id={cell_name}
+      id={id}
       className={[
         "cell",
         answer ? "show" : null,
@@ -80,7 +81,7 @@ export default function Cell({
         </div>
       )}
       <input
-        className={`cell-input ${cell_name} ${answer ? "show" : null}`}
+        className={`cell-input ${id} ${answer ? "show" : null}`}
         // className={`cell-input`}
         type="text"
         size="1"

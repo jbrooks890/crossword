@@ -1,11 +1,12 @@
-export default function HintCache({ hints, onClick }) {
+export default function HintCache({ hints, onClick, onHover }) {
   const groups = Array.from(hints.keys());
   const across = [];
   const down = [];
 
   let count = 0;
   hints.forEach((hint, name) => {
-    let axis = name.split("-")[0] === "across" ? across : down;
+    let [dir] = name.split("-");
+    let axis = dir === "across" ? across : down;
     axis.push(
       <li
         key={count++}
@@ -14,6 +15,8 @@ export default function HintCache({ hints, onClick }) {
         data-hint-group={name}
         data-hint={hint}
         onClick={() => onClick(name, true)}
+        onMouseEnter={() => onHover(name, dir)}
+        onMouseLeave={() => onHover(name, dir)}
       >
         {hint}
       </li>

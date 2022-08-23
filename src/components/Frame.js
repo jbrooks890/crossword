@@ -30,12 +30,18 @@ export default function Frame({ puzzle }) {
   // =========== BUTTON CONTROLS ===========
   const buttonControls = e => {
     // console.log(e);
-    const type = e.type;
-    const press = e.key;
-    const cell = e.currentTarget;
+    const {
+      type,
+      key: press,
+      altKey,
+      ctrlKey,
+      shiftKey,
+      currentTarget: cell,
+      which,
+    } = e;
     const id = cell.parentElement.id;
-    const content = e.currentTarget.value;
-    const printable = e.which >= 65 && e.which <= 90;
+    const content = cell.value;
+    const printable = which >= 65 && which <= 90;
     const isJunction = document
       .getElementById(id)
       .classList.contains("junction");
@@ -69,6 +75,7 @@ export default function Frame({ puzzle }) {
             // alert("Go backwards!");
             break;
           case "Enter":
+            e.preventDefault();
             focusNextGroup();
             break;
           case " ":
@@ -112,6 +119,7 @@ export default function Frame({ puzzle }) {
 
   // =========== FOCUS NEXT GROUP ===========
   const focusNextGroup = () => {
+    // console.log("running focus next group");
     const groups = Object.keys(answers);
     const index = groups.indexOf(activeGroup);
     let next = index + 1 >= groups.length ? groups[0] : groups[index + 1];
@@ -159,7 +167,7 @@ export default function Frame({ puzzle }) {
         controls={e => buttonControls(e)}
         onHover={hoverGroup}
       />
-      <HintCache hints={getHints()} onClick={setGroup} />
+      <HintCache hints={getHints()} onClick={setGroup} onHover={hoverGroup} />
       <ButtonCache />
     </form>
   );

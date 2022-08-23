@@ -124,6 +124,8 @@ export default function Grid({
       );
       count++;
     }
+
+    // console.log(cells[Math.floor(Math.random() * cells.length)]);
     return cells;
   };
 

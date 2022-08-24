@@ -14,16 +14,14 @@ export default function Cell({
 }) {
   const [coords, setCoords] = useState(index);
   const [axis, setAxis] = useState();
-  const cell = document.getElementById(id);
-  const cellInput = cell.querySelector(".cell-input");
 
   let xGroup;
   let yGroup;
   const axisGroups = new Map();
 
-  // console.log(id, crop);
+  // id === "A0" && console.log(id);
 
-  groups.forEach(group => {
+  groups.forEach((group) => {
     if (group.split("-")[0] === "across") {
       xGroup = group; // TODO: REMOVE
       axisGroups.set("across", group);
@@ -36,6 +34,8 @@ export default function Cell({
   // =========== SELECT DIRECTION ===========
   const selectDir = (e, dir) => {
     e.preventDefault();
+    const cell = document.getElementById(id);
+    const cellInput = cell.querySelector(".cell-input");
     setAxis(dir);
     setGroup(axisGroups.get(dir));
     cellInput.focus();
@@ -72,11 +72,11 @@ export default function Cell({
         <div className="axis-select">
           <button
             className="select-across"
-            onClick={e => selectDir(e, "across")}
+            onClick={(e) => selectDir(e, "across")}
           ></button>
           <button
             className="select-down"
-            onClick={e => selectDir(e, "down")}
+            onClick={(e) => selectDir(e, "down")}
           ></button>
         </div>
       )}
@@ -87,10 +87,10 @@ export default function Cell({
         size="1"
         maxLength="1"
         tabIndex="-1"
-        onFocus={e => e.currentTarget.select()}
+        onFocus={(e) => e.currentTarget.select()}
         onClick={() => setGroup(groups[0])}
-        onKeyDown={e => controls(e)}
-        onKeyUp={e => controls(e)}
+        onKeyDown={(e) => controls(e)}
+        onKeyUp={(e) => controls(e)}
         // data-coords={String(index.join("-"))}
       />
     </div>

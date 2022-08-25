@@ -20,8 +20,16 @@ export default function Frame({ puzzle }) {
     [activeGroup]
   );
 
+  // =========== FOCUS CELL ===========
+  const focusCell = (id, group = activeGroup) => {
+    console.log("running focus cell", { id, group });
+    group !== activeGroup && setGroup(group);
+    document.querySelector(`#${id} .cell-input`).focus();
+  };
+
   // =========== SET GROUP ===========
-  const setGroup = (name, groups = [name], swap = false) => {
+  // const setGroup = (name, groups = [name], swap = false) => {
+  const setGroup = name => {
     // console.log("Groups:", groups);
 
     console.log({ name });
@@ -77,7 +85,6 @@ export default function Frame({ puzzle }) {
             focusNext(id);
             break;
           case "Backspace":
-            // console.log(activeGroup);
             const { group } = answers[activeGroup];
             if (content.length < 1) {
               const prev = group.indexOf(id) - 1;
@@ -85,10 +92,9 @@ export default function Frame({ puzzle }) {
               if (prev < 0) {
                 cell.blur();
               } else {
-                document.querySelector(`#${group[prev]} .cell-input`).focus();
+                focusCell(group[prev]);
               }
             }
-            // alert("Go backwards!");
             break;
           case "Enter":
             e.preventDefault();
@@ -111,11 +117,12 @@ export default function Frame({ puzzle }) {
     // const isFirst = currPos === 0;
     const lastCell = currPos === group.length - 1;
     const isJunction = cell.classList.contains("junction");
-    const getCell = id => document.querySelector(`#${id} .cell-input`);
+    // const getCell = id => document.querySelector(`#${id} .cell-input`);
     let nextPos;
 
     if (!lastCell) {
-      nextPos = group[currPos + 1];
+      // nextPos = group[currPos + 1];
+      focusCell(group[currPos + 1]);
     } else {
       if (isJunction) {
         const altGroupName = cell
@@ -125,12 +132,12 @@ export default function Frame({ puzzle }) {
         const altGroup = answers[altGroupName].group;
 
         let next = altGroup.indexOf(id) + 1;
-        nextPos = altGroup[next];
+        focusCell(altGroup[next], altGroupName);
       } else {
         focusNextGroup();
       }
     }
-    nextPos && document.querySelector(`#${nextPos} .cell-input`).focus();
+    // nextPos && focusCell(nextPos);
   };
 
   // =========== FOCUS NEXT GROUP ===========
@@ -148,12 +155,11 @@ export default function Frame({ puzzle }) {
   // =========== FOCUS FIRST ===========
   const focusFirst = name => {
     const { group } = answers[name];
-    const targets = group
-      .map(id => document.querySelector(`#${id} .cell-input`))
-      .filter(cell => cell.value.length === 0);
+    const targets = group.filter(
+      id => document.querySelector(`#${id} .cell-input`).value.length === 0
+    );
 
-    // console.log(targets);
-    targets.length ? targets[0].focus() : focusNextGroup(name);
+    targets.length ? focusCell(targets[0], name) : focusNextGroup(name);
   };
 
   // =========== FOCUS NEAREST ===========
@@ -193,6 +199,7 @@ export default function Frame({ puzzle }) {
         setGroup={setGroup}
         controls={e => buttonControls(e)}
         onHover={hoverGroup}
+        focusCell={focusCell}
       />
       <HintCache hints={getHints()} onClick={setGroup} onHover={hoverGroup} />
       <ButtonCache />

@@ -10,6 +10,7 @@ export default function Grid({
   setGroup,
   controls,
   onHover,
+  focusCell,
 }) {
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
@@ -122,6 +123,7 @@ export default function Grid({
           onHover={onHover}
           // onKeyDown={e => cellKeyDown(e)}
           controls={e => controls(e)}
+          focusCell={focusCell}
         />
       );
       count++;

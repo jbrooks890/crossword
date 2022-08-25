@@ -1,6 +1,7 @@
 import Cell from "./Cell";
 
 export default function Grid({
+  activeGroup,
   gridWidth,
   gridHeight,
   editorMode,
@@ -110,6 +111,7 @@ export default function Grid({
         <Cell
           key={count}
           cell_name={cellName}
+          activeGroup={activeGroup}
           isJunction={groups.length > 1}
           index={[x, y]}
           answer={answerKey[cellName] ? answerKey[cellName] : null}

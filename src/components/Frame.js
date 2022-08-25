@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import ButtonCache from "./ButtonCache";
 import Grid from "./Grid";
 import HintBox from "./HintBox";
 import HintCache from "./HintCache";
+
+const ActiveGroup = createContext();
 
 export default function Frame({ puzzle }) {
   const [editorMode, setEditorMode] = useState(false);
@@ -10,21 +12,35 @@ export default function Frame({ puzzle }) {
   const { answerKey, answers } = puzzle;
   const [activeGroup, setActiveGroup] = useState(Object.keys(answers)[0]);
 
-  // =========== SET GROUP ===========
-  const setGroup = (name, focusFirst = false) => {
-    if (answers[name]) {
-      document
-        .querySelectorAll(".active")
-        .forEach(cell => cell.classList.remove("active"));
-    }
-    document
-      .querySelectorAll(`.axis-box.${name}`)
-      .forEach(cell => cell.classList.add("active"));
-    document.querySelector(`#hint-${name}`).classList.add("active");
+  // useEffect(() => console.log(Object.keys(answers)), []);
+  useEffect(() => console.log(`%c${"=".repeat(50)}`, "color: orange"), []);
+  useEffect(
+    () =>
+      console.log(`%c${activeGroup}`, "color: lime; text-transform: uppercase"),
+    [activeGroup]
+  );
 
-    focusFirst &&
-      document.querySelector(`#${answers[name].group[0]} .cell-input`).focus();
-    setActiveGroup(name);
+  // =========== SET GROUP ===========
+  const setGroup = (name, groups = [name], swap = false) => {
+    // console.log("Groups:", groups);
+
+    console.log({ name });
+    if (name !== activeGroup) {
+      // const name = groups.find(name => name !== activeGroup);
+      console.log(`Change groups: ${activeGroup} --> ${name}`);
+
+      if (answers[name]) {
+        document
+          .querySelectorAll(".active")
+          .forEach(cell => cell.classList.remove("active"));
+      }
+      document
+        .querySelectorAll(`.axis-box.${name}`)
+        .forEach(cell => cell.classList.add("active"));
+      document.querySelector(`#hint-${name}`).classList.add("active");
+
+      setActiveGroup(name);
+    }
   };
 
   // =========== BUTTON CONTROLS ===========
@@ -118,12 +134,26 @@ export default function Frame({ puzzle }) {
   };
 
   // =========== FOCUS NEXT GROUP ===========
-  const focusNextGroup = () => {
-    // console.log("running focus next group");
+  const focusNextGroup = (name = activeGroup) => {
+    console.log("running focus next group");
     const groups = Object.keys(answers);
-    const index = groups.indexOf(activeGroup);
+    const index = groups.indexOf(name);
     let next = index + 1 >= groups.length ? groups[0] : groups[index + 1];
-    setGroup(next, true);
+
+    console.log(`Group: ${index + 1}/${groups.length}`);
+    console.log({ next });
+    focusFirst(next);
+  };
+
+  // =========== FOCUS FIRST ===========
+  const focusFirst = name => {
+    const { group } = answers[name];
+    const targets = group
+      .map(id => document.querySelector(`#${id} .cell-input`))
+      .filter(cell => cell.value.length === 0);
+
+    // console.log(targets);
+    targets.length ? targets[0].focus() : focusNextGroup(name);
   };
 
   // =========== FOCUS NEAREST ===========
@@ -139,10 +169,6 @@ export default function Frame({ puzzle }) {
 
   // =========== ON HOVER ===========
   const hoverGroup = (name, direction) => {
-    // [...document.querySelectorAll(".preview")].forEach(x =>
-    //   x.classList.remove("preview")
-    // );
-
     answers[name].group.forEach(id => {
       const axis = direction === "across" ? ".acrossBox" : ".downBox";
       const cell = document.querySelector(`#${id} ${axis}`);
@@ -158,6 +184,7 @@ export default function Frame({ puzzle }) {
     <form id="crossword">
       <HintBox hint={answers[activeGroup].hint} />
       <Grid
+        activeGroup={activeGroup}
         gridWidth={gridWidth}
         gridHeight={gridHeight}
         editorMode={editorMode}

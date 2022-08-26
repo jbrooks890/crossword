@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div id="home-page">
       <h1 className="puzzle-title">{activePuzzle.name}</h1>
-      <Frame puzzle={activePuzzle} />
+      <Frame puzzle={activePuzzle} editorMode={false} />
     </div>
   );
 }

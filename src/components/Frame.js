@@ -4,8 +4,7 @@ import Grid from "./Grid";
 import HintBox from "./HintBox";
 import HintCache from "./HintCache";
 
-export default function Frame({ puzzle }) {
-  const [editorMode, setEditorMode] = useState(false);
+export default function Frame({ puzzle, editorMode }) {
   const [gridWidth, gridHeight] = puzzle.gridSize;
   const { answerKey, answers } = puzzle;
   const [activeGroup, setActiveGroup] = useState(Object.keys(answers)[0]);
@@ -225,7 +224,7 @@ export default function Frame({ puzzle }) {
   // =========== FOCUS NEAREST ===========
   const focusNearest = (id, [x, y], [xDiff, yDiff]) => {
     const cell = document.getElementById(id);
-    const actives = Object.keys(answerKey);
+    const actives = Object.keys(answerKey).sort();
     let cols = [];
     let rows = [];
     actives.forEach(entry => {
@@ -234,6 +233,8 @@ export default function Frame({ puzzle }) {
       !cols.includes(col) && cols.push(col);
       !rows.includes(row) && rows.push(parseInt(row));
     });
+
+    // console.log("Active groups:", actives);
 
     // AXIS: checking for candidates along an 'axis'
     const [dir, axis] =
@@ -289,7 +290,6 @@ export default function Frame({ puzzle }) {
 
   // =========== GIVE HINT ===========
   const giveHint = () => {
-    const test = Object.keys(answerKey);
     const remaining = Object.keys(answerKey).filter(
       id => cellData(id).input.value.length === 0
     );

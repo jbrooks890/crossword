@@ -23,13 +23,20 @@ export default function Build() {
     }));
   };
 
+  const handleSubmit = () => setPhase(prev => prev + 1);
+
   return (
     <div id="build-page">
       <h2>Build</h2>
       {phase === 0 && (
-        <NewPuzzleForm puzzle={newPuzzle} updatePuzzle={e => updatePuzzle(e)} />
+        <NewPuzzleForm
+          puzzle={newPuzzle}
+          updatePuzzle={e => updatePuzzle(e)}
+          handleSubmit={handleSubmit}
+        />
       )}
-      {phase > 0 && <Frame puzzle={newPuzzle} editorMode={true} />}
+      {/* {phase > 0 && <Frame puzzle={newPuzzle} editorMode={true} />} */}
+      {phase > 0 && <h1>MAKE A PUZZLE!</h1>}
     </div>
   );
 }

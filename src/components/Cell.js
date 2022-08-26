@@ -8,46 +8,13 @@ export default function Cell({
   groups,
   display,
   crop,
-  setGroup,
   controls,
   onHover,
-  activeGroup,
   focusCell,
 }) {
-  /* const [axis, setAxis] = useState(
-    crop
-      ? null
-      : isJunction // IF JUNCTION, DEFAULT TO DIRECTION OF...
-      ? activeGroup.split("-")[0] // ...CURRENT GROUP, OR IF NOT
-      : groups[0].split("-")[0] // ...THE ONLY GROUP AVAILABLE
-  ); */
-  const [axis, setAxis] = useState("");
-
-  useEffect(() => {
-    if (groups.length) {
-      // ^^ SHOULD BE BASED ON 'CROP' BUT CROP IS NOT WORKING
-      if (isJunction) {
-        setAxis(activeGroup.split("-")[0]);
-      } else {
-        setAxis(groups[0].split("-")[0]);
-      }
-    } else {
-      setAxis(undefined);
-    }
-  }, []);
-
   const axisGroups = new Map();
 
   groups.forEach(group => axisGroups.set(group.split("-")[0], group));
-
-  // =========== SELECT DIRECTION ===========
-  const selectDir = async (e, dir) => {
-    e.preventDefault();
-    const cell = document.getElementById(id);
-    const cellInput = cell.querySelector(".cell-input");
-    await setAxis(dir);
-    cellInput.focus();
-  };
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
@@ -82,19 +49,13 @@ export default function Cell({
         className={`acrossBox axis-box ${
           axisGroups.has("across") ? axisGroups.get("across") : ""
         }`}
-        onFocus={async e => {
-          await setAxis("across");
-          document.querySelector(`#${id} .cell-input`).focus();
-        }}
+        onFocus={e => document.querySelector(`#${id} .cell-input`).focus()}
       ></span>
       <span
         className={`downBox axis-box ${
           axisGroups.has("down") ? axisGroups.get("down") : ""
         }`}
-        onFocus={async e => {
-          await setAxis("down");
-          document.querySelector(`#${id} .cell-input`).focus();
-        }}
+        onFocus={e => document.querySelector(`#${id} .cell-input`).focus()}
       ></span>
       {isJunction && (
         // ====== AXIS SELECTOR BOX ======

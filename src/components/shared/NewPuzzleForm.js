@@ -1,12 +1,18 @@
 import { useState } from "react";
 
-export default function NewPuzzleForm({ puzzle, updatePuzzle }) {
+export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
   const [gridLink, setGridLink] = useState(true);
   const { gridSize } = puzzle;
   const [x, y] = gridSize;
 
   return (
-    <form id="newPuzzleForm">
+    <form
+      id="newPuzzleForm"
+      onSubmit={e => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+    >
       <label htmlFor="newPuzzle-name">
         <h4>Name</h4>
         <input
@@ -14,6 +20,7 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle }) {
           type="text"
           placeholder="Puzzle Name"
           onFocus={e => e.currentTarget.select()}
+          required
         />
       </label>
 
@@ -30,9 +37,7 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle }) {
         </button>
         <NumInput dir="col" linked={gridLink} defaultValue={y} />
       </div>
-      <button type="submit" onClick={e => e.preventDefault()}>
-        Start
-      </button>
+      <button type="submit">Start</button>
     </form>
   );
 }
@@ -61,6 +66,7 @@ function NumInput({ dir, linked, defaultValue }) {
         onMouseLeave={e => e.currentTarget.blur()}
         onFocus={e => e.currentTarget.select()}
         onInput={e => updateGridSize(e)}
+        required
       />
     </label>
   );

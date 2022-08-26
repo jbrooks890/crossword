@@ -23,16 +23,7 @@ export default function Grid({
     !activeRows.includes(row) && activeRows.push(row);
   });
 
-  /*   const getLetter = n => {
-    const first = "a".charCodeAt(0);
-    const last = "z".charCodeAt(0);
-    const length = last - first + 1; // letter range
-
-    // console.log(String.fromCharCode(first + n - 1));
-    return String.fromCharCode(first + n).toUpperCase();
-  }; */
-
-  const drawGrid = () => {
+  /* const drawGrid = () => {
     let rows = [];
     let count = 0;
     for (let y = 0; y < gridHeight; y++) {
@@ -53,24 +44,9 @@ export default function Grid({
     }
 
     return rows.map((row, i) => <tr key={i}>{row}</tr>);
-  };
+  }; */
 
-  const setTabOrder = () => {
-    let order = 0;
-    const groupNames = Object.keys(answers);
-    groupNames.forEach(name =>
-      answers[name].group.forEach(id => {
-        const cell = document.querySelector(`#${id}.cell`);
-        const xBox = cell.querySelector(".acrossBox");
-        const yBox = cell.querySelector(".downBox");
-        const axis = name.split("-")[0] === "across" ? xBox : yBox;
-        axis.tabIndex = order;
-        order++;
-      })
-    );
-  };
-
-  const drawPuzzle = () => {
+  const drawGrid = () => {
     const totalCells = gridWidth * gridHeight;
     let count = 0;
     let cells = [];
@@ -113,17 +89,14 @@ export default function Grid({
         <Cell
           key={count}
           cell_name={cellName}
-          activeGroup={activeGroup}
-          isJunction={groups.length > 1}
           index={[x, y]}
-          answer={answerKey[cellName] ? answerKey[cellName] : null}
-          groups={groups}
-          display={display.length && display}
+          isJunction={groups.length > 1} // PLAY MODE
+          answer={answerKey[cellName] ? answerKey[cellName] : null} // PLAY MODE
+          groups={groups} // PLAY MODE
+          display={display.length && display} // PLAY MODE
           crop={!activeCols.includes(col) || !activeRows.includes(y)}
-          setGroup={setGroup}
-          onHover={onHover}
-          // onKeyDown={e => cellKeyDown(e)}
           controls={e => controls(e)}
+          onHover={onHover}
           focusCell={focusCell}
         />
       );
@@ -142,7 +115,7 @@ export default function Grid({
         gridTemplate: `repeat(${activeRows.length}, 48px) / repeat(${activeCols.length}, 48px)`,
       }}
     >
-      {drawPuzzle()}
+      {drawGrid()}
     </div>
   );
 }

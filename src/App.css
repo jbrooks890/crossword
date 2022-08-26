@@ -39,6 +39,7 @@ a:hover, a:focus {
 
 button {
   appearance: none;
+  cursor: pointer;
   outline: none;
   background-color: transparent;
 }
@@ -329,4 +330,34 @@ form#crossword .across.last .acrossBox {
   /* font-family: var(--bodyFont); */
   /* border: 1px solid red; */
   box-sizing: border-box;
+}
+
+/*  --------- BUTTON CACHE --------- */
+#button-cache {
+  display: flex;
+  align-items: center;
+  margin-block: 1rem;
+}
+
+#button-cache button {
+  display: block;
+  line-height: 1em;
+  padding: 1em;
+  color: var(--pop);
+  font-family: var(--keyFont);
+  font-size: large;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 3px solid var(--pop);
+  border-radius: 10px;
+  transition: 0.1s ease-out
+}
+
+#button-cache button:hover {
+  background-color: var(--pop);
+  color: white;
+}
+
+#button-cache button:not(:last-of-type){
+  margin-right: 1rem;
 }

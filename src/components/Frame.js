@@ -165,9 +165,10 @@ export default function Frame({ puzzle }) {
 
         let next = altGroup.indexOf(id) + 1;
         focusCell(altGroup[next], altGroupName);
-      } else {
-        focusNextGroup();
       }
+      // else {
+      //   focusNextGroup();
+      // }
     }
     // nextPos && focusCell(nextPos);
   };
@@ -271,6 +272,18 @@ export default function Frame({ puzzle }) {
     document.getElementById("hint-" + name).classList.toggle("preview");
   };
 
+  // =========== GIVE HINT ===========
+  const giveHint = () => {
+    const test = Object.keys(answerKey);
+    const remaining = Object.keys(answerKey).filter(
+      id => cellData(id).input.value.length === 0
+    );
+    const cell = remaining[Math.floor(Math.random() * remaining.length)];
+    const { element, input } = cellData(cell);
+    element.classList.add("assisted");
+    input.value = answerKey[cell];
+  };
+
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
 
@@ -290,8 +303,8 @@ export default function Frame({ puzzle }) {
         focusCell={focusCell}
         getLetter={getLetter}
       />
+      <ButtonCache giveHint={giveHint} />
       <HintCache hints={getHints()} onClick={focusFirst} onHover={hoverGroup} />
-      <ButtonCache />
     </form>
   );
 }

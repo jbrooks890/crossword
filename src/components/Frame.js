@@ -11,12 +11,12 @@ export default function Frame({ puzzle }) {
   const [activeGroup, setActiveGroup] = useState(Object.keys(answers)[0]);
   // const [history, setHistory] = useState([]);
 
-  useEffect(() => console.log(`%c${"=".repeat(50)}`, "color: orange"), []);
-  useEffect(
-    () =>
-      console.log(`%c${activeGroup}`, "color: lime; text-transform: uppercase"),
-    [activeGroup]
-  );
+  // useEffect(() => console.log(`%c${"=".repeat(50)}`, "color: orange"), []);
+  // useEffect(
+  //   () =>
+  //     console.log(`%c${activeGroup}`, "color: lime; text-transform: uppercase"),
+  //   [activeGroup]
+  // );
 
   // =========== GET CELL DATA ===========
   const cellData = id => {
@@ -122,7 +122,9 @@ export default function Frame({ puzzle }) {
             break;
           case "ArrowLeft":
             e.preventDefault();
-            focusNearest(id, index, [-1, 0]);
+            shiftKey
+              ? focusFirst(activeGroup, true)
+              : focusNearest(id, index, [-1, 0]);
             break;
           case "ArrowRight":
             e.preventDefault();
@@ -130,7 +132,9 @@ export default function Frame({ puzzle }) {
             break;
           case "ArrowUp":
             e.preventDefault();
-            focusNearest(id, index, [0, -1]);
+            shiftKey
+              ? focusFirst(activeGroup, true)
+              : focusNearest(id, index, [0, -1]);
             break;
           case "ArrowDown":
             e.preventDefault();
@@ -188,12 +192,23 @@ export default function Frame({ puzzle }) {
   // =========== FOCUS FIRST ===========
   const focusFirst = (name, strict = false) => {
     const { group } = answers[name];
-    const targets = group.filter(
-      id => document.querySelector(`#${id} .cell-input`).value.length === 0
-    );
+    const targets = group.filter(id => cellData(id).input.value.length === 0);
 
     targets.length
       ? focusCell(strict ? group[0] : targets[0], name)
+      : focusNextGroup(name);
+  };
+
+  // =========== FOCUS LAST ===========
+  const focusLast = (name, strict = false) => {
+    const { group } = answers[name];
+    const targets = group.filter(id => cellData(id).input.value.length === 0);
+
+    targets.length
+      ? focusCell(
+          strict ? group[group.length - 1] : targets[targets.lengt - 1],
+          name
+        )
       : focusNextGroup(name);
   };
 

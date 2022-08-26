@@ -148,7 +148,7 @@ nav a:not(:last-of-type){
 }
 
 .cell-input::selection {
-  background-color: var(--faint);
+  background-color: transparent;
 }
 
 .cell-input.show::placeholder {

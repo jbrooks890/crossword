@@ -124,6 +124,7 @@ export default function Cell({
         onClick={() => focusCell(id, !isJunction ? groups[0] : undefined)}
         onKeyDown={e => controls(e)}
         onKeyUp={e => controls(e)}
+        // placeholder={id}
       />
     </div>
   );

@@ -11,6 +11,7 @@ export default function Grid({
   controls,
   onHover,
   focusCell,
+  getLetter,
 }) {
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
@@ -22,14 +23,14 @@ export default function Grid({
     !activeRows.includes(row) && activeRows.push(row);
   });
 
-  const getLetter = n => {
+  /*   const getLetter = n => {
     const first = "a".charCodeAt(0);
     const last = "z".charCodeAt(0);
     const length = last - first + 1; // letter range
 
     // console.log(String.fromCharCode(first + n - 1));
     return String.fromCharCode(first + n).toUpperCase();
-  };
+  }; */
 
   const drawGrid = () => {
     let rows = [];

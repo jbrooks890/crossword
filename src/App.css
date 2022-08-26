@@ -152,6 +152,8 @@ nav a:not(:last-of-type){
 
 .cell-input.show::placeholder {
   color: hsl(240, 100%, 75%);
+  opacity: 0.5;
+  font-weight: 300;
 }
 
 .cell.assisted .cell-input {color: var(--pop-alt)}

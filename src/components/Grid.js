@@ -94,7 +94,7 @@ export default function Grid({
           answer={answerKey[cellName] ? answerKey[cellName] : null} // PLAY MODE
           groups={groups} // PLAY MODE
           display={display.length && display} // PLAY MODE
-          crop={!activeCols.includes(col) || !activeRows.includes(y)}
+          crop={!activeCols.includes(col) || !activeRows.includes(y)} // PLAY MODE
           controls={e => controls(e)}
           onHover={onHover}
           focusCell={focusCell}

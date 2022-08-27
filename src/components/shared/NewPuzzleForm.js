@@ -13,10 +13,10 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
         handleSubmit();
       }}
     >
-      <label htmlFor="newPuzzle-name">
+      <label htmlFor="name">
         <h4>Name</h4>
         <input
-          name="newPuzzle-name"
+          name="name"
           type="text"
           placeholder="Puzzle Name"
           onFocus={e => e.currentTarget.select()}
@@ -43,7 +43,7 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
 }
 
 function NumInput({ dir, linked, defaultValue }) {
-  const label = `newPuzzle-gridSize-${dir}s`;
+  const label = dir === "row" ? "x" : "y";
   const updateGridSize = e => {
     const inputs = [...document.querySelectorAll(".num-input")];
     if (linked) {

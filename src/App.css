@@ -423,6 +423,11 @@ form#crossword .across.last .acrossBox {
   background-color: transparent;
 }
 
+#newPuzzleForm input {
+  color: var(--pop);
+  outline-color: var(--pop);
+}
+
 #newPuzzleForm label input {
   padding: 1rem;
   text-align: center;
@@ -517,10 +522,11 @@ form#crossword .across.last .acrossBox {
   letter-spacing: 0.1em;
   border: 2.5px solid var(--faint);
   border-radius: 10px;
-  transition: 0.1s ease-out;
+  transition: 0.05s ease-out;
 }
 
 #newPuzzleForm button[type='submit']:hover {
-  background-color: silver;
+  background-color: var(--pop);
   color: white;
+  border-color: var(--pop);
 }

@@ -6,7 +6,8 @@ export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
     name: "",
     type: "Crossword",
-    gridSize: [20, 20],
+    cols: 20,
+    rows: 20,
     version: 1,
     answerKey: {},
     answers: {},
@@ -15,8 +16,17 @@ export default function Build() {
   const [grid, setGrid] = useState([]);
   const [phase, setPhase] = useState(0);
 
+  // console.log(newPuzzle);
+
   const updatePuzzle = e => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    value =
+      name === "name"
+        ? value.replace(/\s+/g, " ").trim()
+        : name === "rows" || name === "cols"
+        ? parseInt(value)
+        : value;
+
     setNewPuzzle(prev => ({
       ...prev,
       [name]: value,

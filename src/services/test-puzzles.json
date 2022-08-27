@@ -2,6 +2,8 @@
   "name": "Space",
   "type": "Crossword",
   "gridSize": [20, 20],
+  "cols":20,
+  "rows":20,
   "version": 0,
   "answerKey": {
     "H2": "M",

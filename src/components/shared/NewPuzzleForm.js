@@ -2,8 +2,7 @@ import { useState } from "react";
 
 export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
   const [gridLink, setGridLink] = useState(true);
-  const { gridSize } = puzzle;
-  const [x, y] = gridSize;
+  const { cols, rows } = puzzle;
 
   return (
     <form
@@ -20,6 +19,7 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
           type="text"
           placeholder="Puzzle Name"
           onFocus={e => e.currentTarget.select()}
+          onChange={e => updatePuzzle(e)}
           required
         />
       </label>
@@ -27,7 +27,12 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
       <h4 className="label">Grid</h4>
       <div className={`newPuzzle-gridSize-wrap ${gridLink ? "linked" : ""}`}>
         {/* <h4>Grid</h4> */}
-        <NumInput dir="row" linked={gridLink} defaultValue={x} />
+        <NumInput
+          dir="cols"
+          linked={gridLink}
+          defaultValue={cols}
+          updatePuzzle={updatePuzzle}
+        />
         <button
           className="newPuzzle-gridSize-link"
           type="button"
@@ -35,15 +40,20 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
         >
           &times;
         </button>
-        <NumInput dir="col" linked={gridLink} defaultValue={y} />
+        <NumInput
+          dir="rows"
+          linked={gridLink}
+          defaultValue={rows}
+          updatePuzzle={updatePuzzle}
+        />
       </div>
       <button type="submit">Start</button>
     </form>
   );
 }
 
-function NumInput({ dir, linked, defaultValue }) {
-  const label = dir === "row" ? "x" : "y";
+function NumInput({ dir, linked, defaultValue, updatePuzzle }) {
+  // const label = dir === "row" ? "cols" : "rows";
   const updateGridSize = e => {
     const inputs = [...document.querySelectorAll(".num-input")];
     if (linked) {
@@ -51,12 +61,13 @@ function NumInput({ dir, linked, defaultValue }) {
       inputs.find(element => element !== e.currentTarget).value =
         e.currentTarget.value;
     }
+    updatePuzzle(e);
   };
 
   return (
-    <label htmlFor={label}>
+    <label htmlFor={dir}>
       <input
-        name={label}
+        name={dir}
         className="num-input"
         type="number"
         min={10}

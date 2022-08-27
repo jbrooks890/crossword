@@ -20,13 +20,15 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
           placeholder="Puzzle Name"
           onFocus={e => e.currentTarget.select()}
           onChange={e => updatePuzzle(e)}
+          // onClick={e => console.log(e)}
+          onMouseEnter={e => e.currentTarget.focus()}
+          // onMouseLeave={e => e.currentTarget.blur()}
           required
         />
       </label>
 
       <h4 className="label">Grid</h4>
       <div className={`newPuzzle-gridSize-wrap ${gridLink ? "linked" : ""}`}>
-        {/* <h4>Grid</h4> */}
         <NumInput
           dir="cols"
           linked={gridLink}
@@ -53,13 +55,11 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
 }
 
 function NumInput({ dir, linked, defaultValue, updatePuzzle }) {
-  // const label = dir === "row" ? "cols" : "rows";
   const updateGridSize = e => {
     const inputs = [...document.querySelectorAll(".num-input")];
+
     if (linked) {
-      // inputs.forEach(input => (input.value = e.currentTarget.value));
-      inputs.find(element => element !== e.currentTarget).value =
-        e.currentTarget.value;
+      inputs.find(element => element !== e.target).value = e.target.value;
     }
     updatePuzzle(e);
   };
@@ -76,7 +76,10 @@ function NumInput({ dir, linked, defaultValue, updatePuzzle }) {
         onMouseEnter={e => e.currentTarget.focus()}
         onMouseLeave={e => e.currentTarget.blur()}
         onFocus={e => e.currentTarget.select()}
-        onInput={e => updateGridSize(e)}
+        onInput={e => {
+          // console.log(e, e.target.name);
+          updateGridSize(e);
+        }}
         required
       />
     </label>

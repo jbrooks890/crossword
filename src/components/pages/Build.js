@@ -19,16 +19,23 @@ export default function Build() {
   // console.log(newPuzzle);
 
   const updatePuzzle = e => {
-    let { name, value } = e.target;
+    let { name, value, form } = e.target;
     value =
       name === "name"
         ? value.replace(/\s+/g, " ").trim()
-        : name === "rows" || name === "cols"
+        : name === ("rows" || "cols")
         ? parseInt(value)
         : value;
 
+    let other = {};
+    if (name === ("rows" || "cols")) {
+      let dir = name === "rows" ? "cols" : "rows";
+      other[dir] = parseInt(form[dir].value);
+    }
+    // console.log(other);
     setNewPuzzle(prev => ({
       ...prev,
+      ...other,
       [name]: value,
     }));
   };
@@ -45,8 +52,8 @@ export default function Build() {
           handleSubmit={handleSubmit}
         />
       )}
-      {/* {phase > 0 && <Frame puzzle={newPuzzle} editorMode={true} />} */}
-      {phase > 0 && <h1>MAKE A PUZZLE!</h1>}
+      {phase > 0 && <Frame puzzle={newPuzzle} editorMode={true} />}
+      {/* {phase > 0 && <h1>MAKE A PUZZLE!</h1>} */}
     </div>
   );
 }

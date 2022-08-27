@@ -14,7 +14,7 @@ export default function Grid({
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
   const activeRows = [];
-  activeCells.forEach((cell) => {
+  activeCells.forEach(cell => {
     const [col, _row] = cell.match(/[\d\.]+|\D+/g);
     const row = parseInt(_row);
     !activeCols.includes(col) && activeCols.push(col);
@@ -59,12 +59,12 @@ export default function Grid({
       let y = Math.floor(count / gridWidth);
       let col = getLetter(x);
       let cellName = col + y;
-      let groups = groupNames.filter((entry) =>
+      let groups = groupNames.filter(entry =>
         answers[entry].group.includes(cellName)
       );
       let display = [];
 
-      groups.forEach((entry) => {
+      groups.forEach(entry => {
         let across = entry.split("-")[0] === "across";
         let group = answers[entry].group;
 
@@ -101,7 +101,7 @@ export default function Grid({
             display: display.length && display,
             crop: !activeCols.includes(col) || !activeRows.includes(y),
           })}
-          controls={(e) => controls(e)}
+          controls={e => controls(e)}
           onHover={onHover}
           focusCell={focusCell}
         />

@@ -7,7 +7,7 @@ export default function Grid({
   answerKey,
   answers,
   controls,
-  onHover,
+  hoverGroup,
   focusCell,
   getLetter,
 }) {
@@ -21,104 +21,91 @@ export default function Grid({
     !activeRows.includes(row) && activeRows.push(row);
   });
 
-  /* const drawGrid = () => {
-    let rows = [];
-    let count = 0;
-    for (let y = 0; y < gridHeight; y++) {
-      let row = [];
-      for (let x = 0; x < gridWidth; x++) {
-        const cellName = getLetter(x) + y;
-        row.push(
-          <Cell
-            key={count++}
-            cell_name={cellName}
-            isJunction={false}
-            index={[x, y]}
-            answer={answerKey[cellName] ? answerKey[cellName] : null}
-          />
-        );
-      }
-      rows.push(row);
-    }
-
-    return rows.map((row, i) => <tr key={i}>{row}</tr>);
-  }; */
+  // =========== DRAW GRID ===========
 
   const drawGrid = () => {
+    // const groupNames = Object.keys(answers);
     const totalCells = gridWidth * gridHeight;
     let count = 0;
     let cells = [];
-    // let allGroups = answers.map(answer => answer.group);
-    let groupNames = Object.keys(answers);
-
-    // console.log(allGroups);
+    // console.log({ totalCells });
 
     while (count < totalCells) {
       // 18 --> [0,1], 19 --> [1,1]
-      let x = count % gridHeight;
+      let x = count % gridWidth;
       let y = Math.floor(count / gridWidth);
       let col = getLetter(x);
-      let cellName = col + y;
-      let groups = groupNames.filter(entry =>
-        answers[entry].group.includes(cellName)
-      );
-      let display = [];
+      let id = col + y;
 
-      groups.forEach(entry => {
-        let across = entry.split("-")[0] === "across";
-        let group = answers[entry].group;
-
-        if (across) {
-          if (group[0] === cellName) {
-            display.push("first");
-          } else if (group[group.length - 1] === cellName) {
-            display.push("last");
-          }
-        } else {
-          if (group[0] === cellName) {
-            display.push("top");
-          } else if (group[group.length - 1] === cellName) {
-            display.push("bottom");
-          }
-        }
-      });
+      // console.log({ count, x, y, gridWidth, gridHeight });
 
       cells.push(
         <Cell
           key={count}
-          cell_name={cellName}
+          cell_name={id}
           index={[x, y]}
-          // isJunction={groups.length > 1} // PLAY MODE
-          // answer={answerKey[cellName] ? answerKey[cellName] : null} // PLAY MODE
-          // groups={groups} // PLAY MODE
-          // display={display.length && display} // PLAY MODE
-          // crop={!activeCols.includes(col) || !activeRows.includes(y)} // PLAY MODE
-          {...(!editorMode && {
-            // PLAY MODE
-            isJunction: groups.length > 1,
-            answer: answerKey[cellName] ? answerKey[cellName] : null,
-            groups,
-            display: display.length && display,
-            crop: !activeCols.includes(col) || !activeRows.includes(y),
-          })}
+          {...(!editorMode && formatCellData(id, x, y))}
           controls={e => controls(e)}
-          onHover={onHover}
+          editorMode={editorMode}
+          hoverGroup={hoverGroup}
           focusCell={focusCell}
         />
       );
       count++;
     }
 
-    // console.log(cells[Math.floor(Math.random() * cells.length)]);
     return cells;
   };
+
+  // =========== FORMAT CELL DATA ===========
+
+  const formatCellData = (id, x, y) => {
+    const groupNames = Object.keys(answers);
+    const col = getLetter(x);
+    const groups = groupNames.filter(entry =>
+      answers[entry].group.includes(id)
+    );
+    let display = [];
+
+    groups.forEach(entry => {
+      let across = entry.split("-")[0] === "across";
+      let group = answers[entry].group;
+
+      if (across) {
+        if (group[0] === id) {
+          display.push("first");
+        } else if (group[group.length - 1] === id) {
+          display.push("last");
+        }
+      } else {
+        if (group[0] === id) {
+          display.push("top");
+        } else if (group[group.length - 1] === id) {
+          display.push("bottom");
+        }
+      }
+    });
+
+    return {
+      isJunction: groups.length > 1,
+      answer: answerKey[id] ? answerKey[id] : null,
+      groups,
+      display: display.length && display,
+      crop: !activeCols.includes(col) || !activeRows.includes(y),
+    };
+  };
+
+  // --------------------------------
+  // :::::::::::: RENDER ::::::::::::
 
   return (
     <div
       id="cw-grid"
       className="grid"
       style={{
-        gridTemplate: `repeat(${activeRows.length}, 48px) / repeat(${activeCols.length}, 48px)`,
+        gridTemplate: `repeat(${
+          editorMode ? gridHeight : activeRows.length
+        }, 48px) / repeat(${editorMode ? gridWidth : activeCols.length}, 48px)`,
       }}
     >
       {drawGrid()}

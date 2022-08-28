@@ -120,7 +120,6 @@ nav a:not(:last-of-type){
 
 .cell {
   position: relative;
-  /* display: none; */
   visibility: hidden;
 }
 
@@ -129,7 +128,8 @@ nav a:not(:last-of-type){
   display: none;
 }
 
-.cell.show {
+.cell.show,
+.cell.build {
   display: block;
   visibility: visible;
 }
@@ -185,7 +185,6 @@ nav a:not(:last-of-type){
   left: var(--offset);
   right: var(--offset);
   box-sizing: border-box;
-  /* border: 2px dashed cyan; */
   opacity: 0;
   transition: 0.2s ease;
   z-index: -1;
@@ -204,7 +203,6 @@ nav a:not(:last-of-type){
   left: 0;
   right: 0;
   bottom: 0;
-  /* border: 1px solid red; */
   box-sizing: border-box;
   transition: 0.1s ease-out;
   opacity: 0;
@@ -224,7 +222,6 @@ nav a:not(:last-of-type){
   justify-content: space-between;
   width: 100%;
   height: 50%;
-  /* background-color: hlsa(0,0%,0%,0.05); */
   background-color: transparent;
   font-size: 2rem;
   line-height: 1em;
@@ -304,6 +301,10 @@ form#crossword .across.last .acrossBox {
   border-radius: 0 8px 8px 0;
 }
 
+form#crossword .axis-box.preview {
+  /* TODO */
+  border-color: var(--pop-alt) !important;
+}
 /*  --------- HINT CACHE --------- */
 #hint-cache-wrap {
   display: flex;

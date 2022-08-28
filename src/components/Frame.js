@@ -9,17 +9,9 @@ export default function Frame({ puzzle, editorMode }) {
   const { cols: gridWidth, rows: gridHeight } = puzzle;
   const { answerKey, answers } = puzzle;
   const [activeGroup, setActiveGroup] = useState(Object.keys(answers)[0]);
-  // const [history, setHistory] = useState([]);
-
-  // useEffect(() => console.log(`%c${"=".repeat(50)}`, "color: orange"), []);
-  // useEffect(
-  //   () =>
-  //     console.log(`%c${activeGroup}`, "color: lime; text-transform: uppercase"),
-  //   [activeGroup]
-  // );
 
   // =========== GET CELL DATA ===========
-  const cellData = (id) => {
+  const cellData = id => {
     const element = document.getElementById(id);
     const input = element.querySelector(".cell-input");
     const groups = element.getAttribute("data-groups").split(" ");
@@ -37,18 +29,19 @@ export default function Frame({ puzzle, editorMode }) {
   };
 
   // =========== SET GROUP ===========
-  const setGroup = (name) => {
+  const setGroup = name => {
     if (name !== activeGroup) {
       // console.log(`Change groups: ${activeGroup} --> ${name}`);
+      // console.log({ name });
 
       if (answers[name]) {
         document
           .querySelectorAll(".active")
-          .forEach((cell) => cell.classList.remove("active"));
+          .forEach(cell => cell.classList.remove("active"));
       }
       document
         .querySelectorAll(`.axis-box.${name}`)
-        .forEach((cell) => cell.classList.add("active"));
+        .forEach(cell => cell.classList.add("active"));
       document.querySelector(`#hint-${name}`).classList.add("active");
 
       setActiveGroup(name);
@@ -56,7 +49,7 @@ export default function Frame({ puzzle, editorMode }) {
   };
 
   // =========== BUTTON CONTROLS ===========
-  const buttonControls = (e) => {
+  const buttonControls = e => {
     // console.log(e);
     const {
       type,
@@ -116,7 +109,7 @@ export default function Frame({ puzzle, editorMode }) {
             if (isJunction) {
               focusCell(
                 id,
-                groups.find((group) => group !== activeGroup)
+                groups.find(group => group !== activeGroup)
               );
             }
             break;
@@ -146,7 +139,7 @@ export default function Frame({ puzzle, editorMode }) {
   };
 
   // =========== FOCUS NEXT ===========
-  const focusNext = (id) => {
+  const focusNext = id => {
     const cell = document.getElementById(id);
     const { group } = answers[activeGroup];
     const currPos = group.indexOf(id);
@@ -164,7 +157,7 @@ export default function Frame({ puzzle, editorMode }) {
         const altGroupName = cell
           .getAttribute("data-groups")
           .split(" ")
-          .find((name) => name !== activeGroup);
+          .find(name => name !== activeGroup);
         const altGroup = answers[altGroupName].group;
 
         let next = altGroup.indexOf(id) + 1;
@@ -192,17 +185,23 @@ export default function Frame({ puzzle, editorMode }) {
   // =========== FOCUS FIRST ===========
   const focusFirst = (name, strict = false) => {
     const { group } = answers[name];
-    const targets = group.filter((id) => cellData(id).input.value.length === 0);
+    const targets = group.filter(id => cellData(id).input.value.length === 0);
 
-    targets.length
-      ? focusCell(strict ? group[0] : targets[0], name)
-      : focusNextGroup(name);
+    if (strict) {
+      focusCell(group[0], name);
+    } else {
+      if (targets.length) {
+        focusCell(targets[0], name);
+      } else {
+        focusNextGroup(name);
+      }
+    }
   };
 
   // =========== FOCUS LAST ===========
   const focusLast = (name, strict = false) => {
     const { group } = answers[name];
-    const targets = group.filter((id) => cellData(id).input.value.length === 0);
+    const targets = group.filter(id => cellData(id).input.value.length === 0);
 
     targets.length
       ? focusCell(
@@ -213,7 +212,7 @@ export default function Frame({ puzzle, editorMode }) {
   };
 
   // =========== GET LETTER ===========
-  const getLetter = (n) => {
+  const getLetter = n => {
     const first = "a".charCodeAt(0);
     const last = "z".charCodeAt(0);
     const length = last - first + 1; // letter range
@@ -228,7 +227,7 @@ export default function Frame({ puzzle, editorMode }) {
     const actives = Object.keys(answerKey).sort();
     let cols = [];
     let rows = [];
-    actives.forEach((entry) => {
+    actives.forEach(entry => {
       const [col, _row] = entry.match(/[\d\.]+|\D+/g);
       const row = parseInt(_row);
       !cols.includes(col) && cols.push(col);
@@ -265,7 +264,7 @@ export default function Frame({ puzzle, editorMode }) {
       const isJunction = cell.classList.contains("junction");
       const groups = cell.getAttribute("data-groups").split(" ");
       const group = isJunction
-        ? groups.find((group) => group.includes(dir))
+        ? groups.find(group => group.includes(dir))
         : groups[0];
       focusCell(destination, group);
     }
@@ -274,16 +273,14 @@ export default function Frame({ puzzle, editorMode }) {
   // =========== GET HINTS ===========
   const getHints = () => {
     let list = new Map();
-    Object.keys(answers).forEach((entry) =>
-      list.set(entry, answers[entry].hint)
-    );
+    Object.keys(answers).forEach(entry => list.set(entry, answers[entry].hint));
     // console.log(list);
     return list;
   };
 
   // =========== ON HOVER ===========
   const hoverGroup = (name, direction) => {
-    answers[name].group.forEach((id) => {
+    answers[name].group.forEach(id => {
       const axis = direction === "across" ? ".acrossBox" : ".downBox";
       const cell = document.querySelector(`#${id} ${axis}`);
       cell.classList.toggle("preview");
@@ -294,7 +291,7 @@ export default function Frame({ puzzle, editorMode }) {
   // =========== GIVE HINT ===========
   const giveHint = () => {
     const remaining = Object.keys(answerKey).filter(
-      (id) => cellData(id).input.value.length === 0
+      id => cellData(id).input.value.length === 0
     );
     const cell = remaining[Math.floor(Math.random() * remaining.length)];
     const { element, input } = cellData(cell);
@@ -307,7 +304,7 @@ export default function Frame({ puzzle, editorMode }) {
 
   return (
     <form id="crossword">
-      <HintBox hint={answers[activeGroup].hint} />
+      {!editorMode && <HintBox hint={answers[activeGroup].hint} />}
       <Grid
         activeGroup={activeGroup}
         gridWidth={gridWidth}
@@ -316,13 +313,19 @@ export default function Frame({ puzzle, editorMode }) {
         answerKey={answerKey}
         answers={answers}
         setGroup={setGroup}
-        controls={(e) => buttonControls(e)}
-        onHover={hoverGroup}
+        controls={e => buttonControls(e)}
+        hoverGroup={hoverGroup}
         focusCell={focusCell}
         getLetter={getLetter}
       />
-      <ButtonCache giveHint={giveHint} />
-      <HintCache hints={getHints()} onClick={focusFirst} onHover={hoverGroup} />
+      <ButtonCache giveHint={!editorMode && giveHint} />
+      {!editorMode && (
+        <HintCache
+          hints={getHints()}
+          focusFirst={focusFirst}
+          onHover={hoverGroup}
+        />
+      )}
     </form>
   );
 }

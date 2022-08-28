@@ -23,12 +23,12 @@ export default function Build() {
     value =
       name === "name"
         ? value.replace(/\s+/g, " ").trim()
-        : name === ("rows" || "cols")
+        : name === "rows" || name === "cols"
         ? parseInt(value)
         : value;
 
     let other = {};
-    if (name === ("rows" || "cols")) {
+    if (name === "rows" || name === "cols") {
       let dir = name === "rows" ? "cols" : "rows";
       other[dir] = parseInt(form[dir].value);
     }
@@ -52,8 +52,8 @@ export default function Build() {
           handleSubmit={handleSubmit}
         />
       )}
+      {phase > 0 && <h1>{newPuzzle.name}</h1>}
       {phase > 0 && <Frame puzzle={newPuzzle} editorMode={true} />}
-      {/* {phase > 0 && <h1>MAKE A PUZZLE!</h1>} */}
     </div>
   );
 }

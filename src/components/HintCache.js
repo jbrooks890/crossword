@@ -1,4 +1,4 @@
-export default function HintCache({ hints, onClick, onHover }) {
+export default function HintCache({ hints, focusFirst, onHover }) {
   const groups = Array.from(hints.keys());
   const across = [];
   const down = [];
@@ -14,7 +14,7 @@ export default function HintCache({ hints, onClick, onHover }) {
         className="hint"
         data-hint-group={name}
         data-hint={hint}
-        onClick={() => onClick(name, true)}
+        onClick={() => focusFirst(name, true)}
         onMouseEnter={() => onHover(name, dir)}
         onMouseLeave={() => onHover(name, dir)}
       >

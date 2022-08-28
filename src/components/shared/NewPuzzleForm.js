@@ -23,6 +23,7 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
           // onClick={e => console.log(e)}
           onMouseEnter={e => e.currentTarget.focus()}
           // onMouseLeave={e => e.currentTarget.blur()}
+          defaultValue="TEST" //TODO
           required
         />
       </label>

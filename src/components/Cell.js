@@ -12,13 +12,47 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     focusCell,
   } = props;
 
+  const [editAxis, setEditAxis] = useState("across");
+
   const axisGroups = new Map(); // TODO
   !editorMode &&
     groups.forEach(group => axisGroups.set(group.split("-")[0], group)); // TODO
 
+  // =========== EDITOR CONTROLS ===========
+  const editControls = e => {
+    const {
+      type,
+      key,
+      altKey,
+      ctrlKey,
+      shiftKey,
+      currentTarget: input,
+      which,
+    } = e;
+    switch (type) {
+      // ++++++ KEY UP ++++++
+      case "keyup":
+        // printable && focusNext(id);
+        break;
+      // ++++++ KEY DOWN ++++++
+      case "keydown":
+        switch (key) {
+          case " ":
+            e.preventDefault();
+            break;
+        }
+        break;
+    }
+  };
+
+  // =========== HANDLE SUBMIT ===========
+
   const formatCell = () => {
     const axisGroups = new Map();
     groups.forEach(group => axisGroups.set(group.split("-")[0], group));
+
+    // --------------------------------
+    // :::::::::::: RENDER ::::::::::::
 
     return {
       cell: {
@@ -125,7 +159,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         }
         onKeyDown={e => controls(e)}
         onKeyUp={e => controls(e)}
-        placeholder={editorMode && id}
+        placeholder={editorMode ? id : undefined}
       />
     </div>
   );

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import BuildNav from "./BuildNav";
 import ButtonCache from "./ButtonCache";
 import Grid from "./Grid";
 import HintBox from "./HintBox";
 import HintCache from "./HintCache";
 
-export default function Frame({ puzzle, editorMode }) {
+export default function Frame({ children, puzzle, editorMode, updateGrid }) {
   // const [gridWidth, gridHeight] = puzzle.gridSize;
   const { cols: gridWidth, rows: gridHeight } = puzzle;
   const { answerKey, answers } = puzzle;
@@ -304,14 +305,15 @@ export default function Frame({ puzzle, editorMode }) {
 
   return (
     <form id="crossword">
-      {!editorMode && <HintBox hint={answers[activeGroup].hint} />}
+      {children}
+      {/* {!editorMode && <HintBox hint={answers[activeGroup].hint} />}
+      {editorMode && <BuildNav />}
       <Grid
-        activeGroup={activeGroup}
         gridWidth={gridWidth}
         gridHeight={gridHeight}
-        editorMode={editorMode}
         answerKey={answerKey}
         answers={answers}
+        editorMode={editorMode}
         setGroup={setGroup}
         controls={e => buttonControls(e)}
         hoverGroup={hoverGroup}
@@ -325,7 +327,7 @@ export default function Frame({ puzzle, editorMode }) {
           focusFirst={focusFirst}
           onHover={hoverGroup}
         />
-      )}
+      )} */}
     </form>
   );
 }

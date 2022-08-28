@@ -160,7 +160,7 @@ nav a:not(:last-of-type){
 .cell-input::placeholder {
   background-color: transparent;
   color: hsla(0, 0%, 0%, 0.1);
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .cell-input::selection {
@@ -301,10 +301,10 @@ form#crossword .across.last .acrossBox {
   border-radius: 0 8px 8px 0;
 }
 
-form#crossword .axis-box.preview {
-  /* TODO */
+/* form#crossword .axis-box.preview {
   border-color: var(--pop-alt) !important;
-}
+} */
+
 /*  --------- HINT CACHE --------- */
 #hint-cache-wrap {
   display: flex;
@@ -386,6 +386,37 @@ form#crossword .axis-box.preview {
   flex-grow: 1;
   /* align-items: center; */
   box-sizing: border-box;
+}
+
+#build-nav {
+  display: flex;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+#build-nav li {
+  cursor: pointer;
+  padding: 0.5em 1.25em;
+  color: silver;
+  font-family: var(--keyFont);
+  font-weight: normal;
+  font-size: smaller;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1em;
+  box-sizing: border-box;
+  border: 2.5px solid var(--faint);
+  border-radius: 5px;
+  transition: 0.1s ease-out;
+}
+
+#build-nav li:not(:last-of-type){margin-right: 0.5rem}
+
+#build-nav li:hover,
+#build-nav li:focus{
+  background-color: silver;
+  color: white;
+  border-color: silver;
 }
 
 

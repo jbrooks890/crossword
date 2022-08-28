@@ -1,16 +1,16 @@
+import { useState, useEffect } from "react";
 import Cell from "./Cell";
 
 export default function Grid({
-  gridWidth,
-  gridHeight,
-  editorMode,
-  answerKey,
-  answers,
+  puzzle,
   controls,
   hoverGroup,
   focusCell,
-  getLetter,
+  // updateGrid,
 }) {
+  const { cols, rows, editorMode, answerKey, answers } = puzzle;
+  const { active: editing, phase } = editorMode;
+  // const [grid, setGrid] = useState({});
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
   const activeRows = [];
@@ -21,39 +21,46 @@ export default function Grid({
     !activeRows.includes(row) && activeRows.push(row);
   });
 
+  // useEffect(() => updateGrid(grid), [grid]);
+
   // =========== DRAW GRID ===========
 
   const drawGrid = () => {
-    // const groupNames = Object.keys(answers);
-    const totalCells = gridWidth * gridHeight;
+    console.log("running draw grid", { cols, rows });
+    const totalCells = cols * rows;
     let count = 0;
     let cells = [];
-    // console.log({ totalCells });
+    let grid = {
+      cols: {},
+      rows: {},
+    };
 
     while (count < totalCells) {
-      // 18 --> [0,1], 19 --> [1,1]
-      let x = count % gridWidth;
-      let y = Math.floor(count / gridWidth);
+      let x = count % cols;
+      let y = Math.floor(count / cols);
       let col = getLetter(x);
       let id = col + y;
 
-      // console.log({ count, x, y, gridWidth, gridHeight });
+      grid.cols[col] ? grid.cols[col].push(id) : (grid.cols[col] = [id]);
+      grid.rows[y] ? grid.rows[y].push(id) : (grid.rows[y] = [id]);
 
       cells.push(
         <Cell
           key={count}
           cell_name={id}
           index={[x, y]}
-          {...(!editorMode && formatCellData(id, x, y))}
+          {...(!editing && formatCellData(id, x, y))}
           controls={e => controls(e)}
-          editorMode={editorMode}
+          editorMode={editing}
           hoverGroup={hoverGroup}
           focusCell={focusCell}
         />
       );
+
       count++;
     }
-
+    // setGrid(grid);
+    console.log(grid);
     return cells;
   };
 
@@ -95,6 +102,16 @@ export default function Grid({
     };
   };
 
+  // =========== GET LETTER ===========
+  const getLetter = n => {
+    const first = "a".charCodeAt(0);
+    const last = "z".charCodeAt(0);
+    const length = last - first + 1; // letter range
+
+    // console.log(String.fromCharCode(first + n - 1));
+    return String.fromCharCode(first + n).toUpperCase();
+  };
+
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
 
@@ -104,8 +121,8 @@ export default function Grid({
       className="grid"
       style={{
         gridTemplate: `repeat(${
-          editorMode ? gridHeight : activeRows.length
-        }, 48px) / repeat(${editorMode ? gridWidth : activeCols.length}, 48px)`,
+          editing ? rows : activeRows.length
+        }, 48px) / repeat(${editing ? cols : activeCols.length}, 48px)`,
       }}
     >
       {drawGrid()}

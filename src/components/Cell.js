@@ -10,6 +10,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     controls,
     hoverGroup,
     focusCell,
+    operations,
   } = props;
 
   const [editAxis, setEditAxis] = useState("across");

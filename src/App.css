@@ -8,8 +8,9 @@
 :root{
   --grid: 48px;
   /* --------- COLORS --------- */
-  --pop: hsl(215, 50%, 60%);
-  --pop-alt: hsl(120, 75%, 60%);
+  --pop: hsl(215, 35%, 50%);
+  /* --pop-alt: hsl(120, 75%, 60%); */
+  --pop-alt: hsl(322, 60%, 60%);
   --lite: white;
   --faint: hsla(0,0%,0%,0.1);
   /* --------- FONTS --------- */
@@ -22,6 +23,10 @@
 html {height: 100vh;}
 
 body, #root, .App {height: 100%;}
+
+body {
+  color: var(--pop);
+}
 
 *::selection {
   background-color: var(--faint);

@@ -18,11 +18,11 @@ export default function Home() {
     completed: false,
   });
   const { answerKey, answers } = activePuzzle;
-  const [activeGroup, setActiveGroup] = useState();
+  const [activeGroup, setActiveGroup] = useState(Object.keys(answers)[0]);
 
   useEffect(() => {
     // console.log("%cTEST", "color:red");
-    focusFirst(Object.keys(answers)[0]);
+    // focusFirst(Object.keys(answers)[0]);
   }, [activePuzzle]);
 
   console.log(
@@ -55,10 +55,10 @@ export default function Home() {
 
   // =========== SET GROUP ===========
   const setGroup = name => {
-    // console.log(
-    //   `%cSET GROUP: ${activeGroup}`,
-    //   "color: plum; text-transform: uppercase"
-    // );
+    console.log(
+      `%cSET GROUP: ${activeGroup}`,
+      "color: plum; text-transform: uppercase"
+    );
 
     if (name !== activeGroup) {
       console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import Cell from "./Cell";
 
 export default function Grid({
@@ -7,6 +7,7 @@ export default function Grid({
   hoverGroup,
   focusCell,
   updateGrid,
+  operations,
   ...props
 }) {
   const { cols, rows, editorMode, answerKey, answers } = puzzle;
@@ -74,16 +75,16 @@ export default function Grid({
   // =========== DRAW GRID ===========
 
   const drawGrid = () => {
-    console.log("%cTEST", "color:red");
+    console.log("%cDRAW GRID", "color:red");
     const totalCells = cols * rows;
     let grid = {
       cells: [],
       cols: {},
       rows: {},
     };
-    let count = 0;
+    // let count = 0;
 
-    while (count < totalCells) {
+    for (let count = 0; count < totalCells; count++) {
       let x = count % cols;
       let y = Math.floor(count / cols);
       let col = getLetter(x);
@@ -102,23 +103,25 @@ export default function Grid({
           editorMode={editing}
           hoverGroup={hoverGroup}
           focusCell={focusCell}
+          operations={operations}
         />
       );
 
-      count++;
+      // count++;
     }
     // setGrid(grid);
     return grid;
   };
 
-  const [grid, setGrid] = useState(drawGrid()); // NOT WORKING
-  // const [grid, setGrid] = useState({});
-  // useEffect(() => updateGrid && updateGrid(grid), [phase]);
+  const { cells, cols: _cols, rows: _rows } = drawGrid();
+  const [grid, setGrid] = useState({ cols: _cols, rows: _rows });
 
   console.log(
-    `%c${"<>".repeat(7)}\\ GRID /${"<>".repeat(7)}`,
+    `%c${"<>".repeat(8)}\\ GRID /${"<>".repeat(8)}`,
     "color: plum; text-transform: uppercase"
   );
+
+  console.log(grid);
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
@@ -133,8 +136,7 @@ export default function Grid({
         }, 48px) / repeat(${editing ? cols : activeCols.length}, 48px)`,
       }}
     >
-      {grid.cells}
-      {/* {drawGrid().cells} */}
+      {cells}
     </div>
   );
 }

@@ -26,9 +26,8 @@ export default function Build() {
   });
   // const { content, cols, rows } = grid;
 
-  // useEffect(() => console.log(grid), []);
-
-  console.log(newPuzzle);
+  // console.log(grid);
+  // console.log(newPuzzle);
 
   // =========== UPDATE GRID ===========
   const updateGrid = data => {
@@ -120,14 +119,10 @@ export default function Build() {
           handleSubmit={handleSubmit}
         />
       )}
-      {phase > 0 && <h1>{newPuzzle.name}</h1>}
-      {/* {phase > 0 && (
-        <Frame puzzle={newPuzzle} editorMode={true} updateGrid={updateGrid} />
-      )} */}
       {phase > 0 && (
         <Frame puzzle={newPuzzle}>
           <BuildNav />
-          <Grid puzzle={newPuzzle} />
+          <Grid puzzle={newPuzzle} updateGrid={updateGrid} />
         </Frame>
       )}
     </div>

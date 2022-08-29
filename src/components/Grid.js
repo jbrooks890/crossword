@@ -6,11 +6,13 @@ export default function Grid({
   controls,
   hoverGroup,
   focusCell,
-  // updateGrid,
+  updateGrid,
+  ...props
 }) {
   const { cols, rows, editorMode, answerKey, answers } = puzzle;
   const { active: editing, phase } = editorMode;
-  // const [grid, setGrid] = useState({});
+  const { functions } = props;
+
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
   const activeRows = [];
@@ -21,47 +23,14 @@ export default function Grid({
     !activeRows.includes(row) && activeRows.push(row);
   });
 
-  // useEffect(() => updateGrid(grid), [grid]);
+  // =========== GET LETTER ===========
+  const getLetter = n => {
+    const first = "a".charCodeAt(0);
+    const last = "z".charCodeAt(0);
+    const length = last - first + 1; // letter range
 
-  // =========== DRAW GRID ===========
-
-  const drawGrid = () => {
-    console.log("running draw grid", { cols, rows });
-    const totalCells = cols * rows;
-    let count = 0;
-    let cells = [];
-    let grid = {
-      cols: {},
-      rows: {},
-    };
-
-    while (count < totalCells) {
-      let x = count % cols;
-      let y = Math.floor(count / cols);
-      let col = getLetter(x);
-      let id = col + y;
-
-      grid.cols[col] ? grid.cols[col].push(id) : (grid.cols[col] = [id]);
-      grid.rows[y] ? grid.rows[y].push(id) : (grid.rows[y] = [id]);
-
-      cells.push(
-        <Cell
-          key={count}
-          cell_name={id}
-          index={[x, y]}
-          {...(!editing && formatCellData(id, x, y))}
-          controls={e => controls(e)}
-          editorMode={editing}
-          hoverGroup={hoverGroup}
-          focusCell={focusCell}
-        />
-      );
-
-      count++;
-    }
-    // setGrid(grid);
-    console.log(grid);
-    return cells;
+    // console.log(String.fromCharCode(first + n - 1));
+    return String.fromCharCode(first + n).toUpperCase();
   };
 
   // =========== FORMAT CELL DATA ===========
@@ -102,15 +71,54 @@ export default function Grid({
     };
   };
 
-  // =========== GET LETTER ===========
-  const getLetter = n => {
-    const first = "a".charCodeAt(0);
-    const last = "z".charCodeAt(0);
-    const length = last - first + 1; // letter range
+  // =========== DRAW GRID ===========
 
-    // console.log(String.fromCharCode(first + n - 1));
-    return String.fromCharCode(first + n).toUpperCase();
+  const drawGrid = () => {
+    console.log("%cTEST", "color:red");
+    const totalCells = cols * rows;
+    let grid = {
+      cells: [],
+      cols: {},
+      rows: {},
+    };
+    let count = 0;
+
+    while (count < totalCells) {
+      let x = count % cols;
+      let y = Math.floor(count / cols);
+      let col = getLetter(x);
+      let id = col + y;
+
+      grid.cols[col] ? grid.cols[col].push(id) : (grid.cols[col] = [id]);
+      grid.rows[y] ? grid.rows[y].push(id) : (grid.rows[y] = [id]);
+
+      grid.cells.push(
+        <Cell
+          key={count}
+          cell_name={id}
+          index={[x, y]}
+          {...(!editing && formatCellData(id, x, y))}
+          controls={e => controls(e)}
+          editorMode={editing}
+          hoverGroup={hoverGroup}
+          focusCell={focusCell}
+        />
+      );
+
+      count++;
+    }
+    // setGrid(grid);
+    return grid;
   };
+
+  const [grid, setGrid] = useState(drawGrid()); // NOT WORKING
+  // const [grid, setGrid] = useState({});
+  // useEffect(() => updateGrid && updateGrid(grid), [phase]);
+
+  console.log(
+    `%c${"<>".repeat(7)}\\ GRID /${"<>".repeat(7)}`,
+    "color: plum; text-transform: uppercase"
+  );
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
@@ -125,7 +133,8 @@ export default function Grid({
         }, 48px) / repeat(${editing ? cols : activeCols.length}, 48px)`,
       }}
     >
-      {drawGrid()}
+      {grid.cells}
+      {/* {drawGrid().cells} */}
     </div>
   );
 }

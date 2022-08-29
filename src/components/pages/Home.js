@@ -17,14 +17,18 @@ export default function Home() {
     timer: 0,
     completed: false,
   });
-  const {
-    name,
-    cols: gridWidth,
-    rows: gridHeight,
-    answerKey,
-    answers,
-  } = activePuzzle;
-  const [activeGroup, setActiveGroup] = useState(Object.keys(answers)[0]);
+  const { answerKey, answers } = activePuzzle;
+  const [activeGroup, setActiveGroup] = useState();
+
+  useEffect(() => {
+    // console.log("%cTEST", "color:red");
+    focusFirst(Object.keys(answers)[0]);
+  }, [activePuzzle]);
+
+  console.log(
+    `%c${"=".repeat(15)}/ ${activeGroup} \\${"=".repeat(15)}`,
+    "color: lime; text-transform: uppercase"
+  );
 
   // =========== GET CELL DATA ===========
   const cellData = id => {
@@ -40,14 +44,24 @@ export default function Home() {
 
   // =========== FOCUS CELL ===========
   const focusCell = (id, group = activeGroup) => {
+    console.log(
+      `%cCURRENT GROUP: ${activeGroup}`,
+      "color: orange; text-transform: uppercase"
+    );
+    console.log("running focus cell:", { id, group });
     group !== activeGroup && setGroup(group);
     cellData(id).input.focus();
   };
 
   // =========== SET GROUP ===========
   const setGroup = name => {
+    // console.log(
+    //   `%cSET GROUP: ${activeGroup}`,
+    //   "color: plum; text-transform: uppercase"
+    // );
+
     if (name !== activeGroup) {
-      // console.log(`Change groups: ${activeGroup} --> ${name}`);
+      console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
       // console.log({ name });
 
       if (answers[name]) {
@@ -159,14 +173,10 @@ export default function Home() {
     const cell = document.getElementById(id);
     const { group } = answers[activeGroup];
     const currPos = group.indexOf(id);
-    // const isFirst = currPos === 0;
     const lastCell = currPos === group.length - 1;
     const isJunction = cell.classList.contains("junction");
-    // const getCell = id => document.querySelector(`#${id} .cell-input`);
-    let nextPos;
 
     if (!lastCell) {
-      // nextPos = group[currPos + 1];
       focusCell(group[currPos + 1]);
     } else {
       if (isJunction) {
@@ -200,6 +210,7 @@ export default function Home() {
 
   // =========== FOCUS FIRST ===========
   const focusFirst = (name, strict = false) => {
+    // console.log("%cFOCUS FIRST", "color: limegreen");
     const { group } = answers[name];
     const targets = group.filter(id => cellData(id).input.value.length === 0);
 
@@ -239,6 +250,7 @@ export default function Home() {
 
   // =========== FOCUS NEAREST ===========
   const focusNearest = (id, [x, y], [xDiff, yDiff]) => {
+    // console.log("%cFOCUS NEAREST", "color: yellow");
     const cell = document.getElementById(id);
     const actives = Object.keys(answerKey).sort();
     let cols = [];
@@ -317,13 +329,11 @@ export default function Home() {
 
   return (
     <div id="home-page">
-      <h1 className="puzzle-title">{name}</h1>
-      {/* <Frame puzzle={activePuzzle} editorMode={false} /> */}
       <Frame puzzle={activePuzzle}>
-        <HintBox hint={answers[activeGroup].hint} />
+        {activeGroup && <HintBox hint={answers[activeGroup].hint} />}
         <Grid
           puzzle={activePuzzle}
-          setGroup={setGroup}
+          // setGroup={setGroup}
           controls={e => buttonControls(e)}
           hoverGroup={hoverGroup}
           focusCell={focusCell}

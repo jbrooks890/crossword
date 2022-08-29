@@ -51,9 +51,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     const axisGroups = new Map();
     groups.forEach(group => axisGroups.set(group.split("-")[0], group));
 
-    // --------------------------------
-    // :::::::::::: RENDER ::::::::::::
-
     return {
       cell: {
         classes: [
@@ -154,9 +151,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         maxLength="1"
         tabIndex="-1"
         onFocus={e => e.currentTarget.select()}
-        onClick={() =>
-          !editorMode && focusCell(id, !isJunction ? groups[0] : undefined)
-        }
+        onClick={() => {
+          !editorMode && focusCell(id, !isJunction ? groups[0] : undefined);
+          // focusCell(id, !isJunction ? groups[0] : undefined);
+        }}
         onKeyDown={e => controls(e)}
         onKeyUp={e => controls(e)}
         placeholder={editorMode ? id : undefined}

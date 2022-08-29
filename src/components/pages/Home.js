@@ -327,6 +327,13 @@ export default function Home() {
     input.value = answerKey[cell];
   };
 
+  const cellOperations = {
+    controls: e => buttonControls(e),
+    hoverGroup: hoverGroup,
+    focusCell: focusCell,
+    getLetter: getLetter,
+  };
+
   return (
     <div id="home-page">
       <Frame puzzle={activePuzzle}>
@@ -338,6 +345,7 @@ export default function Home() {
           hoverGroup={hoverGroup}
           focusCell={focusCell}
           getLetter={getLetter}
+          operations={cellOperations}
         />
         <ButtonCache giveHint={giveHint} />
         <HintCache

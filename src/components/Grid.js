@@ -10,6 +10,8 @@ export default function Grid({
   operations,
   ...props
 }) {
+  const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
+
   const { cols, rows, editorMode, answerKey, answers } = puzzle;
   const { active: editing, phase } = editorMode;
   const { functions } = props;
@@ -103,6 +105,8 @@ export default function Grid({
           editorMode={editing}
           hoverGroup={hoverGroup}
           focusCell={focusCell}
+          axis={axis}
+          toggleAxis={toggleAxis}
           operations={operations}
         />
       );

@@ -6,7 +6,7 @@ import NewPuzzleForm from "../shared/NewPuzzleForm";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
-    name: "",
+    name: "Boogie",
     type: "Crossword",
     cols: 20,
     rows: 20,
@@ -104,7 +104,10 @@ export default function Build() {
 
   // =========== HANDLE SUBMIT ===========
 
-  const handleSubmit = () => setPhase(prev => prev + 1);
+  const handleSubmit = e => {
+    e.preventDefault();
+    setPhase(prev => prev + 1);
+  };
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::

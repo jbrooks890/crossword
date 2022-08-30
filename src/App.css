@@ -139,6 +139,37 @@ nav a:not(:last-of-type){
   visibility: visible;
 }
 
+.cell.build .cell-input::before{
+  --offset: -2px;
+  content: '';
+  position: absolute;
+  display: block;
+  top: var(--offset);
+  bottom: var(--offset);
+  left: var(--offset);
+  right: var(--offset);
+}
+
+.cell.build.edit-across .cell-input:focus{
+  background-color: #ff000030
+}
+
+.cell.build.edit-down .cell-input:focus{
+  background-color: #00ffe530
+}
+
+.cell.build.edit-across .cell-input:focus::before {
+  --border: 2px solid var(--pop-alt);
+  border-top: var(--border);
+  border-bottom: var(--border);
+}
+
+.cell.build.edit-down .cell-input:focus::before {
+  --border: 2px solid var(--pop-alt);
+  border-left: var(--border);
+  border-right: var(--border);
+}
+
 .cell-input {
   cursor: pointer;
   position: relative;

@@ -2,16 +2,10 @@ import { useState } from "react";
 
 export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
   const [gridLink, setGridLink] = useState(true);
-  const { cols, rows } = puzzle;
+  const { name: title, cols, rows } = puzzle;
 
   return (
-    <form
-      id="newPuzzleForm"
-      onSubmit={e => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
+    <form id="newPuzzleForm" onSubmit={e => handleSubmit(e)}>
       <label htmlFor="name">
         <h4>Name</h4>
         <input
@@ -19,11 +13,11 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
           type="text"
           placeholder="Puzzle Name"
           onFocus={e => e.currentTarget.select()}
-          onChange={e => updatePuzzle(e)}
+          onInput={e => updatePuzzle(e)}
           // onClick={e => console.log(e)}
           onMouseEnter={e => e.currentTarget.focus()}
           // onMouseLeave={e => e.currentTarget.blur()}
-          defaultValue="TEST" //TODO
+          defaultValue={title} //TODO
           required
         />
       </label>

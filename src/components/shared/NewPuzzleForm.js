@@ -6,6 +6,7 @@ export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
 
   return (
     <form id="newPuzzleForm" onSubmit={e => handleSubmit(e)}>
+      <h2>Build</h2>
       <label htmlFor="name">
         <h4>Name</h4>
         <input

@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.61365e5f.css",
+    "main.js": "/static/js/main.ab7ee2da.js",
+    "static/media/RussoOne-Regular.ttf": "/static/media/RussoOne-Regular.b2f5b287ccb8fd446eae.ttf",
+    "index.html": "/index.html",
+    "main.61365e5f.css.map": "/static/css/main.61365e5f.css.map",
+    "main.ab7ee2da.js.map": "/static/js/main.ab7ee2da.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.61365e5f.css",
+    "static/js/main.ab7ee2da.js"
+  ]
+}

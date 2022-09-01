@@ -16,8 +16,9 @@
   /* --------- FONTS --------- */
   --keyFont: 'Russo', sans-serif;
   --bodyFont: 'Odibee Sans', cursive;
+  --fontSize: 18px;
   font-family: var(--bodyFont);
-  font-size: 18px;
+  font-size: var(--fontSize);
   /* --------- BORDER --------- */
 }
 
@@ -128,6 +129,7 @@ nav a:not(:last-of-type){
 #hint-box {
   cursor: pointer;
   width: 50%;
+  max-width: calc(var(--grid)*15);
   margin-bottom: 1rem;
   padding: 1rem;
   border: 2px solid var(--faint);
@@ -154,11 +156,70 @@ nav a:not(:last-of-type){
   background-color: transparent;
 }
 
+/* --------- HOME PAGE --------- */
+
+#home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding-bottom: 2rem; */
+}
+
+
+h1.home-page-logo {
+  width: calc(var(--grid) * 8);
+}
+
+#xword-full-logo {
+  width: 100%;
+  height: 100%;
+}
+
+#xword-full-logo .outline {
+  fill: var(--pop);
+}
+
+#xword-full-logo .letters *{
+  fill: white;
+}
+
+#game-list {
+  list-style-type: none;
+  padding-left: 0;
+  /* border: 1px solid red; */
+}
+
+#game-list a {
+  display: block;
+  margin-bottom: 2rem;
+}
+
+/* #game-list a:not(:last-of-type) {
+  margin-bottom: 2rem;
+} */
+
+#game-list .puzzle-list-item {
+  padding: 1rem 2rem;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+#game-list .puzzle-list-item h3 {
+  font-family: var(--keyFont);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+
+
 /* --------- GRID --------- */
 #crossword {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* border: 1px solid red; */
 }
 
 #cw-grid {
@@ -396,12 +457,16 @@ form#crossword .across.last .acrossBox {
 #hint-cache-wrap {
   display: flex;
   width: 75vw;
+  justify-content: center;
+  /* border: 1px solid blue; */
 }
 
 .hint-cache {
   counter-reset: hint;
   list-style-position: inside;
   list-style-type: none;
+  padding-left: 0;
+  padding: 1rem;
 }
 
 .hint-cache li {
@@ -466,13 +531,135 @@ form#crossword .across.last .acrossBox {
   margin-right: 1rem;
 }
 
+/*  --------- COMMENTS SECTION --------- */
+
+#comment-section{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 50%;
+}
+
+#comment-section button {
+  line-height: 1em;
+  padding: 0.5em 1.5em;
+  background-color: var(--pop);
+  color: white;
+  border: none;
+  border-radius: 2px;
+}
+
+form#new-comment {
+  /* align-self: center; */
+  display: flex;
+  flex-direction: column;
+  /* margin: 0 2rem; */
+  padding: 1em;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+}
+
+.comment-input-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.comment-input-box * {
+  font-size: 1rem;
+  color: var(--pop);
+  caret-color: var(--faint);
+}
+
+.comment-input-box input {
+  margin-bottom: 0.5em;
+  font-family: var(--keyFont);
+  outline: none;
+  border: none;
+}
+
+.comment-input-box ::placeholder {
+  color: hsl(0,0%,75%);
+}
+
+.comment-input-box textarea{
+  appearance: none;
+  background-color: transparent;
+  font-family: inherit;
+  outline: none;
+  border: none;
+}
+
+form#new-comment button {
+  align-self: flex-end;
+}
+
+#comment-list {
+  display: flex;
+  flex-direction: column-reverse;
+  padding-left: 0;
+}
+
+#comment-list li.comment-entry {
+  list-style-type: none;
+  background-color: hsl(0,0%,95%);
+  border: 2px solid hsl(0, 0%, 95%);
+  /* box-shadow: 0 2px 2px var(--faint); */
+  /* margin-bottom: 1rem; */
+  margin: 0 2rem 1rem;
+  padding: 1em;
+  text-align: left;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.comment-entry h3 {
+  margin: 0;
+}
+
+/* .comment-button-cache button{
+  line-height: 1em;
+  padding: 0.5em 1.5em;
+  background-color: hsl(0,0%,90%);
+  border: none;
+  border-radius: 2px;
+} */
+
+.comment-button-cache button:not(:last-of-type){
+  margin-right: 0.5em;
+}
+
+.edit-comment {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-comment textarea {
+  padding: 1em;
+  font-size: 1rem;
+  font-family: inherit;
+    color: var(--pop);
+    caret-color: var(--faint);
+  border: none;
+  outline: none;
+  margin-block: 1rem;
+  border-radius: 2px;
+}
+
+.edit-comment button {
+  align-self: flex-end;
+}
+
 /*  ============ BUILD PAGE  ============ */
 #build-page {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  /* align-items: center; */
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
+  /* border: 1px solid red; */
 }
 
 #build-nav {
@@ -512,7 +699,7 @@ form#crossword .across.last .acrossBox {
   display: flex;
   flex-direction: column;
   align-items: center;
-  align-self: center;
+  /* align-self: center; */
   padding: 2rem;
   border: 3px solid var(--faint);
   border-radius: 20px;
@@ -653,9 +840,10 @@ form#crossword .across.last .acrossBox {
 /*  ============ FOOTER  ============ */
 
 .jb-logo {
-  --size: calc(var(--grid) * 4);
+  --size: calc(var(--grid) * 4.5);
   width: var(--size);
   /* height: var(--size); */
+  filter: drop-shadow(0 2px 0 hsla(0, 0%, 0%, 0.05));
   fill: white;
 }
 
@@ -670,7 +858,7 @@ form#crossword .across.last .acrossBox {
 }
 
 .sm-list a {
-  --size: calc(var(--grid)*0.75);
+  --size: calc(var(--grid)*0.6);
   cursor: pointer;
   width: var(--size);
   height: var(--size);
@@ -695,6 +883,7 @@ svg.sm-icon:hover {
 }
 
 .sm-handler {
+  cursor: pointer;
   margin-block: 1em;
   font-family: var(--keyFont);
   letter-spacing: 0.1em;
@@ -713,4 +902,13 @@ svg.sm-icon:hover {
 .sm-list:hover + .sm-handler{
   opacity: 1;
   transform: translateY(0);
+}
+
+footer span.copyright {
+  cursor: default;
+  color: hsl(0,0%,95%);
+}
+
+footer span.copyright::selection{
+  background-color: transparent;
 }

@@ -9,6 +9,9 @@ export default function Footer() {
         <use href="#jb-logo" />
       </svg>
       <SocialMedia />
+      <span className="copyright">
+        &copy;{new Date().getFullYear()} Julian Brooks. All rights reserved.
+      </span>
       <Icons />
     </footer>
   );

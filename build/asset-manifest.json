@@ -1,14 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.61365e5f.css",
-    "main.js": "/static/js/main.ab7ee2da.js",
+    "main.css": "/static/css/main.11b33fc1.css",
+    "main.js": "/static/js/main.8cdd34bd.js",
     "static/media/RussoOne-Regular.ttf": "/static/media/RussoOne-Regular.b2f5b287ccb8fd446eae.ttf",
+    "static/media/xword-full-logo.svg": "/static/media/xword-full-logo.460ee1e128f0a1091113793118712b68.svg",
+    "static/media/jb-portfolio-logoAsset 3.svg": "/static/media/jb-portfolio-logoAsset 3.afeaa8037df9823299a1e4b1ead214a1.svg",
+    "static/media/xword-logo.svg": "/static/media/xword-logo.9fd21824f3633ffd7adace2cae836050.svg",
+    "static/media/xword-logoAsset 1.svg": "/static/media/xword-logoAsset 1.aff984c4c01536a02607cfc33b709c4e.svg",
+    "static/media/ig-logoAsset 5.svg": "/static/media/ig-logoAsset 5.623770d0034d9e95b27a2c6bd20a4901.svg",
+    "static/media/github-logoAsset 7.svg": "/static/media/github-logoAsset 7.4c7ee01fde7ae53763b7dbaf47bc4d44.svg",
+    "static/media/linked-in-logoAsset 6.svg": "/static/media/linked-in-logoAsset 6.3dd17d2ba51f6aa24d3a6ce34e9793da.svg",
     "index.html": "/index.html",
-    "main.61365e5f.css.map": "/static/css/main.61365e5f.css.map",
-    "main.ab7ee2da.js.map": "/static/js/main.ab7ee2da.js.map"
+    "main.11b33fc1.css.map": "/static/css/main.11b33fc1.css.map",
+    "main.8cdd34bd.js.map": "/static/js/main.8cdd34bd.js.map"
   },
   "entrypoints": [
-    "static/css/main.61365e5f.css",
-    "static/js/main.ab7ee2da.js"
+    "static/css/main.11b33fc1.css",
+    "static/js/main.8cdd34bd.js"
   ]
 }

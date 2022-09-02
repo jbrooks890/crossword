@@ -8,6 +8,7 @@ import ButtonCache from "../ButtonCache";
 import HintCache from "../HintCache";
 import apiUrl from "../../config";
 import CommentSection from "../CommentSection";
+import AnswerInput from "../AnswerInput";
 
 export default function Play() {
   const [activePuzzle, setActivePuzzle] = useState({});
@@ -366,6 +367,7 @@ export default function Play() {
                 getLetter={getLetter}
                 operations={cellOperations}
               />
+              <AnswerInput entry={answers[activeGroup]} />
             </div>
             <ButtonCache giveHint={giveHint} />
             <HintCache

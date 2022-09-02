@@ -217,7 +217,8 @@ h1.home-page-logo {
 }
 
 #hint-box::selection {
-  background-color: hsla(0, 0%, 0%, 0.025);
+  /* background-color: hsla(0, 0%, 0%, 0.025); */
+  background-color: transparent;
 }
 
 #hint-box:hover {
@@ -240,6 +241,34 @@ h1.home-page-logo {
 
 #hint-box:hover::before {
   opacity: 1;
+}
+
+/* --------- ANSWER INPUT --------- */
+
+#answer-input {
+  position: -webkit-sticky;
+  position: sticky;
+  display: none;
+  background-color: white;
+  bottom: 2rem;
+  align-self: center;
+  margin-top: 1rem;
+  padding: 1em 2em;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+  box-sizing: border-box;
+  opacity: 0;
+  z-index: -1;
+}
+
+#answer-input.active {
+  display: block;
+  opacity: 1;
+  z-index: 11;
+}
+
+.answer-input-hint {
+  margin-bottom: 0.5em;
 }
 
 /* --------- GRID --------- */

@@ -204,20 +204,25 @@ export default function Play() {
     }
   };
 
+  // =========== FIND REMAINING ===========
+  const findRemaining = () => {
+    return [...document.querySelectorAll(".cell-input.show")].filter(
+      cell => cell.value.length === 0
+    );
+  };
+
   // =========== FOCUS NEXT GROUP ===========
   const focusNextGroup = (name = activeGroup) => {
-    console.log("running focus next group");
     const groups = Object.keys(answers);
     const index = groups.indexOf(name);
     let next = index + 1 >= groups.length ? groups[0] : groups[index + 1];
 
-    console.log(`Group: ${index + 1}/${groups.length}`);
-    console.log({ next });
-    focusFirst(next);
+    // console.log(`Group: ${index + 1}/${groups.length}`);
+    findRemaining().length && focusFirst(next);
   };
 
   // =========== FOCUS FIRST ===========
-  const focusFirst = (name, strict = false) => {
+  const focusFirst = (name = activeGroup, strict = false) => {
     // console.log("%cFOCUS FIRST", "color: limegreen");
     const { group } = answers[name];
     const targets = group.filter(id => cellData(id).input.value.length === 0);

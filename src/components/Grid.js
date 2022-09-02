@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState } from "react";
 import Cell from "./Cell";
 
 export default function Grid({

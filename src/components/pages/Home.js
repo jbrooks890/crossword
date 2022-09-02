@@ -4,7 +4,7 @@ import axios from "axios";
 import { ReactComponent as XWORD_FULL } from "../../assets/icons/xword-full-logo.svg";
 import apiUrl from "../../config";
 
-export default function Home2() {
+export default function Home() {
   const [games, setGames] = useState([]);
   const [activeGame, setActiveGame] = useState({});
 

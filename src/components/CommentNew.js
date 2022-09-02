@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CommentNew({ add }) {
-  const [newComment, setNewComment] = useState({
+  const blank = {
     user: {
       name: "",
       ip_addr: "0.0.0.0/0",
@@ -10,7 +10,17 @@ export default function CommentNew({ add }) {
     content: "",
     ownerType: "puzzle",
     thread: [],
-  });
+  };
+  const [newComment, setNewComment] = useState(blank);
+  const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    if (added) {
+      console.log("Refresh new comment!");
+      setNewComment(blank);
+      setAdded(false);
+    }
+  }, [added]);
 
   const handleChange = e => {
     setNewComment(prev => {
@@ -31,6 +41,7 @@ export default function CommentNew({ add }) {
       id="new-comment"
       onSubmit={e => {
         e.preventDefault();
+        setAdded(true);
         add(newComment);
       }}
     >
@@ -49,7 +60,7 @@ export default function CommentNew({ add }) {
           required
         />
       </div>
-      <button>Comment</button>
+      <button>Post</button>
     </form>
   );
 }

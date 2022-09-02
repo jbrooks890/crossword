@@ -9,7 +9,7 @@ export default function HintBox({ hint }) {
       className={sticky ? "sticky" : ""}
       onDoubleClick={() => setSticky(prev => !prev)}
     >
-      <p>{hint}</p>
+      {hint}
     </div>
   );
 }

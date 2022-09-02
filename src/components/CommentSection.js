@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommentList from "./CommentList";
 import CommentNew from "./CommentNew";
 import axios from "axios";
@@ -12,14 +12,15 @@ export default function CommentSection({ comments, owner }) {
 
   // ----------- ADD COMMENT ----------
   const addComment = newComment => {
-    // e.preventDefault();
-    console.log(newComment);
     axios({
       url: `${apiUrl}/comments`,
       method: "POST",
       data: { ...newComment, owner },
     })
-      .then(res => setAllComments(prev => [...prev, res.data.comment]))
+      .then(res => {
+        setAllComments(prev => [...prev, res.data.comment]);
+        // setModified(true);
+      })
       .catch(console.error);
   };
 
@@ -31,7 +32,16 @@ export default function CommentSection({ comments, owner }) {
       method: "PUT",
       data: comment,
     })
-      .then(setModified(true))
+      .then(
+        setAllComments(prev => {
+          const revised = [...prev];
+          const edited = revised.indexOf(
+            revised.find(comment => comment._id === id)
+          );
+          revised.splice(edited, 1, comment);
+          return revised;
+        })
+      )
       .catch(console.error);
   };
 
@@ -42,7 +52,16 @@ export default function CommentSection({ comments, owner }) {
       url: `${apiUrl}/comments/${id}`,
       method: "DELETE",
     })
-      .then(setModified(true))
+      .then(
+        setAllComments(prev => {
+          const revised = [...prev];
+          const deleted = revised.indexOf(
+            revised.find(comment => comment._id === id)
+          );
+          revised.splice(deleted, 1);
+          return revised;
+        })
+      )
       .catch(console.error);
   };
 
@@ -53,7 +72,7 @@ export default function CommentSection({ comments, owner }) {
     <div id="comment-section">
       <CommentNew add={e => addComment(e)} />
       <CommentList
-        comments={comments}
+        comments={allComments}
         editComment={editComment}
         deleteComment={deleteComment}
       />

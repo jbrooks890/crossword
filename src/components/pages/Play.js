@@ -7,8 +7,6 @@ import Grid from "../Grid";
 import ButtonCache from "../ButtonCache";
 import HintCache from "../HintCache";
 import apiUrl from "../../config";
-import CommentNew from "../CommentNew";
-import CommentList from "../CommentList";
 import CommentSection from "../CommentSection";
 
 export default function Play() {
@@ -32,8 +30,6 @@ export default function Play() {
       const { puzzle } = response.data;
       setActivePuzzle(puzzle);
       setActiveGroup(Object.keys(puzzle.answers)[0]);
-      // focusFirst(Object.keys(puzzle.answers)[0]);
-      console.log(puzzle);
     } catch (e) {
       console.log(e);
     }
@@ -186,30 +182,26 @@ export default function Play() {
 
   // =========== FOCUS NEXT ===========
   const focusNext = id => {
-    const cell = document.getElementById(id);
+    const { isJunction, groups } = cellData(id);
     const { group } = answers[activeGroup];
     const currPos = group.indexOf(id);
     const lastCell = currPos === group.length - 1;
-    const isJunction = cell.classList.contains("junction");
 
     if (!lastCell) {
       focusCell(group[currPos + 1]);
     } else {
       if (isJunction) {
-        const altGroupName = cell
-          .getAttribute("data-groups")
-          .split(" ")
-          .find(name => name !== activeGroup);
+        const altGroupName = groups.find(group => group !== activeGroup);
         const altGroup = answers[altGroupName].group;
 
         let next = altGroup.indexOf(id) + 1;
-        focusCell(altGroup[next], altGroupName);
+        if (next > altGroup.length - 1) {
+          focusFirst(altGroupName);
+        } else {
+          focusCell(altGroup[next], altGroupName);
+        }
       }
-      // else {
-      //   focusNextGroup();
-      // }
     }
-    // nextPos && focusCell(nextPos);
   };
 
   // =========== FOCUS NEXT GROUP ===========
@@ -358,16 +350,18 @@ export default function Play() {
       {activeGroup && (
         <>
           <Frame puzzle={activePuzzle}>
-            <HintBox hint={answers[activeGroup].hint} />
-            <Grid
-              puzzle={activePuzzle}
-              // setGroup={setGroup}
-              controls={e => buttonControls(e)}
-              hoverGroup={hoverGroup}
-              focusCell={focusCell}
-              getLetter={getLetter}
-              operations={cellOperations}
-            />
+            <div id="cw-grid-wrap">
+              <HintBox hint={answers[activeGroup].hint} />
+              <Grid
+                puzzle={activePuzzle}
+                // setGroup={setGroup}
+                controls={e => buttonControls(e)}
+                hoverGroup={hoverGroup}
+                focusCell={focusCell}
+                getLetter={getLetter}
+                operations={cellOperations}
+              />
+            </div>
             <ButtonCache giveHint={giveHint} />
             <HintCache
               hints={getHints()}

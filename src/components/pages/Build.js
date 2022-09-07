@@ -15,68 +15,10 @@ export default function Build() {
     answerKey: {},
     answers: {},
   });
-  const [editorMode, setEditorMode] = useState(false);
-  const [phase, setPhase] = useState(0);
-  const [grid, setGrid] = useState({
-    content: [], // EX: [A0: "T", A1: "E", A2: "S", A3: "T"], ...
-    cols: {}, // A: [A0, A1, A2, A3, A4], B: [B0, B1, B2, B3, B4], ...
-    rows: {}, // 0: [A0, B0, C0, D1], 1: [A1, B1, C1, D1], ...
-    activeCols: [], // [A, B, C, D]
-    activeRows: [], // [0,1,2,3]
-  });
-  // const { content, cols, rows } = grid;
+  const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
   // console.log(newPuzzle);
-
-  // =========== UPDATE GRID ===========
-  const updateGrid = data => {
-    setGrid(prev => ({
-      ...prev,
-      ...data,
-    }));
-  };
-
-  // =========== CAPTURE ANSWERS ===========
-  const captureAnswers = () => {
-    const { content, cols: _cols, rows: _rows, activeCols, activeRows } = grid;
-
-    // COMB GRID FOR GROUPS
-    // IF ENTRIES ARE GROUPED ADD TO GROUPS -AND- ANSWER KEY
-    const cols = {};
-    const rows = {};
-
-    Object.keys(_cols)
-      .filter(col => activeCols.includes(col))
-      .forEach(col => (cols[col] = _cols[col]));
-    Object.keys(_rows)
-      .filter(row => activeRows.includes(row))
-      .forEach(row => (rows[row] = _rows[row]));
-
-    console.log(cols, rows);
-  };
-
-  // =========== FIND GROUP ===========
-  const findGroups = sets => {
-    const { content: _content } = grid;
-    const content = Object.keys(_content);
-
-    let groups = [];
-
-    sets.forEach(dir =>
-      dir.reduce((prev, curr) => {
-        let newGroup;
-        if (content.includes(curr)) {
-          newGroup = [...prev, curr];
-        } else {
-          newGroup.length > 1 && groups.push(newGroup);
-          newGroup = [];
-        }
-        return newGroup;
-        // let newGroup = prev ? [...prev, curr] : newGroup.length > 1 ? groups.push(newGroup) && []
-      })
-    );
-  };
 
   // =========== UPDATE PUZZLE ===========
 
@@ -102,11 +44,22 @@ export default function Build() {
     }));
   };
 
-  // =========== HANDLE SUBMIT ===========
+  // =========== UPDATE PUZZLE GROUPS ===========
 
-  const handleSubmit = e => {
+  const updatePuzzleGroups = () => {
+    setNewPuzzle(prev => ({
+      ...prev,
+    }));
+  };
+
+  // =========== NEW PUZZLE SUBMIT ===========
+
+  const newPuzzleSubmit = e => {
     e.preventDefault();
-    setPhase(prev => prev + 1);
+    setNewPuzzle(prev => ({
+      ...prev,
+      editorMode: { ...prev.editorMode, phase: phase + 1 },
+    }));
   };
 
   // --------------------------------
@@ -118,13 +71,13 @@ export default function Build() {
         <NewPuzzleForm
           puzzle={newPuzzle}
           updatePuzzle={e => updatePuzzle(e)}
-          handleSubmit={handleSubmit}
+          newPuzzleSubmit={newPuzzleSubmit}
         />
       )}
       {phase > 0 && (
         <Frame puzzle={newPuzzle}>
           <BuildNav />
-          <Grid puzzle={newPuzzle} updateGrid={updateGrid} />
+          <Grid puzzle={newPuzzle} updatePuzzleGroups={updatePuzzleGroups} />
         </Frame>
       )}
     </div>

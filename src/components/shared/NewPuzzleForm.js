@@ -1,11 +1,15 @@
 import { useState } from "react";
 
-export default function NewPuzzleForm({ puzzle, updatePuzzle, handleSubmit }) {
+export default function NewPuzzleForm({
+  puzzle,
+  updatePuzzle,
+  newPuzzleSubmit,
+}) {
   const [gridLink, setGridLink] = useState(true);
   const { name: title, cols, rows } = puzzle;
 
   return (
-    <form id="newPuzzleForm" onSubmit={e => handleSubmit(e)}>
+    <form id="newPuzzleForm" onSubmit={e => newPuzzleSubmit(e)}>
       <h2>Build</h2>
       <label htmlFor="name">
         <h4>Name</h4>

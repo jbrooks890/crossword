@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cell from "./Cell";
 
 export default function Grid({
@@ -6,7 +6,6 @@ export default function Grid({
   controls,
   hoverGroup,
   focusCell,
-  updateGrid,
   operations,
   ...props
 }) {
@@ -108,6 +107,7 @@ export default function Grid({
           axis={axis}
           toggleAxis={toggleAxis}
           operations={operations}
+          updateGrid={e => updateGrid(e, id, col, y)}
         />
       );
 
@@ -117,8 +117,109 @@ export default function Grid({
     return grid;
   };
 
+  // ------------------------------------------------
+  // <><><><><><><><><> GRID STATE <><><><><><><><><>
+  // ------------------------------------------------
+
   const { cells, cols: _cols, rows: _rows } = drawGrid();
-  const [grid, setGrid] = useState({ cols: _cols, rows: _rows });
+  const [grid, setGrid] = useState({
+    content: new Map(), // EX: [A0: "T", A1: "E", A2: "S", A3: "T"], ...
+    cols: _cols, // A: [A0, A1, A2, A3, A4], B: [B0, B1, B2, B3, B4], ...
+    rows: _rows, // 0: [A0, B0, C0, D1], 1: [A1, B1, C1, D1], ...
+    activeCols: [], // [A, B, C, D]
+    activeRows: [], // [0,1,2,3]
+  });
+
+  // =========== UPDATE GRID ===========
+
+  const updateGrid = (e, id, col, row) => {
+    const { value } = e.target;
+    setGrid(prev => {
+      const { cols, rows, content, activeCols, activeRows } = prev;
+      if (value) {
+        return {
+          ...prev,
+          content: content.set(id, value),
+          activeCols: activeCols.includes(col)
+            ? activeCols
+            : [...activeCols, col],
+          activeRows: activeRows.includes(row)
+            ? activeRows
+            : [...activeRows, row],
+        };
+      } else {
+        let activeCells = [...content.keys()];
+        console.log(activeCells);
+
+        content.delete(id);
+
+        // If ROW or COL doesn't have any other content, remove it from actives
+        // activeCols.length > 1 && activeCols.splice(activeCols.indexOf(col), 1);
+        // activeRows.length > 1 && activeRows.splice(activeRows.indexOf(row), 1);
+        return { ...prev };
+      }
+    });
+  };
+
+  // =========== FIND GROUP ===========
+  // "SET" = ROW or COLUMN
+  const findGroups = (sets, isRow) => {
+    const { content } = grid;
+    const activeCells = [...content.keys()];
+    const dir = isRow ? "across" : "down";
+
+    let groups = [];
+
+    // loop thru each row/column...
+    // collect entries until it hits a break (empty cell)...
+    // --OR hits the end of the row/column...
+    // THEN save the group.
+
+    sets.forEach(arr => {
+      let newGroup = [];
+      for (let i = 0; i <= arr.length; i++) {
+        const cell = arr[i];
+        if (activeCells.includes(cell)) {
+          newGroup.push(cell);
+        } else {
+          // if the new group has at least 2 entries...
+          newGroup.length > 1 &&
+            groups.push({ [`${dir}-${newGroup[0]}`]: newGroup });
+          newGroup = [];
+        }
+      }
+    });
+
+    return groups;
+  };
+
+  // =========== CAPTURE ANSWERS ===========
+  const captureAnswers = () => {
+    const { cols, rows, activeCols, activeRows } = grid;
+
+    // COMB GRID FOR GROUPS
+    // IF ENTRIES ARE GROUPED ADD TO GROUPS -AND- ANSWER KEY
+
+    const _cols = Object.keys(cols)
+      .filter(col => activeCols.includes(col))
+      .map(id => cols[id]);
+    const _rows = Object.keys(rows)
+      .filter(row => activeRows.includes(Number(row)))
+      .map(id => rows[id]);
+
+    // console.log(_cols, _rows);
+    const xGroups = findGroups(_rows, true);
+    const yGroups = findGroups(_cols, false);
+
+    console.log("groups:", xGroups, yGroups);
+  };
+
+  // useEffect(() => captureAnswers(), []);
+  captureAnswers();
+
+  // ------------------------------------------------
+  // <><><><><><><><> TESTING (TODO) <><><><><><><><>
+  // ------------------------------------------------
 
   console.log(
     `%c${"<>".repeat(8)}\\ GRID /${"<>".repeat(8)}`,

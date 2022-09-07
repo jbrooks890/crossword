@@ -14,6 +14,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     axis,
     toggleAxis,
     operations,
+    updateGrid,
   } = props;
 
   // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
@@ -230,6 +231,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
           // toggleFocus();
           e.currentTarget.select();
         }}
+        onChange={updateGrid} // UPDATE GRID + FIND GROUPS
         // onBlur={toggleFocus()}
         onClick={() => {
           !editorMode && focusCell(id, !isJunction ? groups[0] : undefined);

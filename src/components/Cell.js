@@ -124,15 +124,17 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
 
     return {
       cell: {
-        classes: [
-          answer && "show",
-          groups.length && groups.join(" "),
-          isJunction && "junction",
-          axisGroups.has("across") && "across",
-          axisGroups.has("down") && "down",
-          display && display.join(" "),
-          crop && "crop ",
-        ].filter(entry => entry),
+        classes: formatClassList(
+          [
+            answer && "show",
+            groups.length && groups.join(" "),
+            isJunction && "junction",
+            axisGroups.has("across") && "across",
+            axisGroups.has("down") && "down",
+            display && display.join(" "),
+            crop && "crop ",
+          ].filter(entry => entry)
+        ),
         attributes: {
           ["data-groups"]: groups.join(" "),
           onMouseEnter: () =>
@@ -203,7 +205,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
               // focused && "focused",
               axis ? "edit-across" : "edit-down",
             ])
-          : formatClassList(["cell", ...formatCell().cell.classes])
+          : `cell ${formatCell().cell.classes}`
       }
       data-coord-x={index[0]}
       data-coord-y={index[1]}

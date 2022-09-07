@@ -1,9 +1,11 @@
-export default function BuildNav() {
+export default function BuildNav({ sections, changeSection }) {
   return (
     <ul id="build-nav">
-      <li>Grid</li>
-      <li>Hints</li>
-      <li>Preview</li>
+      {sections.map((section, i) => (
+        <li key={i} onClick={() => changeSection(i)}>
+          {section}
+        </li>
+      ))}
     </ul>
   );
 }

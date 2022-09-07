@@ -2,23 +2,28 @@ import { useEffect, useState } from "react";
 import BuildNav from "../BuildNav";
 import Frame from "../Frame";
 import Grid from "../Grid";
+import HintInput from "../HintInput";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
     name: "Boogie",
     type: "Crossword",
+    description: "",
     cols: 20,
     rows: 20,
     version: 1,
     editorMode: { active: true, phase: 0 },
     answerKey: {},
     answers: {},
+    tags: [],
   });
+  const sectionTabs = ["Grid", "Hints", "Preview"];
+  const [activeSection, setActiveSection] = useState(0);
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
-  // console.log(newPuzzle);
+  useEffect(() => console.log(newPuzzle), [activeSection]);
 
   // =========== UPDATE PUZZLE ===========
 
@@ -46,9 +51,14 @@ export default function Build() {
 
   // =========== UPDATE PUZZLE GROUPS ===========
 
-  const updatePuzzleGroups = () => {
+  const updatePuzzleGroups = (answerKey, answers) => {
+    // console.log(answerKey, answers);
+    console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: orange");
     setNewPuzzle(prev => ({
       ...prev,
+      answerKey,
+      answers,
+      // editorMode: { ...prev.editorMode, phase: 2 },
     }));
   };
 
@@ -58,7 +68,7 @@ export default function Build() {
     e.preventDefault();
     setNewPuzzle(prev => ({
       ...prev,
-      editorMode: { ...prev.editorMode, phase: phase + 1 },
+      editorMode: { ...prev.editorMode, phase: 1 },
     }));
   };
 
@@ -76,8 +86,19 @@ export default function Build() {
       )}
       {phase > 0 && (
         <Frame puzzle={newPuzzle}>
-          <BuildNav />
-          <Grid puzzle={newPuzzle} updatePuzzleGroups={updatePuzzleGroups} />
+          <BuildNav sections={sectionTabs} changeSection={setActiveSection} />
+          <Grid
+            puzzle={newPuzzle}
+            active={activeSection === 0 || activeSection === 2}
+            preview={activeSection === 2}
+            updatePuzzleGroups={updatePuzzleGroups}
+          />
+          {phase === 2 && (
+            <HintInput
+              active={activeSection === 1}
+              groups={newPuzzle.answers}
+            />
+          )}
         </Frame>
       )}
     </div>

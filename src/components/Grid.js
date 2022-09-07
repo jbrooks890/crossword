@@ -7,6 +7,7 @@ export default function Grid({
   hoverGroup,
   focusCell,
   operations,
+  updatePuzzleGroups,
   ...props
 }) {
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
@@ -24,6 +25,8 @@ export default function Grid({
     !activeCols.includes(col) && activeCols.push(col);
     !activeRows.includes(row) && activeRows.push(row);
   });
+
+  console.log({ phase });
 
   // =========== GET LETTER ===========
   const getLetter = n => {
@@ -73,6 +76,76 @@ export default function Grid({
     };
   };
 
+  // =========== FIND GROUP ===========
+  // "SET" = ROW or COLUMN
+  const findGroups = (sets, isRow) => {
+    const { content } = grid;
+    const activeCells = [...content.keys()];
+    const dir = isRow ? "across" : "down";
+
+    let groups = {};
+
+    // loop thru each row/column...
+    // collect entries until it hits a break (empty cell)...
+    // --OR hits the end of the row/column...
+    // THEN save the group.
+
+    sets.forEach(arr => {
+      let set = {
+        // name: "",
+        group: [],
+        sum: "",
+      };
+      for (let i = 0; i <= arr.length; i++) {
+        const cell = arr[i];
+        if (activeCells.includes(cell)) {
+          set.group.push(cell);
+          set.sum += content.get(cell).toUpperCase();
+        } else {
+          // if the new group has at least 2 entries...
+          if (set.group.length > 1) {
+            // set.name = `${dir}-${set.group[0]}`;
+            groups[`${dir}-${set.group[0]}`] = { ...set, hint: "" };
+          }
+          set = {
+            group: [],
+            sum: "",
+          };
+        }
+      }
+    });
+
+    return groups;
+  };
+
+  // =========== CAPTURE ANSWERS ===========
+  const captureAnswers = () => {
+    const { cols, rows, activeCols, activeRows } = grid;
+
+    // COMB GRID FOR GROUPS
+    // IF ENTRIES ARE GROUPED ADD TO GROUPS -AND- ANSWER KEY
+
+    const _cols = Object.keys(cols)
+      .filter(col => activeCols.includes(col))
+      .map(id => cols[id]);
+    const _rows = Object.keys(rows)
+      .filter(row => activeRows.includes(Number(row)))
+      .map(id => rows[id]);
+
+    // console.log(_cols, _rows);
+    // const xGroups = findGroups(_rows, true);
+    // const yGroups = findGroups(_cols, false);
+
+    updatePuzzleGroups(Object.fromEntries(grid.content), {
+      across: findGroups(_rows, true),
+      down: findGroups(_cols, false),
+    });
+
+    // console.log("groups:", xGroups, yGroups);
+  };
+
+  // useEffect(() => captureAnswers(), []);
+
   // =========== DRAW GRID ===========
 
   const drawGrid = () => {
@@ -108,6 +181,7 @@ export default function Grid({
           toggleAxis={toggleAxis}
           operations={operations}
           updateGrid={e => updateGrid(e, id, col, y)}
+          // captureAnswers={captureAnswers}
         />
       );
 
@@ -135,7 +209,7 @@ export default function Grid({
   const updateGrid = (e, id, col, row) => {
     const { value } = e.target;
     setGrid(prev => {
-      const { cols, rows, content, activeCols, activeRows } = prev;
+      const { content, activeCols, activeRows } = prev;
       if (value) {
         return {
           ...prev,
@@ -161,61 +235,8 @@ export default function Grid({
     });
   };
 
-  // =========== FIND GROUP ===========
-  // "SET" = ROW or COLUMN
-  const findGroups = (sets, isRow) => {
-    const { content } = grid;
-    const activeCells = [...content.keys()];
-    const dir = isRow ? "across" : "down";
-
-    let groups = [];
-
-    // loop thru each row/column...
-    // collect entries until it hits a break (empty cell)...
-    // --OR hits the end of the row/column...
-    // THEN save the group.
-
-    sets.forEach(arr => {
-      let newGroup = [];
-      for (let i = 0; i <= arr.length; i++) {
-        const cell = arr[i];
-        if (activeCells.includes(cell)) {
-          newGroup.push(cell);
-        } else {
-          // if the new group has at least 2 entries...
-          newGroup.length > 1 &&
-            groups.push({ [`${dir}-${newGroup[0]}`]: newGroup });
-          newGroup = [];
-        }
-      }
-    });
-
-    return groups;
-  };
-
-  // =========== CAPTURE ANSWERS ===========
-  const captureAnswers = () => {
-    const { cols, rows, activeCols, activeRows } = grid;
-
-    // COMB GRID FOR GROUPS
-    // IF ENTRIES ARE GROUPED ADD TO GROUPS -AND- ANSWER KEY
-
-    const _cols = Object.keys(cols)
-      .filter(col => activeCols.includes(col))
-      .map(id => cols[id]);
-    const _rows = Object.keys(rows)
-      .filter(row => activeRows.includes(Number(row)))
-      .map(id => rows[id]);
-
-    // console.log(_cols, _rows);
-    const xGroups = findGroups(_rows, true);
-    const yGroups = findGroups(_cols, false);
-
-    console.log("groups:", xGroups, yGroups);
-  };
-
-  // useEffect(() => captureAnswers(), []);
-  captureAnswers();
+  useEffect(() => phase >= 1 && captureAnswers(), []);
+  // phase >= 1 && captureAnswers();
 
   // ------------------------------------------------
   // <><><><><><><><> TESTING (TODO) <><><><><><><><>

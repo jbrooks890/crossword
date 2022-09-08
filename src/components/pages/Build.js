@@ -58,7 +58,10 @@ export default function Build() {
       ...prev,
       answerKey,
       answers,
-      // editorMode: { ...prev.editorMode, phase: 2 },
+      // editorMode: {
+      //   ...prev.editorMode,
+      //   phase: Object.keys(answers).length ? 2 : 1,
+      // },
     }));
   };
 

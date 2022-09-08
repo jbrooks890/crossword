@@ -92,7 +92,6 @@ export default function Grid({
 
     sets.forEach(arr => {
       let set = {
-        // name: "",
         group: [],
         sum: "",
       };
@@ -132,16 +131,10 @@ export default function Grid({
       .filter(row => activeRows.includes(Number(row)))
       .map(id => rows[id]);
 
-    // console.log(_cols, _rows);
-    // const xGroups = findGroups(_rows, true);
-    // const yGroups = findGroups(_cols, false);
-
     updatePuzzleGroups(Object.fromEntries(grid.content), {
       across: findGroups(_rows, true),
       down: findGroups(_cols, false),
     });
-
-    // console.log("groups:", xGroups, yGroups);
   };
 
   // useEffect(() => captureAnswers(), []);

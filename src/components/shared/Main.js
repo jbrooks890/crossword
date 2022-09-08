@@ -5,15 +5,27 @@ import Build from "../pages/Build";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import Play from "../pages/Play";
+import axios from "axios";
+import apiUrl from "../../config";
 
 export default function Main() {
-  // TODO: STATE = CURRENT PUZZLE
-  // TODO: STATE = NEW PUZZLE
+  const [games, setGames] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/puzzles`);
+      setGames(response.data.puzzles);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(async () => fetchData(), []);
 
   return (
     <main>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home games={games} />} />
         <Route path="/puzzles/:id" element={<Play />} />
         <Route path="/build" element={<Build />} />
         <Route path="/about" element={<About />} />

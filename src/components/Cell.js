@@ -16,6 +16,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     operations,
     updateGrid,
   } = props;
+  const { active: editing, phase } = editorMode;
 
   // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   // const [focused, setFocused] = useState(false);
@@ -23,8 +24,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   // useEffect(() => setFocused(true), []);
   // const toggleFocus = useCallback(() => setFocused(prev => !prev), []);
 
+  // console.log(editing);
+
   const axisGroups = new Map(); // TODO
-  !editorMode &&
+  !editing &&
     groups.forEach(group => axisGroups.set(group.split("-")[0], group)); // TODO
 
   // =========== EDITOR CONTROLS ===========
@@ -197,7 +200,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     <div
       id={id}
       className={
-        editorMode
+        editing
           ? // ? `cell build ${focused ? 'focused' : ''} ${axis ? "edit-across" : "edit-down"}`
             formatClassList([
               "cell",
@@ -209,7 +212,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       }
       data-coord-x={index[0]}
       data-coord-y={index[1]}
-      {...(!editorMode && formatCell().cell.attributes)}
+      {...(!editing && formatCell().cell.attributes)}
     >
       {["across", "down"].map((dir, i) => (
         <span
@@ -222,7 +225,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
           onFocus={e => document.querySelector(`#${id} .cell-input`).focus()}
         ></span>
       ))}
-      {!editorMode && isJunction && <AxisSelector />}
+      {!editing && isJunction && <AxisSelector />}
       <input
         className={`cell-input ${id} ${answer ? "show" : null}`}
         type="text"
@@ -236,13 +239,13 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         onChange={updateGrid} // UPDATE GRID + FIND GROUPS
         // onBlur={toggleFocus()}
         onClick={() => {
-          !editorMode && focusCell(id, !isJunction ? groups[0] : undefined);
+          !editing && focusCell(id, !isJunction ? groups[0] : undefined);
           // focusCell(id, !isJunction ? groups[0] : undefined);
         }}
-        onKeyDown={e => (editorMode ? editControls(e) : controls(e))}
+        onKeyDown={e => (editing ? editControls(e) : controls(e))}
         // onKeyDown={e => controls(e)}
-        onKeyUp={e => (editorMode ? editControls(e) : controls(e))}
-        placeholder={editorMode ? id : undefined}
+        onKeyUp={e => (editing ? editControls(e) : controls(e))}
+        placeholder={editing ? id : undefined}
       />
     </div>
   );

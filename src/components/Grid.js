@@ -11,10 +11,8 @@ export default function Grid({
   ...props
 }) {
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
-
   const { cols, rows, editorMode, answerKey, answers } = puzzle;
   const { active: editing, phase } = editorMode;
-  const { functions } = props;
 
   const activeCells = Object.keys(answerKey);
   const activeCols = [];
@@ -25,8 +23,6 @@ export default function Grid({
     !activeCols.includes(col) && activeCols.push(col);
     !activeRows.includes(row) && activeRows.push(row);
   });
-
-  console.log({ phase });
 
   // =========== GET LETTER ===========
   const getLetter = n => {
@@ -167,7 +163,7 @@ export default function Grid({
           index={[x, y]}
           {...(!editing && formatCellData(id, x, y))}
           controls={e => controls(e)}
-          editorMode={editing}
+          editorMode={editorMode}
           hoverGroup={hoverGroup}
           focusCell={focusCell}
           axis={axis}
@@ -228,8 +224,8 @@ export default function Grid({
     });
   };
 
-  useEffect(() => phase >= 1 && captureAnswers(), []);
-  // phase >= 1 && captureAnswers();
+  useEffect(() => phase >= 1 && captureAnswers(), [grid]);
+  // editing && phase >= 1 && captureAnswers();
 
   // ------------------------------------------------
   // <><><><><><><><> TESTING (TODO) <><><><><><><><>

@@ -4,20 +4,20 @@ import axios from "axios";
 import { ReactComponent as XWORD_FULL } from "../../assets/icons/xword-full-logo.svg";
 import apiUrl from "../../config";
 
-export default function Home() {
-  const [games, setGames] = useState([]);
+export default function Home({ games }) {
+  // const [games, setGames] = useState([]);
   const [activeGame, setActiveGame] = useState({});
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/puzzles`);
-      setGames(response.data.puzzles);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get(`${apiUrl}/puzzles`);
+  //     setGames(response.data.puzzles);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  useEffect(async () => fetchData(), []);
+  // useEffect(async () => fetchData(), []);
 
   const gamesData = games.map(puzzle => {
     const { _id, name, description } = puzzle;

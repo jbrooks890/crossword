@@ -51,17 +51,21 @@ export default function Build() {
 
   // =========== UPDATE PUZZLE GROUPS ===========
 
-  const updatePuzzleGroups = (answerKey, answers) => {
-    // console.log(answerKey, answers);
-    console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: orange");
+  const updatePuzzleGroups = (answerKey, answerSets) => {
+    // console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: orange");
+    const { across, down } = answerSets;
+    const answers = { ...across, ...down };
+    // console.log("all groups:", answers);
+
     setNewPuzzle(prev => ({
       ...prev,
       answerKey,
       answers,
-      // editorMode: {
-      //   ...prev.editorMode,
-      //   phase: Object.keys(answers).length ? 2 : 1,
-      // },
+      answerSets,
+      editorMode: {
+        ...prev.editorMode,
+        phase: Object.keys(answers).length ? 2 : 1,
+      },
     }));
   };
 
@@ -99,7 +103,7 @@ export default function Build() {
           {phase === 2 && (
             <HintInput
               active={activeSection === 1}
-              groups={newPuzzle.answers}
+              groups={newPuzzle.answerSets}
             />
           )}
         </Frame>

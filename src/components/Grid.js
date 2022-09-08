@@ -8,6 +8,7 @@ export default function Grid({
   focusCell,
   operations,
   updatePuzzleGroups,
+  preview,
   ...props
 }) {
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
@@ -37,6 +38,7 @@ export default function Grid({
   // =========== FORMAT CELL DATA ===========
 
   const formatCellData = (id, x, y) => {
+    // console.log(answers);
     const col = getLetter(x);
     const groupNames = [...answers.keys()];
     const groups = groupNames.filter(entry =>
@@ -79,7 +81,7 @@ export default function Grid({
     const activeCells = [...content.keys()];
     const dir = isRow ? "across" : "down";
 
-    let groups = {};
+    let groups = [];
 
     // loop thru each row/column...
     // collect entries until it hits a break (empty cell)...
@@ -100,7 +102,12 @@ export default function Grid({
           // if the new group has at least 2 entries...
           if (set.group.length > 1) {
             // set.name = `${dir}-${set.group[0]}`;
-            groups[`${dir}-${set.group[0]}`] = { ...set, dir: dir, hint: "" };
+            groups.push({
+              ...set,
+              name: `${dir}-${set.group[0]}`,
+              dir: dir,
+              hint: "",
+            });
           }
           set = {
             group: [],
@@ -127,10 +134,10 @@ export default function Grid({
       .filter(row => activeRows.includes(Number(row)))
       .map(id => rows[id]);
 
-    updatePuzzleGroups(Object.fromEntries(grid.content), {
+    updatePuzzleGroups(Object.fromEntries(grid.content), [
       ...findGroups(_rows, true),
       ...findGroups(_cols, false),
-    });
+    ]);
   };
 
   // useEffect(() => captureAnswers(), []);
@@ -161,15 +168,15 @@ export default function Grid({
           key={count}
           cell_name={id}
           index={[x, y]}
-          {...(!editing && formatCellData(id, x, y))}
+          {...(phase >= 2 && formatCellData(id, x, y))}
           controls={e => controls(e)}
           editorMode={editorMode}
-          hoverGroup={hoverGroup}
-          focusCell={focusCell}
-          axis={axis}
-          toggleAxis={toggleAxis}
+          hoverGroup={hoverGroup} // BOTH
+          focusCell={focusCell} // PLAY
+          axis={axis} // EDITOR
+          toggleAxis={toggleAxis} // EDITOR
           operations={operations}
-          updateGrid={e => updateGrid(e, id, col, y)}
+          updateGrid={e => updateGrid(e, id, col, y)} // EDITOR
           // captureAnswers={captureAnswers}
         />
       );

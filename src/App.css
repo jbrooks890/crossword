@@ -569,6 +569,7 @@ form#crossword .across.last .acrossBox {
 #hint-input {
   display: none;
   width: 100%;
+  max-width: 560px;
   opacity: 0;
   transition: 0.1s ease-out;
   /* border: 1px solid blue; */
@@ -841,7 +842,7 @@ form#new-comment button {
   list-style-type: none;
 }
 
-#build-nav li {
+#build-nav li.build-nav-btn {
   cursor: pointer;
   padding: 0.5em 1.25em;
   color: silver;
@@ -866,6 +867,11 @@ form#new-comment button {
   border-color: silver;
 }
 
+#build-nav li.build-nav-btn.active {
+  background-color: var(--pop);
+  border-color: var(--pop);
+  color: white;
+}
 
 /*  --------- NEW PUZZLE FORM  --------- */
 #newPuzzleForm {

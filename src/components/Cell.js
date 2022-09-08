@@ -60,14 +60,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             toggleAxis(prev => !prev);
             break;
           case "Backspace":
-            // const { group } = answers[activeGroup];
             if (content.length < 1) {
-              // const prev = group.indexOf(id) - 1;
-              // if (prev < 0) {
-              //   input.blur();
-              // } else {
-              //   focusCell(group[prev]);
-              // }
             }
             break;
           case "ArrowLeft":
@@ -76,7 +69,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             // shiftKey
             //   ? focusFirst(activeGroup, true)
             //   : focusNearest(id, index, [-1, 0]);
-
             break;
           case "ArrowRight":
             e.preventDefault();

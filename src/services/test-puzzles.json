@@ -1,7 +1,7 @@
 {
   "name": "Space",
   "type": "Crossword",
-  "gridSize": [20, 20],
+  "description": "A puzzle about space and space-related things!",
   "cols": 20,
   "rows": 20,
   "version": 0,
@@ -152,18 +152,24 @@
     "I19": "Y",
     "L19": "N"
   },
-  "answers": {
-    "down-H2": {
+  "answers": [
+    {
+      "name": "down-H2",
+      "dir": "down",
       "group": ["H2", "H3", "H4", "H5"],
       "sum": "MARS",
       "hint": "The red planet; fourth from the sun."
     },
-    "down-P2": {
+    {
+      "name": "down-P2",
+      "dir": "down",
       "group": ["P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"],
       "sum": "PLUTONIAN",
       "hint": "A word to describe things associated with the Underworld."
     },
-    "down-R2": {
+    {
+      "name": "down-R2",
+      "dir": "down",
       "group": [
         "R2",
         "R3",
@@ -185,130 +191,181 @@
       "sum": "EXTRATERRESTRIAL",
       "hint": "A synonym for alien beings not from planet Earth."
     },
-    "down-G8": {
+    {
+      "name": "down-G8",
+      "dir": "down",
       "group": ["G8", "G9", "G10", "G11", "G12", "G13", "G14", "G15", "G16"],
       "sum": "ARMSTRONG",
       "hint": "The last name of the first astronaut to land on the Moon."
     },
-    "down-I13": {
+    {
+      "name": "down-I13",
+      "dir": "down",
       "group": ["I13", "I14", "I15", "I16", "I17", "I18", "I19"],
       "sum": "MERCURY",
       "hint": "A liquid metal commonly used in thermometers."
     },
-    "down-J3": {
+    {
+      "name": "down-J3",
+      "dir": "down",
       "group": ["J3", "J4", "J5", "J6", "J7"],
       "sum": "TITAN",
       "hint": "Saturn's largest moon; the gods that preceded the Olympian gods of Greek mythology."
     },
-    "down-K9": {
+    {
+      "name": "down-K9",
+      "dir": "down",
       "group": ["K9", "K10", "K11", "K12", "K13"],
       "sum": "TIDAL",
       "hint": "The gravitational forces of the moon that are known to cause high tide on Earth."
     },
-    "down-O11": {
+    {
+      "name": "down-O11",
+      "dir": "down",
       "group": ["O11", "O12", "O13", "O14", "O15", "O16"],
       "sum": "URANUS",
       "hint": "Seventh planet from the sun."
     },
-    "down-L13": {
+    {
+      "name": "down-L13",
+      "dir": "down",
       "group": ["L13", "L14", "L15", "L16", "L17", "L18", "L19"],
       "sum": "KRYPTON",
       "hint": "The fictional home planet of Superman; a chemical element with an atomic number of 36."
     },
-    "down-M5": {
+    {
+      "name": "down-M5",
+      "dir": "down",
       "group": ["M5", "M6", "M7", "M8", "M9", "M10", "M11"],
       "sum": "NEPTUNE",
       "hint": "The Roman equivalent of Poseidon."
     },
-    "down-C7": {
+    {
+      "name": "down-C7",
+      "dir": "down",
       "group": ["C7", "C8", "C9", "C10", "C11", "C12"],
       "sum": "ALIENS",
       "hint": "Extraterrestrial beings from outer space."
     },
-    "down-C14": {
+    {
+      "name": "down-C14",
+      "dir": "down",
       "group": ["C14", "C15", "C16", "C17", "C18"],
       "sum": "THIRD",
       "hint": "The order in which Earth is furthest from the sun."
     },
-    "down-E10": {
+    {
+      "name": "down-E10",
+      "dir": "down",
       "group": ["E10", "E11", "E12", "E13", "E14", "E15", "E16", "E17", "E18"],
       "sum": "ASTROLOGY",
       "hint": "The study of the movements and relative positions of celestial bodies."
     },
-    "across-G3": {
+    {
+      "name": "across-G3",
+      "dir": "down",
       "group": ["G3", "H3", "I3", "J3", "K3"],
       "sum": "EARTH",
       "hint": "The only planet in the Milky Way currently known to be able to support human life."
     },
-    "across-N3": {
+    {
+      "name": "across-N3",
+      "dir": "down",
       "group": ["N3", "O3", "P3", "Q3", "R3", "S3"],
       "sum": "GALAXY",
       "hint": "The Milky Way"
     },
-    "across-H5": {
+    {
+      "name": "across-H5",
+      "dir": "down",
       "group": ["H5", "I5", "J5", "K5", "L5", "M5"],
       "sum": "SATURN",
       "hint": "A large gas giant planet circled by rings of asteroids."
     },
-    "across-O5": {
+    {
+      "name": "across-O5",
+      "dir": "down",
       "group": ["O5", "P5", "Q5", "R5"],
       "sum": "STAR",
       "hint": "A celestial body that emits light."
     },
-    "across-B7": {
+    {
+      "name": "across-B7",
+      "dir": "down",
       "group": ["B7", "C7", "D7"],
       "sum": "GAS",
       "hint": "The largest planets in the Milky Way solar system are known as this type of giant."
     },
-    "across-M7": {
+    {
+      "name": "across-M7",
+      "dir": "down",
       "group": ["M7", "N7", "O7", "P7", "Q7", "R7"],
       "sum": "PLANET",
       "hint": "A large celestial body that orbits a star."
     },
-    "across-E8": {
+    {
+      "name": "across-E8",
+      "dir": "down",
       "group": ["E8", "F8", "G8", "H8", "I8"],
       "sum": "SPACE",
       "hint": "The highway between planets."
     },
-    "across-G10": {
+    {
+      "name": "across-G10",
+      "dir": "down",
       "group": ["G10", "H10", "I10", "J10", "K10", "L10", "M10"],
       "sum": "MARTIAN",
       "hint": "A word to describe anything associated with the planet Mars."
     },
-    "across-A11": {
+    {
+      "name": "across-A11",
+      "dir": "down",
       "group": ["A11", "B11", "C11", "D11", "E11"],
       "sum": "VENUS",
       "hint": "The Roman goddess of love."
     },
-    "across-I13": {
+    {
+      "name": "across-I13",
+      "dir": "down",
       "group": ["I13", "J13", "K13", "L13", "M13", "N13", "O13", "P13"],
       "sum": "MILKYWAY",
       "hint": "The candy bar that stole its name from our galaxy."
     },
-    "across-A14": {
+    {
+      "name": "across-A14",
+      "dir": "down",
       "group": ["A14", "B14", "C14", "D14", "E14"],
       "sum": "ASTRO",
       "hint": "A prefix to describe things associated with space and celestial bodies."
     },
-    "across-E15": {
+    {
+      "name": "across-E15",
+      "dir": "down",
       "group": ["E15", "F15", "G15", "H15", "I15"],
       "sum": "LUNAR",
       "hint": "Describes anything associated with the Moon."
     },
-    "across-O16": {
+    {
+      "name": "across-O16",
+      "dir": "down",
       "group": ["O16", "P16", "Q16", "R16", "S16"],
       "sum": "SOLAR",
       "hint": "Describes anything associated with the Sun."
     },
-    "across-H17": {
+    {
+      "name": "across-H17",
+      "dir": "down",
       "group": ["H17", "I17", "J17", "K17", "L17", "M17", "N17"],
       "sum": "JUPITER",
       "hint": "The largest planet in the Milky Way galaxy; has a giant red spot."
     },
-    "across-C18": {
+    {
+      "name": "across-C18",
+      "dir": "down",
       "group": ["C18", "D18", "E18"],
       "sum": "DAY",
       "hint": "One rotation of the Earth."
     }
-  }
+  ],
+  "tags": ["space", "sci-fi"]
 }

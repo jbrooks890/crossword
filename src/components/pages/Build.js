@@ -15,7 +15,7 @@ export default function Build() {
     version: 1,
     editorMode: { active: true, phase: 0 },
     answerKey: {},
-    answers: {},
+    answers: [],
     tags: [],
   });
   const sectionTabs = ["Grid", "Hints", "Preview"];
@@ -51,8 +51,10 @@ export default function Build() {
 
   // =========== UPDATE PUZZLE GROUPS ===========
 
-  const updatePuzzleGroups = (answerKey, answers) => {
+  const updatePuzzleGroups = (answerKey, _answers) => {
     // console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: orange");
+    const answers = new Map(_answers.map(answer => [answer.name, answer]));
+    console.log(`%c${answers.size}`, "color:lime");
 
     setNewPuzzle(prev => ({
       ...prev,
@@ -60,7 +62,7 @@ export default function Build() {
       answers,
       editorMode: {
         ...prev.editorMode,
-        phase: Object.keys(answers).length ? 2 : 1,
+        phase: answers.size ? 2 : 1,
       },
     }));
   };
@@ -75,6 +77,7 @@ export default function Build() {
     }));
   };
 
+  // console.log(`%c${activeSection}`, "color: lime");
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
 
@@ -89,7 +92,11 @@ export default function Build() {
       )}
       {phase > 0 && (
         <Frame puzzle={newPuzzle}>
-          <BuildNav sections={sectionTabs} changeSection={setActiveSection} />
+          <BuildNav
+            sections={sectionTabs}
+            active={activeSection}
+            changeSection={setActiveSection}
+          />
           <Grid
             puzzle={newPuzzle}
             active={activeSection === 0 || activeSection === 2}

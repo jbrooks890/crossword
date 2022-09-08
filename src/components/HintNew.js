@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function HintNew({ entry }) {
-  const [groupName, { sum, hint }] = entry;
+  const { groupName, sum, hint } = entry;
   // const { sum, hint } = content;
   const [chars, setChars] = useState(hint.length);
   const maxLength = 200;

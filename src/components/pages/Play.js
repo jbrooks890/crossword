@@ -29,12 +29,19 @@ export default function Play() {
     try {
       const response = await axios.get(PUZZLE_LINK);
       const { puzzle } = response.data;
-      setActivePuzzle(puzzle);
-      setActiveGroup(Object.keys(puzzle.answers)[0]);
+      setActivePuzzle({
+        ...puzzle,
+        answers: new Map(
+          puzzle.answers.map(entry => [entry.name, { ...entry }])
+        ),
+      });
+      setActiveGroup(puzzle.answers[0].name);
     } catch (e) {
       console.log(e);
     }
   };
+
+  console.log(activePuzzle);
 
   useEffect(() => fetchData(), []);
 
@@ -77,7 +84,7 @@ export default function Play() {
       console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
       // console.log({ name });
 
-      if (answers[name]) {
+      if (answers.has(name)) {
         document
           .querySelectorAll(".active")
           .forEach(cell => cell.classList.remove("active"));
@@ -132,7 +139,8 @@ export default function Play() {
             focusNext(id);
             break;
           case "Backspace":
-            const { group } = answers[activeGroup];
+            // const { group } = answers.find(group => group.name === activeGroup);
+            const { group } = answers.get(activeGroup);
             if (content.length < 1) {
               const prev = group.indexOf(id) - 1;
 
@@ -184,7 +192,7 @@ export default function Play() {
   // =========== FOCUS NEXT ===========
   const focusNext = id => {
     const { isJunction, groups } = cellData(id);
-    const { group } = answers[activeGroup];
+    const { group } = answers.get(activeGroup);
     const currPos = group.indexOf(id);
     const lastCell = currPos === group.length - 1;
 
@@ -193,7 +201,7 @@ export default function Play() {
     } else {
       if (isJunction) {
         const altGroupName = groups.find(group => group !== activeGroup);
-        const altGroup = answers[altGroupName].group;
+        const altGroup = answers.get(altGroupName).group;
 
         let next = altGroup.indexOf(id) + 1;
         if (next > altGroup.length - 1) {
@@ -214,7 +222,8 @@ export default function Play() {
 
   // =========== FOCUS NEXT GROUP ===========
   const focusNextGroup = (name = activeGroup) => {
-    const groups = Object.keys(answers);
+    // const groups = Object.keys(answers);
+    const groups = [...answers.keys()];
     const index = groups.indexOf(name);
     let next = index + 1 >= groups.length ? groups[0] : groups[index + 1];
 
@@ -225,7 +234,7 @@ export default function Play() {
   // =========== FOCUS FIRST ===========
   const focusFirst = (name = activeGroup, strict = false) => {
     // console.log("%cFOCUS FIRST", "color: limegreen");
-    const { group } = answers[name];
+    const { group } = answers.get(name);
     const targets = group.filter(id => cellData(id).input.value.length === 0);
 
     if (strict) {
@@ -241,7 +250,7 @@ export default function Play() {
 
   // =========== FOCUS LAST ===========
   const focusLast = (name, strict = false) => {
-    const { group } = answers[name];
+    const { group } = answers.get(name);
     const targets = group.filter(id => cellData(id).input.value.length === 0);
 
     targets.length
@@ -315,14 +324,13 @@ export default function Play() {
   // =========== GET HINTS ===========
   const getHints = () => {
     let list = new Map();
-    Object.keys(answers).forEach(entry => list.set(entry, answers[entry].hint));
-    // console.log(list);
+    answers.forEach((entry, name) => list.set(name, entry.hint));
     return list;
   };
 
   // =========== ON HOVER ===========
   const hoverGroup = (name, direction) => {
-    answers[name].group.forEach(id => {
+    answers.get(name).group.forEach(id => {
       const axis = direction === "across" ? ".acrossBox" : ".downBox";
       const cell = document.querySelector(`#${id} ${axis}`);
       cell.classList.toggle("preview");
@@ -357,7 +365,7 @@ export default function Play() {
         <>
           <Frame puzzle={activePuzzle}>
             <div id="cw-grid-wrap">
-              <HintBox hint={answers[activeGroup].hint} />
+              <HintBox hint={answers.get(activeGroup).hint} />
               <Grid
                 puzzle={activePuzzle}
                 // setGroup={setGroup}
@@ -367,7 +375,7 @@ export default function Play() {
                 getLetter={getLetter}
                 operations={cellOperations}
               />
-              <AnswerInput entry={answers[activeGroup]} />
+              <AnswerInput entry={answers.get(activeGroup)} />
             </div>
             <ButtonCache giveHint={giveHint} />
             <HintCache

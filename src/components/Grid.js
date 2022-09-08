@@ -37,18 +37,18 @@ export default function Grid({
   // =========== FORMAT CELL DATA ===========
 
   const formatCellData = (id, x, y) => {
-    const groupNames = Object.keys(answers);
     const col = getLetter(x);
+    const groupNames = [...answers.keys()];
     const groups = groupNames.filter(entry =>
-      answers[entry].group.includes(id)
+      answers.get(entry).group.includes(id)
     );
     let display = [];
 
     groups.forEach(entry => {
-      let across = entry.split("-")[0] === "across";
-      let group = answers[entry].group;
+      let { group, dir } = answers.get(entry);
+      // let across = dir === "across";
 
-      if (across) {
+      if (dir === "across") {
         if (group[0] === id) {
           display.push("first");
         } else if (group[group.length - 1] === id) {
@@ -100,7 +100,7 @@ export default function Grid({
           // if the new group has at least 2 entries...
           if (set.group.length > 1) {
             // set.name = `${dir}-${set.group[0]}`;
-            groups[`${dir}-${set.group[0]}`] = { ...set, hint: "" };
+            groups[`${dir}-${set.group[0]}`] = { ...set, dir: dir, hint: "" };
           }
           set = {
             group: [],
@@ -128,8 +128,8 @@ export default function Grid({
       .map(id => rows[id]);
 
     updatePuzzleGroups(Object.fromEntries(grid.content), {
-      across: findGroups(_rows, true),
-      down: findGroups(_cols, false),
+      ...findGroups(_rows, true),
+      ...findGroups(_cols, false),
     });
   };
 

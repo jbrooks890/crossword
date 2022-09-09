@@ -18,15 +18,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   } = props;
   const { active: editing, phase } = editorMode;
 
-  id === "J2" && console.log({ id }, groups); //TODO
-
-  const axisGroups = () => {
-    // groups.length && console.log("GROUPS:", groups);
-    const axisGroups = new Map();
-    axisGroups.forEach(group => axisGroups.set(group.dir, group));
-    return axisGroups;
-  };
-
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
     const {
@@ -105,25 +96,30 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         classes: formatClassList(
           [
             answer && "show",
-            groups.length && groups.join(" "),
+            // groups.length && groups.join(" "),
+            groups.map(group => group.name).join(" "),
+            groups.map(group => group.dir).join(" "),
+            // axisGroups().has("across") && "across",
+            // axisGroups().has("down") && "down",
             isJunction && "junction",
-            axisGroups().has("across") && "across",
-            axisGroups().has("down") && "down",
             display && display.join(" "),
             crop && "crop ",
           ].filter(entry => entry)
         ),
         attributes: {
-          ["data-groups"]: groups.join(" "),
+          ["data-groups"]: groups.map(group => group.name).join(" "),
           onMouseEnter: () =>
-            axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
+            // axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
+            groups.forEach(group => hoverGroup(group.name, group.dir)),
           onMouseLeave: () =>
-            axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
+            // axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
+            groups.forEach(group => hoverGroup(group.name, group.dir)),
         },
       },
       input: {
         attributes: {
-          onClick: () => focusCell(id, !isJunction ? groups[0] : undefined),
+          onClick: () =>
+            focusCell(id, !isJunction ? groups[0].name : undefined),
           onKeyDown: e => controls(e),
           onKeyUp: e => controls(e),
         },
@@ -131,28 +127,19 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     };
   };
 
-  const AxisBox = ({ dir }) => (
-    <span
-      className={formatClassList([
-        `${dir}Box`,
-        "axis-box",
-        axisGroups().has(dir) && axisGroups().get(dir),
-      ])}
-      onFocus={e => document.querySelector(`#${id} .cell-input`).focus()}
-    ></span>
-  );
-
   const AxisSelector = () => (
     <div className="axis-select">
       {groups.map((group, i) => {
-        const dir = group.split("-")[0];
+        // const dir = group.split("-")[0];
+        const { name, dir } = group;
         return (
           <button
             key={i}
             className={`select-${dir}`}
             onClick={e => {
               e.preventDefault();
-              focusCell(id, axisGroups.get(dir));
+              // focusCell(id, axisGroups.get(dir));
+              focusCell(id, name);
             }}
           ></button>
         );
@@ -187,17 +174,23 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       data-coord-y={index[1]}
       {...(!editing && formatCell().cell.attributes)}
     >
-      {["across", "down"].map((dir, i) => (
-        <span
-          key={i}
-          className={formatClassList([
-            `${dir}Box`,
-            "axis-box",
-            axisGroups().has(dir) && axisGroups().get(dir),
-          ])}
-          onFocus={e => document.querySelector(`#${id} .cell-input`).focus()}
-        ></span>
-      ))}
+      {groups &&
+        ["across", "down"].map((dir, i) => {
+          const target = groups.find(group => group.dir === dir);
+          return (
+            <span
+              key={i}
+              className={formatClassList([
+                `${dir}-box`,
+                "axis-box",
+                target && target.name,
+              ])}
+              onFocus={e =>
+                document.querySelector(`#${id} .cell-input`).focus()
+              }
+            ></span>
+          );
+        })}
       {!editing && isJunction && <AxisSelector />}
       <input
         className={`cell-input ${id} ${answer ? "show" : null}`}
@@ -208,7 +201,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         onFocus={e => e.currentTarget.select()}
         onChange={updateGrid} // UPDATE GRID + FIND GROUPS
         onClick={() =>
-          !editing && focusCell(id, !isJunction ? groups[0] : undefined)
+          !editing && focusCell(id, !isJunction ? groups[0].name : undefined)
         }
         onKeyDown={e => (editing ? editControls(e) : controls(e))}
         onKeyUp={e => (editing ? editControls(e) : controls(e))}

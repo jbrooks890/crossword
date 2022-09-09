@@ -54,7 +54,7 @@ export default function Build() {
   const updatePuzzleGroups = (answerKey, _answers) => {
     // console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: orange");
     const answers = new Map(_answers.map(answer => [answer.name, answer]));
-    console.log(`%c${answers.size}`, "color:lime");
+    // console.log(`%c${answers.size}`, "color:lime");
 
     setNewPuzzle(prev => ({
       ...prev,

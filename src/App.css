@@ -480,17 +480,17 @@ h1.home-page-logo {
 
 /*  --------- DOWN (VERTICAL) --------- */
 
-form#crossword .down .downBox {
+form#crossword .down .down-box {
   border-left: 3px solid var(--pop);
   border-right: 3px solid var(--pop);
 }
 
-form#crossword .down.top .downBox {
+form#crossword .down.top .down-box {
   border-top: 3px solid var(--pop);
   border-radius: 8px 8px 0 0;
 }
 
-form#crossword .down.bottom .downBox {
+form#crossword .down.bottom .down-box {
   border-bottom: 3px solid var(--pop);
   border-radius: 0 0 8px 8px;
 }
@@ -498,17 +498,17 @@ form#crossword .down.bottom .downBox {
 
 /*  --------- ACROSS (HORIZONTAL) --------- */
 
-form#crossword .across .acrossBox {
+form#crossword .across .across-box {
   border-top: 3px solid var(--pop);
   border-bottom: 3px solid var(--pop);
 }
 
-form#crossword .across.first .acrossBox {
+form#crossword .across.first .across-box {
   border-left: 3px solid var(--pop);
   border-radius: 8px 0 0 8px;
 }
 
-form#crossword .across.last .acrossBox {
+form#crossword .across.last .across-box {
   border-right: 3px solid var(--pop);
   border-radius: 0 8px 8px 0;
 }

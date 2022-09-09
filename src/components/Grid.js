@@ -37,23 +37,23 @@ export default function Grid({
 
   // =========== FORMAT CELL DATA ===========
 
-  console.log("ANSWERS:", [...answers.keys()]);
-
   const formatCellData = (id, x, y) => {
     // id === "A0" && console.log("%cNOT SUPPOSED TO BE RUNNING!!!", "color: red");
     // console.log(`%cFORMAT CELL: ${id}`, "color: red");
     // console.log(answers);
     const col = getLetter(x);
     const groupNames = [...answers.keys()];
-    const groups = groupNames.filter(entry =>
-      answers.get(entry).group.includes(id)
-    );
+    const groups = groupNames
+      .filter(entry => answers.get(entry).group.includes(id))
+      .map(entry => answers.get(entry));
     let display = [];
+
+    groups.size && console.log({ id }, "GROUPS", groups);
 
     // id === "J2" && console.log("GROUPS:", groups);
 
     groups.forEach(entry => {
-      let { group, dir } = answers.get(entry);
+      let { group, dir } = entry;
       // let across = dir === "across";
 
       if (dir === "across") {
@@ -225,7 +225,6 @@ export default function Grid({
         };
       } else {
         let activeCells = [...content.keys()];
-        console.log(activeCells);
 
         content.delete(id);
 

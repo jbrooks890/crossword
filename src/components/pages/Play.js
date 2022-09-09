@@ -80,6 +80,7 @@ export default function Play() {
       `%cSET GROUP: ${activeGroup}`,
       "color: plum; text-transform: uppercase"
     );
+    console.log(name);
 
     if (name !== activeGroup) {
       console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
@@ -332,7 +333,7 @@ export default function Play() {
   // =========== ON HOVER ===========
   const hoverGroup = (name, direction) => {
     answers.get(name).group.forEach(id => {
-      const axis = direction === "across" ? ".acrossBox" : ".downBox";
+      const axis = direction === "across" ? ".across-box" : ".down-box";
       const cell = document.querySelector(`#${id} ${axis}`);
       cell.classList.toggle("preview");
     });

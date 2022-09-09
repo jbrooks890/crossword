@@ -37,7 +37,11 @@ export default function Grid({
 
   // =========== FORMAT CELL DATA ===========
 
+  console.log("ANSWERS:", [...answers.keys()]);
+
   const formatCellData = (id, x, y) => {
+    // id === "A0" && console.log("%cNOT SUPPOSED TO BE RUNNING!!!", "color: red");
+    // console.log(`%cFORMAT CELL: ${id}`, "color: red");
     // console.log(answers);
     const col = getLetter(x);
     const groupNames = [...answers.keys()];
@@ -45,6 +49,8 @@ export default function Grid({
       answers.get(entry).group.includes(id)
     );
     let display = [];
+
+    // id === "J2" && console.log("GROUPS:", groups);
 
     groups.forEach(entry => {
       let { group, dir } = answers.get(entry);
@@ -168,7 +174,7 @@ export default function Grid({
           key={count}
           cell_name={id}
           index={[x, y]}
-          {...(phase >= 2 && formatCellData(id, x, y))}
+          {...((!editing || phase >= 2) && formatCellData(id, x, y))}
           controls={e => controls(e)}
           editorMode={editorMode}
           hoverGroup={hoverGroup} // BOTH

@@ -18,17 +18,14 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   } = props;
   const { active: editing, phase } = editorMode;
 
-  // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
-  // const [focused, setFocused] = useState(false);
+  id === "J2" && console.log({ id }, groups); //TODO
 
-  // useEffect(() => setFocused(true), []);
-  // const toggleFocus = useCallback(() => setFocused(prev => !prev), []);
-
-  // console.log(editing);
-
-  const axisGroups = new Map(); // TODO
-  !editing &&
-    groups.forEach(group => axisGroups.set(group.split("-")[0], group)); // TODO
+  const axisGroups = () => {
+    // groups.length && console.log("GROUPS:", groups);
+    const axisGroups = new Map();
+    axisGroups.forEach(group => axisGroups.set(group.dir, group));
+    return axisGroups;
+  };
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -66,26 +63,18 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
           case "ArrowLeft":
             e.preventDefault();
             navTo(index, [-1, 0]);
-            // shiftKey
-            //   ? focusFirst(activeGroup, true)
-            //   : focusNearest(id, index, [-1, 0]);
             break;
           case "ArrowRight":
             e.preventDefault();
             navTo(index, [1, 0]);
-            // focusNearest(id, index, [1, 0]);
             break;
           case "ArrowUp":
             e.preventDefault();
             navTo(index, [0, -1]);
-            // shiftKey
-            //   ? focusFirst(activeGroup, true)
-            //   : focusNearest(id, index, [0, -1]);
             break;
           case "ArrowDown":
             e.preventDefault();
             navTo(index, [0, 1]);
-            // focusNearest(id, index, [0, 1]);
             break;
         }
         break;
@@ -94,11 +83,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
 
   // =========== TO NEXT ===========
   const toNext = () => {
-    // console.log(index);
     const [x, y] = index;
     const next = axis ? getLetter(x + 1) + y : getLetter(x) + (y + 1);
-    // console.log(`%c${id} --> ${next}`, "color: aquamarine");
-    // console.log(document.getElementById(next));
     document.querySelector(`.${next}.cell-input`).focus();
   };
 
@@ -114,9 +100,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   // =========== FORMAT CELL ===========
 
   const formatCell = () => {
-    const axisGroups = new Map();
-    groups.forEach(group => axisGroups.set(group.split("-")[0], group));
-
     return {
       cell: {
         classes: formatClassList(
@@ -124,8 +107,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             answer && "show",
             groups.length && groups.join(" "),
             isJunction && "junction",
-            axisGroups.has("across") && "across",
-            axisGroups.has("down") && "down",
+            axisGroups().has("across") && "across",
+            axisGroups().has("down") && "down",
             display && display.join(" "),
             crop && "crop ",
           ].filter(entry => entry)
@@ -133,9 +116,9 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         attributes: {
           ["data-groups"]: groups.join(" "),
           onMouseEnter: () =>
-            axisGroups.forEach((group, dir) => hoverGroup(group, dir)),
+            axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
           onMouseLeave: () =>
-            axisGroups.forEach((group, dir) => hoverGroup(group, dir)),
+            axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
         },
       },
       input: {
@@ -153,7 +136,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       className={formatClassList([
         `${dir}Box`,
         "axis-box",
-        axisGroups.has(dir) && axisGroups.get(dir),
+        axisGroups().has(dir) && axisGroups().get(dir),
       ])}
       onFocus={e => document.querySelector(`#${id} .cell-input`).focus()}
     ></span>
@@ -177,8 +160,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     </div>
   );
 
-  const formatClassList = classArr =>
-    classArr
+  const formatClassList = arr =>
+    arr
       .filter(entry => entry)
       .join(" ")
       .replace(/\s+/g, " ")
@@ -193,11 +176,9 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       id={id}
       className={
         editing
-          ? // ? `cell build ${focused ? 'focused' : ''} ${axis ? "edit-across" : "edit-down"}`
-            formatClassList([
+          ? formatClassList([
               "cell",
               "build",
-              // focused && "focused",
               axis ? "edit-across" : "edit-down",
             ])
           : `cell ${formatCell().cell.classes}`
@@ -212,7 +193,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
           className={formatClassList([
             `${dir}Box`,
             "axis-box",
-            axisGroups.has(dir) && axisGroups.get(dir),
+            axisGroups().has(dir) && axisGroups().get(dir),
           ])}
           onFocus={e => document.querySelector(`#${id} .cell-input`).focus()}
         ></span>
@@ -224,18 +205,12 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         size="1"
         maxLength="1"
         tabIndex="-1"
-        onFocus={e => {
-          // toggleFocus();
-          e.currentTarget.select();
-        }}
+        onFocus={e => e.currentTarget.select()}
         onChange={updateGrid} // UPDATE GRID + FIND GROUPS
-        // onBlur={toggleFocus()}
-        onClick={() => {
-          !editing && focusCell(id, !isJunction ? groups[0] : undefined);
-          // focusCell(id, !isJunction ? groups[0] : undefined);
-        }}
+        onClick={() =>
+          !editing && focusCell(id, !isJunction ? groups[0] : undefined)
+        }
         onKeyDown={e => (editing ? editControls(e) : controls(e))}
-        // onKeyDown={e => controls(e)}
         onKeyUp={e => (editing ? editControls(e) : controls(e))}
         placeholder={editing ? id : undefined}
       />

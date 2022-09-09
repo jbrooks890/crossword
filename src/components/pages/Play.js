@@ -42,6 +42,7 @@ export default function Play() {
   };
 
   console.log(activePuzzle);
+  // console.log(activeGroup);
 
   useEffect(() => fetchData(), []);
 

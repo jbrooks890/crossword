@@ -14,7 +14,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     axis,
     toggleAxis,
     operations,
+    preview,
     updateGrid,
+    updateAnswerKey,
+    captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
 
@@ -96,11 +99,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         classes: formatClassList(
           [
             answer && "show",
-            // groups.length && groups.join(" "),
             groups.map(group => group.name).join(" "),
             groups.map(group => group.dir).join(" "),
-            // axisGroups().has("across") && "across",
-            // axisGroups().has("down") && "down",
             isJunction && "junction",
             display && display.join(" "),
             crop && "crop ",
@@ -109,10 +109,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         attributes: {
           ["data-groups"]: groups.map(group => group.name).join(" "),
           onMouseEnter: () =>
-            // axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
             groups.forEach(group => hoverGroup(group.name, group.dir)),
           onMouseLeave: () =>
-            // axisGroups().forEach((group, dir) => hoverGroup(group, dir)),
             groups.forEach(group => hoverGroup(group.name, group.dir)),
         },
       },
@@ -161,15 +159,11 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   return (
     <div
       id={id}
-      className={
-        editing
-          ? formatClassList([
-              "cell",
-              "build",
-              axis ? "edit-across" : "edit-down",
-            ])
-          : `cell ${formatCell().cell.classes}`
-      }
+      className={formatClassList([
+        "cell",
+        axis ? "edit-across" : "edit-down",
+        editing && !preview ? "build" : formatCell().cell.classes,
+      ])}
       data-coord-x={index[0]}
       data-coord-y={index[1]}
       {...(!editing && formatCell().cell.attributes)}
@@ -199,7 +193,9 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         maxLength="1"
         tabIndex="-1"
         onFocus={e => e.currentTarget.select()}
-        onChange={updateGrid} // UPDATE GRID + FIND GROUPS
+        // onChange={updateGrid} // UPDATE GRID + FIND GROUPS
+        // onChange={updateAnswerKey}
+        onChange={captureAnswer}
         onClick={() =>
           !editing && focusCell(id, !isJunction ? groups[0].name : undefined)
         }

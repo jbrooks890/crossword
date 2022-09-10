@@ -10,8 +10,8 @@ export default function Build() {
     name: "Boogie",
     type: "Crossword",
     description: "",
-    cols: 20,
-    rows: 20,
+    cols: 10,
+    rows: 10,
     version: 1,
     editorMode: { active: true, phase: 0 },
     answerKey: {},
@@ -23,7 +23,8 @@ export default function Build() {
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
-  useEffect(() => console.log(newPuzzle), [activeSection]);
+  useEffect(() => console.log(newPuzzle), [activeSection, newPuzzle.answerKey]);
+  // console.log(newPuzzle);
 
   // =========== UPDATE PUZZLE ===========
 
@@ -51,20 +52,34 @@ export default function Build() {
 
   // =========== UPDATE PUZZLE GROUPS ===========
 
-  const updatePuzzleGroups = (answerKey, _answers) => {
-    // console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: orange");
-    const answers = new Map(_answers.map(answer => [answer.name, answer]));
+  const updatePuzzleGroups = (answer, $answers) => {
+    console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: yellow");
+    const answers = new Map($answers.map(answer => [answer.name, answer]));
     // console.log(`%c${answers.size}`, "color:lime");
+    // console.log(answer);
 
     setNewPuzzle(prev => ({
       ...prev,
-      answerKey,
+      answerKey: { ...prev.answerKey, ...answer },
       answers,
       editorMode: {
         ...prev.editorMode,
         phase: answers.size ? 2 : 1,
       },
     }));
+  };
+
+  // ============ UPDATE ANSWERS ============
+
+  const updateAnswerKey = (e, id, $answers) => {
+    const { value } = e.target;
+    if (value.length) {
+      console.log(`%cTEST`, "color:red");
+      setNewPuzzle(prev => ({
+        ...prev,
+        answerKey: { ...prev.answerKey, [id]: value.toUpperCase() },
+      }));
+    }
   };
 
   // =========== NEW PUZZLE SUBMIT ===========
@@ -76,6 +91,80 @@ export default function Build() {
       editorMode: { ...prev.editorMode, phase: 1 },
     }));
   };
+
+  // -------------------------------------------------
+  // <><><><><><><><> CELL OPERATIONS <><><><><><><><>
+  // -------------------------------------------------
+
+  // =========== CONTROLS ===========
+  // const editControls = e => {
+  //   const {
+  //     type,
+  //     key,
+  //     altKey,
+  //     ctrlKey,
+  //     shiftKey,
+  //     currentTarget: input,
+  //     which,
+  //   } = e;
+  //   const { parentElement: cell } = input;
+  //   const { id } = cell;
+  //   const content = input.value;
+  //   const printable = which >= 65 && which <= 90;
+
+  //   switch (type) {
+  //     // ++++++ KEY UP ++++++
+  //     case "keyup":
+  //       printable && toNext();
+  //       break;
+  //     // ++++++ KEY DOWN ++++++
+  //     case "keydown":
+  //       // console.log(key);
+  //       switch (key) {
+  //         case " ":
+  //           e.preventDefault();
+  //           toggleAxis(prev => !prev);
+  //           break;
+  //         case "Backspace":
+  //           if (content.length < 1) {
+  //           }
+  //           break;
+  //         case "ArrowLeft":
+  //           e.preventDefault();
+  //           navTo(index, [-1, 0]);
+  //           break;
+  //         case "ArrowRight":
+  //           e.preventDefault();
+  //           navTo(index, [1, 0]);
+  //           break;
+  //         case "ArrowUp":
+  //           e.preventDefault();
+  //           navTo(index, [0, -1]);
+  //           break;
+  //         case "ArrowDown":
+  //           e.preventDefault();
+  //           navTo(index, [0, 1]);
+  //           break;
+  //       }
+  //       break;
+  //   }
+  // };
+
+  // =========== TO NEXT ===========
+  // const toNext = () => {
+  //   const [x, y] = index;
+  //   const next = axis ? getLetter(x + 1) + y : getLetter(x) + (y + 1);
+  //   document.querySelector(`.${next}.cell-input`).focus();
+  // };
+
+  // =========== TO CELL ===========
+  // const navTo = (index, diff) => {
+  //   //DIFF = [x,y]
+  //   const [x, y] = index;
+  //   const [a, b] = diff;
+  //   const destination = getLetter(x + a) + (y + b);
+  //   document.querySelector(`.${destination}.cell-input`).focus();
+  // };
 
   // console.log(`%c${activeSection}`, "color: lime");
   // --------------------------------
@@ -102,6 +191,7 @@ export default function Build() {
             active={activeSection === 0 || activeSection === 2}
             preview={activeSection === 2}
             updatePuzzleGroups={updatePuzzleGroups}
+            updateAnswerKey={updateAnswerKey}
           />
           {phase === 2 && (
             <HintInput

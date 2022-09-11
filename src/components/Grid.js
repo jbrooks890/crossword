@@ -122,11 +122,8 @@ export default function Grid({
       }
     }
 
-    // console.log("TEST:", $grid);
     return $grid;
   }
-
-  // console.log(createGrid());
 
   // =========== RENDER GRID ===========
   const renderGrid = () => {
@@ -219,31 +216,6 @@ export default function Grid({
     return groups;
   };
 
-  // =========== CAPTURE ANSWERS ===========
-  // const captureAnswers = () => {
-  //   console.log(`%cCAPTURE ANSWERS`, "color: orange");
-  //   console.log(`%cTEST---`, "color: red");
-
-  //   const { cols, rows, activeCols, activeRows } = grid;
-
-  //   console.log("Test:", activeCols, activeRows);
-
-  //   // COMB GRID FOR GROUPS
-  //   // IF ENTRIES ARE GROUPED ADD TO GROUPS -AND- ANSWER KEY
-
-  //   const _cols = Object.keys(cols)
-  //     .filter(col => activeCols.includes(col))
-  //     .map(id => cols[id]);
-  //   const _rows = Object.keys(rows)
-  //     .filter(row => activeRows.includes(Number(row)))
-  //     .map(id => rows[id]);
-
-  //   updatePuzzleGroups(Object.fromEntries(grid.content), [
-  //     ...findGroups(_rows, true),
-  //     ...findGroups(_cols, false),
-  //   ]);
-  // };
-
   // =========== CAPTURE ANSWER ===========
   function captureAnswer(e, id, _col, _row) {
     console.log(`%cCAPTURE ANSWERS`, "color: orange");
@@ -276,6 +248,13 @@ export default function Grid({
 
   // console.log(grid);
 
+  // preview && console.log(`%cPREVIEW MODE`, "color: cyan");
+  // preview &&
+  //   console.log(
+  //     `%cwidth: ${grid.activeRows.length}\nheight: ${grid.activeCols.length}`,
+  //     "color: cyan"
+  //   );
+
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
 
@@ -285,8 +264,10 @@ export default function Grid({
       className={["grid", preview ? "preview" : ""].join(" ")}
       style={{
         gridTemplate: `repeat(${
-          editing ? rows : grid.activeRows.length
-        }, 48px) / repeat(${editing ? cols : grid.activeCols.length}, 48px)`,
+          editing && !preview ? rows : grid.activeRows.length
+        }, 48px) / repeat(${
+          editing && !preview ? cols : grid.activeCols.length
+        }, 48px)`,
       }}
     >
       {renderGrid()}

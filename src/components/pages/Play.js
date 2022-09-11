@@ -65,25 +65,25 @@ export default function Play() {
 
   // =========== FOCUS CELL ===========
   const focusCell = (id, group = activeGroup) => {
-    console.log(
-      `%cCURRENT GROUP: ${activeGroup}`,
-      "color: orange; text-transform: uppercase"
-    );
-    console.log("running focus cell:", { id, group });
+    // console.log(
+    //   `%cCURRENT GROUP: ${activeGroup}`,
+    //   "color: orange; text-transform: uppercase"
+    // );
+    // console.log("running focus cell:", { id, group });
     group !== activeGroup && setGroup(group);
     cellData(id).input.focus();
   };
 
   // =========== SET GROUP ===========
   const setGroup = name => {
-    console.log(
-      `%cSET GROUP: ${activeGroup}`,
-      "color: plum; text-transform: uppercase"
-    );
-    console.log(name);
+    // console.log(
+    //   `%cSET GROUP: ${activeGroup}`,
+    //   "color: plum; text-transform: uppercase"
+    // );
+    // console.log(name);
 
     if (name !== activeGroup) {
-      console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
+      // console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
       // console.log({ name });
 
       if (answers.has(name)) {
@@ -365,7 +365,10 @@ export default function Play() {
     <div id="play-page">
       {activeGroup && (
         <>
-          <Frame puzzle={activePuzzle}>
+          <Frame
+            puzzle={activePuzzle}
+            submit={e => console.log("You done beech!")}
+          >
             <div id="cw-grid-wrap">
               <HintBox hint={answers.get(activeGroup).hint} />
               <Grid

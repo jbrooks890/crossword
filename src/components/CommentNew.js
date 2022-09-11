@@ -34,17 +34,17 @@ export default function CommentNew({ add }) {
     });
   };
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    setAdded(true);
+    add(newComment);
+    e.target.reset();
+  };
+
   // console.log(newComment);
 
   return (
-    <form
-      id="new-comment"
-      onSubmit={e => {
-        e.preventDefault();
-        setAdded(true);
-        add(newComment);
-      }}
-    >
+    <form id="new-comment" onSubmit={e => handleSubmit(e)}>
       <div className="comment-input-box">
         <input
           name="name"

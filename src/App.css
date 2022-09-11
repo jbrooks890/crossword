@@ -276,7 +276,7 @@ h1.home-page-logo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* border: 1px solid red; */
+  border: 2px solid red;
 }
 
 #cw-grid-wrap {
@@ -284,6 +284,7 @@ h1.home-page-logo {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  border: 2px solid plum;
 }
 
 #cw-grid {
@@ -299,9 +300,65 @@ h1.home-page-logo {
   justify-content: center;
 }
 
+h1.puzzle-title {
+  cursor: default;
+  position: relative;
+  margin-block: 0.5em;
+  padding: 0.5em;
+  line-height: 1em;
+  /* border: 1px solid red; */
+  outline: 2px solid transparent;
+  border-radius: 5px;
+}
+
+h1.puzzle-title.editable {
+  cursor: pointer;
+  transition: 0.1s ease-out;
+}
+
+h1.puzzle-title.editable:hover {
+  outline-color: var(--faint);
+}
+
+h1.puzzle-title.editable:hover::after {
+  content: 'Edit';
+  position: absolute;
+  display: block;
+  left: 50%;
+  bottom: 0;
+  margin: 0;
+  padding: 0.5em;
+  color: silver;
+  background-color: white;
+  font-family: var(--keyFont);
+  font-size: small;
+  font-weight: 300;
+  line-height: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transform: translate(-50%,50%)
+}
+
+/* h1.puzzle-title.editable[contenteditable='true']:active,
+h1.puzzle-title.editable[contenteditable='true']:focus
+{
+  caret-color: var(--faint);
+  outline: none;
+  opacity: 0.75;
+} */
+
 .cell {
   position: relative;
   visibility: hidden;
+}
+
+#cw-grid.preview .cell-input {
+  color: transparent;
+  transition: 0.1s ease-out;
+}
+
+#cw-grid.preview .cell-input:hover {
+  color: inherit;
 }
 
 .cell.crop {
@@ -838,6 +895,7 @@ form#new-comment button {
 
 #build-nav {
   display: flex;
+  margin-top: 0;
   padding-left: 0;
   list-style-type: none;
 }
@@ -1000,7 +1058,7 @@ form#new-comment button {
   box-sizing: border-box;
 } */
 
-#newPuzzleForm button[type='submit'] {
+#newPuzzleForm button.newPuzzle-submit {
   padding: 1rem;
   color: silver;
   font-family: var(--keyFont);
@@ -1011,7 +1069,7 @@ form#new-comment button {
   transition: 0.05s ease-out;
 }
 
-#newPuzzleForm button[type='submit']:hover {
+#newPuzzleForm button.newPuzzle-submit:hover {
   background-color: var(--pop);
   color: white;
   border-color: var(--pop);

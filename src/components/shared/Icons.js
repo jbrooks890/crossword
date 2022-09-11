@@ -5,6 +5,8 @@ import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logoAsset
 import { ReactComponent as GITHUB_LOGO } from "../../assets/icons/github-logoAsset 7.svg";
 import { ReactComponent as RESTART_ICON } from "../../assets/icons/clear-restart.svg";
 import { ReactComponent as LIKE_ICON } from "../../assets/icons/heart-icon.svg";
+import { ReactComponent as DIALOG_ICON } from "../../assets/icons/dialog-icon.svg";
+import { ReactComponent as EDIT_ICON } from "../../assets/icons/edit-icon.svg";
 
 export default function Icons() {
   return (
@@ -16,6 +18,8 @@ export default function Icons() {
       <GITHUB_LOGO />
       <RESTART_ICON />
       <LIKE_ICON />
+      <DIALOG_ICON />
+      <EDIT_ICON />
     </svg>
   );
 }

@@ -23,7 +23,10 @@ export default function Build() {
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
-  useEffect(() => console.log(newPuzzle), [activeSection, newPuzzle.answerKey]);
+  useEffect(
+    () => console.log(newPuzzle),
+    [newPuzzle, activeSection, newPuzzle.answerKey]
+  );
   // console.log(newPuzzle);
 
   // =========== UPDATE PUZZLE ===========
@@ -82,9 +85,20 @@ export default function Build() {
     }
   };
 
+  // =========== NEW PUZZLE START ===========
+
+  const newPuzzleStart = e => {
+    e.preventDefault();
+    setNewPuzzle(prev => ({
+      ...prev,
+      editorMode: { ...prev.editorMode, phase: 1 },
+    }));
+  };
+
   // =========== NEW PUZZLE SUBMIT ===========
 
   const newPuzzleSubmit = e => {
+    console.log(`%cSUBMIT PUZZLE`, "color: coral");
     e.preventDefault();
     setNewPuzzle(prev => ({
       ...prev,
@@ -172,35 +186,41 @@ export default function Build() {
 
   return (
     <div id="build-page">
-      {phase === 0 && (
-        <NewPuzzleForm
-          puzzle={newPuzzle}
-          updatePuzzle={e => updatePuzzle(e)}
-          newPuzzleSubmit={newPuzzleSubmit}
-        />
-      )}
-      {phase > 0 && (
-        <Frame puzzle={newPuzzle}>
-          <BuildNav
-            sections={sectionTabs}
-            active={activeSection}
-            changeSection={setActiveSection}
-          />
-          <Grid
+      <Frame puzzle={newPuzzle} submit={newPuzzleSubmit}>
+        {phase === 0 && (
+          <NewPuzzleForm
             puzzle={newPuzzle}
-            active={activeSection === 0 || activeSection === 2}
-            preview={activeSection === 2}
-            updatePuzzleGroups={updatePuzzleGroups}
-            updateAnswerKey={updateAnswerKey}
+            phase={phase}
+            updatePuzzle={e => updatePuzzle(e)}
+            start={e => newPuzzleStart(e)}
+            submit={newPuzzleSubmit}
           />
-          {phase === 2 && (
-            <HintInput
-              active={activeSection === 1}
-              groups={newPuzzle.answers}
+        )}
+        {phase > 0 && (
+          <>
+            <BuildNav
+              sections={sectionTabs}
+              active={activeSection}
+              changeSection={setActiveSection}
             />
-          )}
-        </Frame>
-      )}
+            <div id="cw-grid-wrap">
+              <Grid
+                puzzle={newPuzzle}
+                active={activeSection === 0 || activeSection === 2}
+                preview={activeSection === 2}
+                updatePuzzleGroups={updatePuzzleGroups}
+                updateAnswerKey={updateAnswerKey}
+              />
+              {phase === 2 && (
+                <HintInput
+                  active={activeSection === 1}
+                  groups={newPuzzle.answers}
+                />
+              )}
+            </div>
+          </>
+        )}
+      </Frame>
     </div>
   );
 }

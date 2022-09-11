@@ -195,7 +195,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         onFocus={e => e.currentTarget.select()}
         // onChange={updateGrid} // UPDATE GRID + FIND GROUPS
         // onChange={updateAnswerKey}
-        onChange={captureAnswer}
+        onChange={editing && !preview ? captureAnswer : undefined}
         onClick={() =>
           !editing && focusCell(id, !isJunction ? groups[0].name : undefined)
         }

@@ -20,11 +20,15 @@ export default function NewPuzzleForm({
     [tags]
   );
 
-  console.log({ tags });
-
   const popTagInput = e => {
     const newVal = e.target.textContent.slice(0, -1);
     document.querySelector("#tag-input").value = newVal;
+  };
+
+  const handleTagInput = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    value.length && addTag(value);
   };
 
   return (
@@ -97,11 +101,12 @@ export default function NewPuzzleForm({
               name="tags"
               placeholder="New Tag"
               onMouseEnter={e => e.target.focus()}
-              onKeyUp={
+              onKeyDown={
                 // e => console.log(e)
                 e => {
-                  e.preventDefault();
-                  e.key === "Enter" && e.target.value.length && addTag(e);
+                  // e.preventDefault();
+                  // e.key === "Enter" && e.target.value.length && addTag(e);
+                  e.key === "Enter" && handleTagInput(e);
                 }
               }
             />

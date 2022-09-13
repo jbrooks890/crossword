@@ -25,7 +25,10 @@ export default function Build() {
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
-  useEffect(() => console.log(newPuzzle), [activeSection, newPuzzle.answerKey]);
+  useEffect(
+    () => console.log(newPuzzle),
+    [newPuzzle.answers.group, activeSection, newPuzzle.answerKey]
+  );
   // console.log(newPuzzle);
 
   // =========== UPDATE PUZZLE ===========
@@ -54,20 +57,47 @@ export default function Build() {
 
   // =========== UPDATE PUZZLE GROUPS ===========
 
-  const updatePuzzleGroups = (answer, $answers) => {
+  const updatePuzzleGroups = (answer, updatedAnswers) => {
     console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: yellow");
-    const answers = new Map($answers.map(answer => [answer.name, answer]));
-    // console.log(`%c${answers.size}`, "color:lime");
+    const $answers = new Map(
+      updatedAnswers.map(answer => {
+        return [
+          answer.name,
+          {
+            ...answer,
+            // KEEP HINT IF THIS ANSWER GROUP EXISTS ALREADY
+            hint: newPuzzle.answers.has(answer.name)
+              ? newPuzzle.answers.get(answer.name).hint
+              : "",
+          },
+        ];
+      })
+    );
+    // const $answers = new Map([...updatedAnswers]);
+    console.log(updatedAnswers);
+    // console.log(`%c${$answers.size}`, "color:lime");
     // console.log(answer);
 
     setNewPuzzle(prev => ({
       ...prev,
       answerKey: { ...prev.answerKey, ...answer },
-      answers,
+      answers: $answers,
       editorMode: {
         ...prev.editorMode,
-        phase: answers.size ? 2 : 1,
+        phase: $answers.size ? 2 : 1,
       },
+    }));
+  };
+
+  // =========== UPDATE PUZZLE HINT ===========
+  const updateHint = (entry, name) => {
+    console.log(`%cRUNNING UPDATE HINT`, "color: coral");
+    const $answers = new Map([...newPuzzle.answers]);
+    const target = $answers.get(name);
+    target.hint = entry;
+    setNewPuzzle(prev => ({
+      ...prev,
+      answers: $answers,
     }));
   };
 
@@ -100,6 +130,7 @@ export default function Build() {
   const newPuzzleSubmit = e => {
     e.preventDefault();
     console.log(`%cSUBMIT PUZZLE`, "color: cyan");
+    console.log(e);
     // setNewPuzzle(prev => ({
     //   ...prev,
     //   editorMode: { ...prev.editorMode, phase: 1 },
@@ -108,9 +139,9 @@ export default function Build() {
 
   // =========== ADD TAG ===========
 
-  const addTag = e => {
-    e.preventDefault();
-    const tag = e.target.value.toLowerCase().replace(/\s+/g, "-").trim();
+  const addTag = $tag => {
+    // e.preventDefault();
+    const tag = $tag.toLowerCase().trim().replace(/\s+/g, "-");
     !newPuzzle.tags.includes(tag) &&
       setNewPuzzle(prev => ({
         ...prev,
@@ -258,6 +289,7 @@ export default function Build() {
                 <HintInput
                   active={activeSection === 1}
                   groups={newPuzzle.answers}
+                  update={updateHint}
                 />
               )}
             </div>

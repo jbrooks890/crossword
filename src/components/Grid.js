@@ -27,18 +27,18 @@ export default function Grid({
   });
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
 
-  useEffect(() => setGrid(createGrid()), [answerKey, answers]);
+  useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
 
   // ------------------------------------------------
   // <><><><><><><><> TESTING (TODO) <><><><><><><><>
   // ------------------------------------------------
 
-  console.log(
-    `%c${"<>".repeat(8)}\\ GRID /${"<>".repeat(8)}`,
-    "color: coral; text-transform: uppercase"
-  );
+  // console.log(
+  //   `%c${"<>".repeat(8)}\\ GRID /${"<>".repeat(8)}`,
+  //   "color: coral; text-transform: uppercase"
+  // );
 
-  console.log(grid);
+  // console.log(grid);
 
   // =========== GET LETTER ===========
   function getLetter(n) {
@@ -92,7 +92,7 @@ export default function Grid({
 
   // =========== CREATE GRID ===========
   function createGrid() {
-    console.log("%cCREATE GRID", "color:aquamarine");
+    console.log("%cCREATE GRID", "color:red");
     const $answerKey = Object.keys(answerKey);
     const totalCells = cols * rows;
 

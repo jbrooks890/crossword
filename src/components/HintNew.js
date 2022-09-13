@@ -1,23 +1,23 @@
 import { useState } from "react";
 
-export default function HintNew({ entry }) {
-  const { groupName, sum, hint } = entry;
-  // const { sum, hint } = content;
-  const [chars, setChars] = useState(hint.length);
+export default function HintNew({ entry, update }) {
+  const { name, sum, hint } = entry;
   const maxLength = 200;
+  console.log(entry);
+  console.log(`${name} length: ${hint.length}`);
 
   return (
     <li
-      className={`hint-input-entry hint-${groupName}`}
-      // data-char-count={`${chars}/${maxLength}`}
-      data-char-count={maxLength - chars}
+      className={`hint-input-entry hint-${name}`}
+      data-char-count={maxLength - hint.length}
     >
       <h4>{sum}</h4>
       <textarea
-        placeholder={hint ? hint : `New hint for ${sum}`}
+        defaultValue={hint ? hint : ""}
+        placeholder={`New hint for ${sum}`}
         rows="2"
         maxLength={maxLength}
-        onInput={e => setChars(e.target.value.length)}
+        onInput={e => update(e.target.value, name)}
         required
       />
     </li>

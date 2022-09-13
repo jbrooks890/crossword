@@ -1,7 +1,7 @@
 import { useState } from "react";
 import HintNew from "./HintNew";
 
-export default function HintInput({ groups, active }) {
+export default function HintInput({ groups, active, update }) {
   // const list = Object.entries(groups);
   // console.log(list);
   // console.log(groups);
@@ -23,7 +23,7 @@ export default function HintInput({ groups, active }) {
         <ol className="hint-input-list across-list">
           <h3>Across</h3>
           {across.map((entry, i) => (
-            <HintNew key={i} entry={entry} />
+            <HintNew key={i} entry={entry} update={update} />
           ))}
         </ol>
       )}
@@ -31,7 +31,7 @@ export default function HintInput({ groups, active }) {
         <ol className="hint-input-list down-list">
           <h3>Down</h3>
           {down.map((entry, i) => (
-            <HintNew key={i} entry={entry} />
+            <HintNew key={i} entry={entry} update={update} />
           ))}
         </ol>
       )}

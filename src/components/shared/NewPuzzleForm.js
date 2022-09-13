@@ -1,68 +1,122 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function NewPuzzleForm({ puzzle, phase, updatePuzzle, start }) {
+export default function NewPuzzleForm({
+  puzzle,
+  phase,
+  updatePuzzle,
+  start,
+  addTag,
+  editTag,
+  deleteTag,
+  active,
+  setFormActive,
+}) {
   const [gridLink, setGridLink] = useState(true);
-  const { name: title, cols, rows, tags } = puzzle;
+  const { name: title, description, cols, rows, tags } = puzzle;
+
+  useEffect(
+    // RESET TAG INPUT
+    () => tags.length && (document.querySelector("#tag-input").value = ""),
+    [tags]
+  );
+
+  console.log({ tags });
+
+  const popTagInput = e => {
+    const newVal = e.target.textContent.slice(0, -1);
+    document.querySelector("#tag-input").value = newVal;
+  };
 
   return (
-    <div id="newPuzzleForm">
+    <div
+      id="newPuzzleForm"
+      className={`${active ? "active" : ""} ${phase > 0 ? "overlay" : ""}`}
+    >
       <h2>Build</h2>
       <label htmlFor="name">
-        <h4>Name</h4>
+        <h4>Title</h4>
         <input
           name="name"
           type="text"
           placeholder="Puzzle Name"
           onFocus={e => e.currentTarget.select()}
           onInput={e => updatePuzzle(e)}
-          // onClick={e => console.log(e)}
           onMouseEnter={e => e.currentTarget.focus()}
-          // onMouseLeave={e => e.currentTarget.blur()}
           defaultValue={title} //TODO
           required
         />
       </label>
 
-      <h4 className="label">Grid</h4>
       {phase === 0 && (
-        <div className={`newPuzzle-gridSize-wrap ${gridLink ? "linked" : ""}`}>
-          <NumInput
-            dir="cols"
-            linked={gridLink}
-            defaultValue={cols}
-            updatePuzzle={updatePuzzle}
-          />
-          <button
-            className="newPuzzle-gridSize-link"
-            type="button"
-            onClick={() => setGridLink(prev => !prev)}
+        <>
+          <h4 className="label">Grid</h4>
+          <div
+            className={`newPuzzle-gridSize-wrap ${gridLink ? "linked" : ""}`}
           >
-            &times;
-          </button>
-          <NumInput
-            dir="rows"
-            linked={gridLink}
-            defaultValue={rows}
-            updatePuzzle={updatePuzzle}
-          />
-        </div>
+            <NumInput
+              dir="cols"
+              linked={gridLink}
+              defaultValue={cols}
+              updatePuzzle={updatePuzzle}
+            />
+            <button
+              className="newPuzzle-gridSize-link"
+              type="button"
+              onClick={() => setGridLink(prev => !prev)}
+            >
+              &times;
+            </button>
+            <NumInput
+              dir="rows"
+              linked={gridLink}
+              defaultValue={rows}
+              updatePuzzle={updatePuzzle}
+            />
+          </div>
+        </>
       )}
       {/* --------- SUBMISSION INFO --------- */}
       {phase > 0 && (
         <div className="newPuzzle-complete">
           <label htmlFor="description">
             <h4>Description</h4>
-            <textarea name="description" />
+            <textarea
+              name="description"
+              defaultValue={description}
+              placeholder="What's your puzzle about?"
+              onMouseEnter={e => e.target.focus()}
+              onInput={e => updatePuzzle(e)}
+              required
+            />
           </label>
 
           <label htmlFor="tags">
             <h4>Tags</h4>
-            <input name="tags" />
-            <ul className="newPuzzle-tags-output">
-              {tags.map(tag => (
-                <li>{tag}</li>
-              ))}
-            </ul>
+            <input
+              id="tag-input"
+              name="tags"
+              placeholder="New Tag"
+              onMouseEnter={e => e.target.focus()}
+              onKeyUp={
+                // e => console.log(e)
+                e => {
+                  e.preventDefault();
+                  e.key === "Enter" && e.target.value.length && addTag(e);
+                }
+              }
+            />
+            {tags.length > 0 && (
+              <ul className="newPuzzle-tags-output">
+                {tags.map((tag, i) => (
+                  <li key={i} onClick={e => popTagInput(e)}>
+                    {tag}
+                    <div className="delete-tag" onClick={() => deleteTag(tag)}>
+                      &times;
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </label>
         </div>
       )}
@@ -73,6 +127,12 @@ export default function NewPuzzleForm({ puzzle, phase, updatePuzzle, start }) {
       >
         {phase === 0 ? "Start" : "Submit"}
       </button>
+      {/* --------- CLOSE BUTTON --------- */}
+      {phase > 0 && (
+        <button className="close-button" onClick={() => setFormActive(false)}>
+          &times;
+        </button>
+      )}
     </div>
   );
 }

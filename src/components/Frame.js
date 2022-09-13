@@ -1,10 +1,13 @@
-export default function Frame({ children, puzzle, submit }) {
-  const { active, phase } = puzzle.editorMode;
+export default function Frame({ children, puzzle, submit, setFormActive }) {
+  const { active: editing, phase } = puzzle.editorMode;
 
   return (
     <form id="crossword" onSubmit={submit}>
-      {(!active || phase > 0) && puzzle.name && (
-        <h1 className={`puzzle-title ${active ? "editable" : ""}`}>
+      {(!editing || phase > 0) && puzzle.name && (
+        <h1
+          className={`puzzle-title ${editing ? "editable" : ""}`}
+          onClick={() => setFormActive(true)}
+        >
           {puzzle.name}
         </h1>
       )}

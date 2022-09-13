@@ -17,16 +17,15 @@ export default function Build() {
     answerKey: {},
     answers: [],
     tags: [],
+    // tags: ["one", "two", "three", "four", "five"],
   });
   const sectionTabs = ["Grid", "Hints", "Preview"];
   const [activeSection, setActiveSection] = useState(0);
+  const [formActive, setFormActive] = useState(true);
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
-  useEffect(
-    () => console.log(newPuzzle),
-    [newPuzzle, activeSection, newPuzzle.answerKey]
-  );
+  useEffect(() => console.log(newPuzzle), [activeSection, newPuzzle.answerKey]);
   // console.log(newPuzzle);
 
   // =========== UPDATE PUZZLE ===========
@@ -89,6 +88,7 @@ export default function Build() {
 
   const newPuzzleStart = e => {
     e.preventDefault();
+    setFormActive(false);
     setNewPuzzle(prev => ({
       ...prev,
       editorMode: { ...prev.editorMode, phase: 1 },
@@ -98,12 +98,47 @@ export default function Build() {
   // =========== NEW PUZZLE SUBMIT ===========
 
   const newPuzzleSubmit = e => {
-    console.log(`%cSUBMIT PUZZLE`, "color: coral");
     e.preventDefault();
+    console.log(`%cSUBMIT PUZZLE`, "color: cyan");
+    // setNewPuzzle(prev => ({
+    //   ...prev,
+    //   editorMode: { ...prev.editorMode, phase: 1 },
+    // }));
+  };
+
+  // =========== ADD TAG ===========
+
+  const addTag = e => {
+    e.preventDefault();
+    const tag = e.target.value.toLowerCase().replace(/\s+/g, "-").trim();
+    !newPuzzle.tags.includes(tag) &&
+      setNewPuzzle(prev => ({
+        ...prev,
+        tags: [...prev.tags, tag],
+      }));
+    // e.target.value = "";
+  };
+
+  // =========== EDIT TAG ===========
+
+  const editTag = (e, index) => {
+    const newVal = e.target.textContent;
+    let { value } = document.querySelector("#tag-input");
+    newVal.slice(-1);
+    value = newVal;
     setNewPuzzle(prev => ({
       ...prev,
-      editorMode: { ...prev.editorMode, phase: 1 },
+      tags: [...prev.tags, prev.tags.splice(index, 1, newVal)],
     }));
+  };
+
+  // =========== DELETE TAG ===========
+
+  const deleteTag = target => {
+    setNewPuzzle(prev => {
+      // let { tags } = prev;
+      return { ...prev, tags: prev.tags.filter(tag => tag !== target) };
+    });
   };
 
   // -------------------------------------------------
@@ -186,14 +221,22 @@ export default function Build() {
 
   return (
     <div id="build-page">
-      <Frame puzzle={newPuzzle} submit={newPuzzleSubmit}>
-        {phase === 0 && (
+      <Frame
+        puzzle={newPuzzle}
+        submit={newPuzzleSubmit}
+        setFormActive={setFormActive}
+      >
+        {(phase === 0 || formActive) && (
           <NewPuzzleForm
             puzzle={newPuzzle}
             phase={phase}
             updatePuzzle={e => updatePuzzle(e)}
             start={e => newPuzzleStart(e)}
-            submit={newPuzzleSubmit}
+            addTag={e => addTag(e)}
+            editTag={editTag}
+            deleteTag={deleteTag}
+            active={formActive}
+            setFormActive={setFormActive}
           />
         )}
         {phase > 0 && (

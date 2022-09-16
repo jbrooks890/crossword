@@ -3,8 +3,8 @@ import { useState } from "react";
 export default function HintNew({ entry, update }) {
   const { name, sum, hint } = entry;
   const maxLength = 200;
-  console.log(entry);
-  console.log(`${name} length: ${hint.length}`);
+  // console.log(entry);
+  // console.log(`${name} hint: ${hint}`);
 
   return (
     <li
@@ -13,7 +13,7 @@ export default function HintNew({ entry, update }) {
     >
       <h4>{sum}</h4>
       <textarea
-        defaultValue={hint ? hint : ""}
+        value={hint}
         placeholder={`New hint for ${sum}`}
         rows="2"
         maxLength={maxLength}

@@ -2,20 +2,9 @@ import { useState } from "react";
 import HintNew from "./HintNew";
 
 export default function HintInput({ groups, active, update }) {
-  // const list = Object.entries(groups);
-  // console.log(list);
-  // console.log(groups);
-  // console.log("%cFISH", "color:lime");
-
-  // const across = Object.keys(groups)
-  //   .filter(group => groups[group].dir === "across")
-  //   .map(group => groups[group]);
-  // const down = Object.keys(groups)
-  //   .filter(group => groups[group].dir === "down")
-  //   .map(group => groups[group]);
-
   const across = [...groups.values()].filter(group => group.dir === "across");
   const down = [...groups.values()].filter(group => group.dir === "down");
+  // console.log(`%c--- RENDER HINTS ---`, "color: coral");
 
   return (
     <div id="hint-input" className={active ? "active" : ""}>

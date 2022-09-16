@@ -10,7 +10,11 @@ import apiUrl from "../../config";
 import CommentSection from "../CommentSection";
 import AnswerInput from "../AnswerInput";
 
-export default function Play() {
+export default function Play({ games }) {
+  // console.log(games);
+  const { id } = useParams();
+  // const puzzle = games.find(game => game._id === id); // TODO: TEST
+  // const [activePuzzle, setActivePuzzle] = useState(puzzle ? puzzle : {}); // TODO: TEST
   const [activePuzzle, setActivePuzzle] = useState({});
   const [game, setGame] = useState({
     user: "",
@@ -21,9 +25,10 @@ export default function Play() {
     completed: false,
   });
   const [activeGroup, setActiveGroup] = useState("");
-  const { id } = useParams();
   const { answerKey, answers, comments } = activePuzzle;
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
+
+  // =========== FETCH DATA ===========
 
   const fetchData = async () => {
     try {
@@ -45,6 +50,12 @@ export default function Play() {
   // console.log(activeGroup);
 
   useEffect(() => fetchData(), []);
+  // useEffect(() => {
+  //   if (!puzzle) {
+  //     console.log(`%cFETCH THE PUZZLE`, "color: yellow");
+  //     fetchData();
+  //   }
+  // }, []);
 
   console.log(
     `%c${"=".repeat(15)}/ ${activeGroup} \\${"=".repeat(15)}`,

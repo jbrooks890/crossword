@@ -17,7 +17,6 @@ export default function Build() {
     answerKey: {},
     answers: [],
     tags: [],
-    // tags: ["one", "two", "three", "four", "five"],
   });
   const sectionTabs = ["Grid", "Hints", "Preview"];
   const [activeSection, setActiveSection] = useState(0);
@@ -58,7 +57,7 @@ export default function Build() {
   // =========== UPDATE PUZZLE GROUPS ===========
 
   const updatePuzzleGroups = (answer, updatedAnswers) => {
-    console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: yellow");
+    // console.log(`%cRUNNING UPDATE PUZZLE GROUPS`, "color: yellow");
     const $answers = new Map(
       updatedAnswers.map(answer => {
         return [
@@ -73,10 +72,6 @@ export default function Build() {
         ];
       })
     );
-    // const $answers = new Map([...updatedAnswers]);
-    console.log(updatedAnswers);
-    // console.log(`%c${$answers.size}`, "color:lime");
-    // console.log(answer);
 
     setNewPuzzle(prev => ({
       ...prev,
@@ -91,7 +86,7 @@ export default function Build() {
 
   // =========== UPDATE PUZZLE HINT ===========
   const updateHint = (entry, name) => {
-    console.log(`%cRUNNING UPDATE HINT`, "color: coral");
+    // console.log(`%cRUNNING UPDATE HINT`, "color: coral");
     const $answers = new Map([...newPuzzle.answers]);
     const target = $answers.get(name);
     target.hint = entry;

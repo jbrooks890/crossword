@@ -174,7 +174,6 @@ export default function Grid({
   // "SET" = ROW or COLUMN
   const findGroups = (sets, isRow, $keys) => {
     const dir = isRow ? "across" : "down";
-    console.log($keys);
     let groups = [];
 
     // loop thru each row/column...
@@ -218,7 +217,7 @@ export default function Grid({
 
   // =========== CAPTURE ANSWER ===========
   function captureAnswer(e, id, _col, _row) {
-    console.log(`%cCAPTURE ANSWERS`, "color: orange");
+    // console.log(`%cCAPTURE ANSWERS`, "color: orange");
     // console.log(`%cTEST---`, "color: red");
     const { value } = e.target;
     const { cols, rows, activeCols, activeRows } = grid;

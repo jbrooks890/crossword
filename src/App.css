@@ -12,6 +12,7 @@
   /* --pop-alt: hsl(120, 75%, 60%); */
   --pop-alt: hsl(322, 60%, 60%);
   --lite: white;
+  --mid: silver;
   --faint: hsla(0,0%,0%,0.1);
   /* --------- FONTS --------- */
   --keyFont: 'Russo', sans-serif;
@@ -85,7 +86,7 @@ textarea {
 }
 
 textarea::placeholder{
-  color: silver;
+  color: var(--mid);;
   font-style: italic;
 }
 
@@ -94,7 +95,7 @@ textarea::-webkit-resizer{
 }
 
 header, footer {
-  background-color: silver;
+  background-color: var(--mid);;
   padding: 1rem 2rem;
   color: var(--lite);
 }
@@ -122,7 +123,7 @@ header h2#site-logo svg .border {
   /* display: none; */
 }
 header h2#site-logo svg .inner {
-  fill: silver;
+  fill: var(--mid);;
 }
 
 main {
@@ -348,7 +349,7 @@ h1.puzzle-title.editable:hover::after {
   bottom: 0;
   margin: 0;
   padding: 0.5em;
-  color: silver;
+  color: var(--mid);;
   background-color: white;
   font-family: var(--keyFont);
   font-size: small;
@@ -634,7 +635,7 @@ form#crossword .across.last .across-box {
   display: block;
   margin-right: 0.5rem;
   width: 2ch;
-  color: silver;
+  color: var(--mid);;
   text-align: right;
   font-weight: 600;
   /* font-family: var(--bodyFont); */
@@ -712,7 +713,7 @@ li.hint-input-entry h4::before {
   content: counter(hint-input)'.';
   align-self: flex-end;
   margin-right: 0.5em;
-  color: silver;
+  color: var(--mid);;
   font-size: small;
   /* width: 2.5ch; */
   box-sizing: border-box;
@@ -734,7 +735,7 @@ li.hint-input-entry h4::before {
 }
 
 .hint-input-entry textarea::placeholder{
-  color: silver;
+  color: var(--mid);;
   font-style: italic;
 }
 
@@ -923,7 +924,7 @@ form#new-comment button {
 #build-nav li.build-nav-btn {
   cursor: pointer;
   padding: 0.5em 1.25em;
-  color: silver;
+  color: var(--mid);;
   font-family: var(--keyFont);
   font-weight: normal;
   font-size: smaller;
@@ -940,9 +941,9 @@ form#new-comment button {
 
 #build-nav li:hover,
 #build-nav li:focus{
-  background-color: silver;
+  background-color: var(--mid);;
   color: white;
-  border-color: silver;
+  border-color: var(--mid);;
 }
 
 #build-nav li.build-nav-btn.active {
@@ -1023,7 +1024,7 @@ form#new-comment button {
  {
   margin: 0;
   margin-bottom: 0.5em;
-  color: silver;
+  color: var(--mid);;
   font-family: var(--keyFont);
   font-size: small;
   font-weight: 300;
@@ -1079,7 +1080,7 @@ form#new-comment button {
   --size: calc(var(--grid) * 1.5);
   width: var(--size);
   height: var(--size);
-  /* color: silver; */
+  /* color: var(--mid);; */
   caret-color: transparent;
   font-family: var(--keyFont);
   font-size: large;
@@ -1103,7 +1104,7 @@ form#new-comment button {
   justify-content: center;
   width: var(--grid);
   height: var(--grid);
-  color: silver;
+  color: var(--mid);;
   font-size: 2rem;
   border: 3px solid transparent;
   /* border: none; */
@@ -1118,7 +1119,7 @@ form#new-comment button {
 
 #newPuzzleForm button.newPuzzle-submit {
   padding: 1rem;
-  color: silver;
+  color: var(--mid);;
   font-family: var(--keyFont);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1190,7 +1191,7 @@ form#new-comment button {
   align-items: center;
   margin: 0 0.25em 0.25em 0;
   padding: 0.25em 1em;
-  background-color: silver;
+  background-color: var(--mid);;
   color: white;
   font-family: var(--keyFont);
   font-size: 0.6rem;

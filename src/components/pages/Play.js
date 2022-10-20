@@ -36,6 +36,7 @@ export default function Play({ games }) {
     try {
       const response = await axios.get(PUZZLE_LINK);
       const { puzzle } = response.data;
+      console.log(puzzle);
       setActivePuzzle({
         ...puzzle,
         answers: new Map(
@@ -369,7 +370,7 @@ export default function Play({ games }) {
         <>
           <Frame
             puzzle={activePuzzle}
-            submit={e => console.log("You done beech!")}
+            submit={e => console.log("Puzzle completed!")}
           >
             <div id="cw-grid-wrap">
               <HintBox hint={answers.get(activeGroup).hint} />

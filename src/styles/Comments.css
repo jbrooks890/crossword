@@ -1,0 +1,129 @@
+/*  --------- COMMENTS SECTION --------- */
+
+#comment-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 50%;
+}
+
+#comment-section button {
+  line-height: 1em;
+  padding: 0.5em 1.5em;
+  background-color: var(--pop);
+  color: white;
+  border: none;
+  border-radius: 2px;
+}
+
+#comment-section ::-webkit-resizer {
+  appearance: none;
+  display: none;
+}
+
+form#new-comment {
+  /* align-self: center; */
+  display: flex;
+  flex-direction: column;
+  /* margin: 0 2rem; */
+  padding: 1em;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+}
+
+.comment-input-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.comment-input-box * {
+  font-size: 1rem;
+  color: var(--pop);
+  caret-color: var(--faint);
+}
+
+.comment-input-box input {
+  margin-bottom: 0.5em;
+  font-family: var(--keyFont);
+  outline: none;
+  border: none;
+}
+
+.comment-input-box ::placeholder {
+  color: hsl(0, 0%, 75%);
+}
+
+.comment-input-box textarea {
+  appearance: none;
+  background-color: transparent;
+  font-family: inherit;
+  outline: none;
+  border: none;
+}
+
+form#new-comment button {
+  align-self: flex-end;
+}
+
+#comment-list {
+  display: flex;
+  flex-direction: column-reverse;
+  padding-left: 0;
+}
+
+#comment-list li.comment-entry {
+  list-style-type: none;
+  background-color: hsl(0, 0%, 95%);
+  border: 2px solid hsl(0, 0%, 95%);
+  /* box-shadow: 0 2px 2px var(--faint); */
+  /* margin-bottom: 1rem; */
+  margin: 0 2rem 1rem;
+  padding: 1em;
+  text-align: left;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.comment-entry h3 {
+  margin: 0;
+}
+
+.comment-button-cache {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* .comment-button-cache button{
+  line-height: 1em;
+  padding: 0.5em 1.5em;
+  background-color: hsl(0,0%,90%);
+  border: none;
+  border-radius: 2px;
+} */
+
+.comment-button-cache button:not(:last-of-type) {
+  margin-right: 0.5em;
+}
+
+.edit-comment {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-comment textarea {
+  padding: 1em;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--pop);
+  caret-color: var(--faint);
+  border: none;
+  outline: none;
+  margin-block: 1rem;
+  border-radius: 2px;
+}
+
+.edit-comment button {
+  align-self: flex-end;
+}

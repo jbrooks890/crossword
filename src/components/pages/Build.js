@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../styles/Build.css";
 import BuildNav from "../BuildNav";
 import Frame from "../Frame";
 import Grid from "../Grid";

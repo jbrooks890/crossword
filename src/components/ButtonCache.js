@@ -1,3 +1,5 @@
+import "../styles/ButtonCache.css";
+
 export default function ButtonCache({ giveHint }) {
   return (
     <div id="button-cache">

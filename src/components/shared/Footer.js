@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "../../styles/Footer.css"
 import Icons from "./Icons";
 import SocialMedia from "./SocialMedia";
 

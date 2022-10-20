@@ -1,0 +1,63 @@
+/* --------- HINT BOX --------- */
+
+#hint-box-wrap {
+  position: relative;
+  align-self: center;
+  width: calc(var(--grid)*15);
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+#hint-box,
+#hint-box::before {
+  cursor: pointer;
+  padding: 1rem;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: 0.1s ease-out;
+}
+
+#hint-box {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#hint-box-wrap.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 1em;
+  /* margin-bottom: 75%; */
+  background-color: white;
+  box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.05);
+  z-index: 10;
+}
+
+#hint-box::selection {
+  /* background-color: hsla(0, 0%, 0%, 0.025); */
+  background-color: transparent;
+}
+
+#hint-box:hover {
+  color: transparent;
+}
+
+#hint-box::before {
+  content: attr(data-hint-full);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  color: var(--pop);
+  /* height: 100%; */
+  background-color: white;
+  white-space: normal;
+  opacity: 0;
+}
+
+#hint-box:hover::before {
+  opacity: 1;
+}

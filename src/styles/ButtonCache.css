@@ -1,0 +1,29 @@
+/*  --------- BUTTON CACHE --------- */
+#button-cache {
+  display: flex;
+  align-items: center;
+  margin-block: 1rem;
+}
+
+#button-cache button {
+  display: block;
+  line-height: 1em;
+  padding: 1em;
+  color: var(--pop);
+  font-family: var(--keyFont);
+  font-size: large;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 3px solid var(--pop);
+  border-radius: 10px;
+  transition: 0.1s ease-out
+}
+
+#button-cache button:hover {
+  background-color: var(--pop);
+  color: white;
+}
+
+#button-cache button:not(:last-of-type) {
+  margin-right: 1rem;
+}

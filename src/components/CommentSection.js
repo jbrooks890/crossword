@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/Comments.css";
 import CommentList from "./CommentList";
 import CommentNew from "./CommentNew";
 import axios from "axios";

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../styles/NewPuzzleForm.css"
 
 export default function NewPuzzleForm({
   puzzle,

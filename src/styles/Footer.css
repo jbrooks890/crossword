@@ -1,0 +1,76 @@
+/*  ============ FOOTER  ============ */
+
+.jb-logo {
+  --size: calc(var(--grid) * 4.5);
+  width: var(--size);
+  /* height: var(--size); */
+  filter: drop-shadow(0 2px 0 hsla(0, 0%, 0%, 0.05));
+  fill: white;
+}
+
+.sm-cache {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sm-list {
+  display: flex;
+}
+
+.sm-list a {
+  --size: calc(var(--grid)*0.6);
+  cursor: pointer;
+  width: var(--size);
+  height: var(--size);
+  box-sizing: border-box;
+  /* border: 2px solid white; */
+}
+
+.sm-list a:not(:last-of-type) {
+  margin-right: 1.5rem;
+}
+
+svg.sm-icon {
+  fill: hsl(0, 0%, 95%);
+  width: 100%;
+  height: 100%;
+  transition: 0.1s ease-out;
+}
+
+svg.sm-icon:hover {
+  fill: white;
+  transform: scale(1.1);
+  filter: drop-shadow(0 2px 0 hsla(0, 0%, 0%, 0.1))
+}
+
+.sm-handler {
+  cursor: pointer;
+  margin-block: 0.5em;
+  font-family: var(--keyFont);
+  letter-spacing: 0.1em;
+  transform: translateY(0.25em);
+  transition: 0.1s ease-out;
+  opacity: 0;
+}
+
+.sm-handler::before {
+  content: '@';
+  display: inline-block;
+  margin-right: 2px;
+  opacity: 0.5;
+}
+
+.sm-list:hover+.sm-handler {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+footer span.copyright {
+  cursor: default;
+  color: hsl(0, 0%, 95%);
+}
+
+footer span.copyright::selection {
+  background-color: transparent;
+}

@@ -1,0 +1,48 @@
+/*  --------- HINT CACHE --------- */
+#hint-cache-wrap {
+  display: flex;
+  width: 75vw;
+  justify-content: center;
+  /* border: 1px solid blue; */
+}
+
+.hint-cache {
+  counter-reset: hint;
+  list-style-position: inside;
+  list-style-type: none;
+  padding-left: 0;
+  padding: 1rem;
+}
+
+.hint-cache li {
+  cursor: pointer;
+  display: flex;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  text-align: left;
+  border: 2px solid var(--faint);
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: 0.1s ease-out;
+}
+
+.hint-cache li.active,
+.hint-cache li:hover,
+.hint-cache li.preview {
+  border-color: var(--pop);
+}
+
+.hint-cache li::before {
+  counter-increment: hint;
+  content: counter(hint)'.';
+  display: block;
+  margin-right: 0.5rem;
+  width: 2ch;
+  color: var(--mid);
+  ;
+  text-align: right;
+  font-weight: 600;
+  /* font-family: var(--bodyFont); */
+  /* border: 1px solid red; */
+  box-sizing: border-box;
+}

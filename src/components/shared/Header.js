@@ -1,4 +1,5 @@
 import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo.svg";
+import "../../styles/Header.css"
 import Nav from "./Nav";
 
 export default function Header() {

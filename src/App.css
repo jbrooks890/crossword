@@ -14,6 +14,7 @@
   --lite: white;
   --mid: silver;
   --faint: hsla(0,0%,0%,0.1);
+  --phantom: hsla(0,0%,0%,0.05);
   /* --------- FONTS --------- */
   --keyFont: 'Russo', sans-serif;
   --bodyFont: 'Odibee Sans', cursive;
@@ -100,6 +101,8 @@ header, footer {
   color: var(--lite);
 }
 
+/* --------- HEADER --------- */
+
 header {
   display: flex;
   justify-content: space-between;
@@ -123,8 +126,10 @@ header h2#site-logo svg .border {
   /* display: none; */
 }
 header h2#site-logo svg .inner {
-  fill: var(--mid);;
+  fill: var(--mid);
 }
+
+/* --------- MAIN --------- */
 
 main {
   display: flex;

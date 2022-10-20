@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/HintBox.css";
 
 export default function HintBox({ hint }) {
   const [sticky, setSticky] = useState(true);

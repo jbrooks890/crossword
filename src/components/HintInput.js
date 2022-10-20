@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/HintInput.css"
 import HintNew from "./HintNew";
 
 export default function HintInput({ groups, active, update }) {

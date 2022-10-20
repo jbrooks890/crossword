@@ -1,0 +1,285 @@
+/* --------- GRID --------- */
+#crossword {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#cw-grid-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+#cw-grid {
+  margin: 0 auto;
+  padding: 1rem;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+}
+
+#cw-grid.grid {
+  display: grid;
+  grid-gap: 4px;
+  justify-content: center;
+}
+
+h1.puzzle-title {
+  cursor: default;
+  position: relative;
+  margin-block: 0.5em;
+  padding: 0.5em;
+  line-height: 1em;
+  outline: 2px solid transparent;
+  border-radius: 5px;
+}
+
+h1.puzzle-title.editable {
+  cursor: pointer;
+  transition: 0.1s ease-out;
+}
+
+h1.puzzle-title.editable:hover {
+  outline-color: var(--faint);
+}
+
+h1.puzzle-title.editable:hover::after {
+  content: 'Edit';
+  position: absolute;
+  display: block;
+  left: 50%;
+  bottom: 0;
+  margin: 0;
+  padding: 0.5em;
+  color: var(--mid);;
+  background-color: white;
+  font-family: var(--keyFont);
+  font-size: small;
+  font-weight: 300;
+  line-height: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transform: translate(-50%,50%)
+}
+
+.cell {
+  position: relative;
+  visibility: hidden;
+}
+
+#cw-grid.preview .cell-input {
+  color: transparent;
+  transition: 0.1s ease-out;
+}
+
+#cw-grid.preview .cell-input:hover {
+  color: inherit;
+}
+
+.cell.crop {
+  display: none;
+}
+
+.cell.show,
+.cell.build {
+  display: block;
+  visibility: visible;
+}
+
+.cell.build .cell-input::before{
+  --offset: -2px;
+  content: '';
+  position: absolute;
+  display: block;
+  top: var(--offset);
+  bottom: var(--offset);
+  left: var(--offset);
+  right: var(--offset);
+}
+
+.cell.build.edit-across .cell-input:focus{
+  background-color: #ff000030
+}
+
+.cell.build.edit-down .cell-input:focus{
+  background-color: #00ffe530
+}
+
+.cell.build.edit-across .cell-input:focus::before {
+  --border: 2px solid var(--pop-alt);
+  border-top: var(--border);
+  border-bottom: var(--border);
+}
+
+.cell.build.edit-down .cell-input:focus::before {
+  --border: 2px solid var(--pop-alt);
+  border-left: var(--border);
+  border-right: var(--border);
+}
+
+.cell-input {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--grid);
+  height: var(--grid);
+  background-color: transparent;
+  caret-color: transparent;
+  color: hsl(215, 50%, 60%);
+  font-family: var(--keyFont);
+  font-size: large;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1em;
+  outline-color: var(--pop);
+  box-sizing: border-box;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.cell-input::placeholder {
+  background-color: transparent;
+  color: hsla(0, 0%, 0%, 0.1);
+  font-weight: 300;
+}
+
+.cell-input::selection {
+  background-color: transparent;
+}
+
+.cell-input.show::placeholder {
+  color: hsl(240, 100%, 75%);
+  opacity: 0.5;
+  font-weight: 300;
+}
+
+.cell.assisted .cell-input {color: var(--pop-alt)}
+
+.axis-box {
+  --offset: -4px;
+  content: '';
+  position: absolute;
+  display: block;
+  top: var(--offset);
+  bottom: var(--offset);
+  left: var(--offset);
+  right: var(--offset);
+  box-sizing: border-box;
+  opacity: 0;
+  transition: 0.2s ease;
+  z-index: -1;
+}
+
+.axis-box.preview,
+.axis-box.active {
+  opacity: 1;
+}
+
+.axis-select {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  transition: 0.1s ease-out;
+  opacity: 0;
+  z-index: -1;
+}
+
+.cell.junction:hover .axis-select{
+  opacity: 1;
+  z-index: 2;
+}
+
+.axis-select button {
+  cursor: pointer;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50%;
+  background-color: transparent;
+  font-size: 2rem;
+  line-height: 1em;
+  border: none;
+  box-sizing: border-box;
+  transition: 0.1s ease-out;
+  z-index: 2;
+}
+
+.axis-select button:hover {
+  z-index: 3;
+}
+
+.axis-select button::before,
+.axis-select button::after {
+  --offset: 2px;
+  content: '';
+  position: absolute;
+  display: block;
+  width: 25%;
+  height: 100%;
+  background-color: hsl(0,0%,90%);
+  transition: 0.1s ease-out;
+}
+
+.axis-select button:hover::before,
+.axis-select button:hover::after{
+  background-color: var(--pop-alt);
+}
+
+.axis-select button::before {
+  left: 0;
+  clip-path: polygon(0 50%, 100% 100%, 60% 50%, 100% 0);
+}
+
+.axis-select button::after {
+  right: 0;
+  clip-path: polygon(0 0, 40% 50%, 0 100%, 100% 50%);
+}
+
+.axis-select button.select-down {
+  transform: rotate(90deg);
+}
+
+ /* --------- DOWN (VERTICAL) --------- */
+
+form#crossword .down .down-box {
+  border-left: 3px solid var(--pop);
+  border-right: 3px solid var(--pop);
+}
+
+form#crossword .down.top .down-box {
+  border-top: 3px solid var(--pop);
+  border-radius: 8px 8px 0 0;
+}
+
+form#crossword .down.bottom .down-box {
+  border-bottom: 3px solid var(--pop);
+  border-radius: 0 0 8px 8px;
+}
+
+
+ /* --------- ACROSS (HORIZONTAL) --------- */
+
+form#crossword .across .across-box {
+  border-top: 3px solid var(--pop);
+  border-bottom: 3px solid var(--pop);
+}
+
+form#crossword .across.first .across-box {
+  border-left: 3px solid var(--pop);
+  border-radius: 8px 0 0 8px;
+}
+
+form#crossword .across.last .across-box {
+  border-right: 3px solid var(--pop);
+  border-radius: 0 8px 8px 0;
+}

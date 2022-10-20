@@ -1,0 +1,55 @@
+/* --------- HOME PAGE --------- */
+
+#home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding-bottom: 2rem; */
+}
+
+
+h1.home-page-logo {
+  width: calc(var(--grid) * 8);
+}
+
+#xword-full-logo {
+  width: 100%;
+  height: 100%;
+}
+
+#xword-full-logo .outline {
+  fill: var(--pop);
+}
+
+#xword-full-logo .letters * {
+  fill: white;
+}
+
+#game-list {
+  list-style-type: none;
+  padding-left: 0;
+  /* border: 1px solid red; */
+}
+
+#game-list a {
+  display: block;
+  margin-bottom: 2rem;
+}
+
+/* #game-list a:not(:last-of-type) {
+  margin-bottom: 2rem;
+} */
+
+#game-list .puzzle-list-item {
+  padding: 1rem 2rem;
+  border: 2px solid var(--faint);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+#game-list .puzzle-list-item h3 {
+  font-family: var(--keyFont);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}

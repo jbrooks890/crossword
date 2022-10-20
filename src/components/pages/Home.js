@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../../styles/Home.css"
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { ReactComponent as XWORD_FULL } from "../../assets/icons/xword-full-logo.svg";

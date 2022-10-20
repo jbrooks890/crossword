@@ -1,0 +1,92 @@
+#hint-input {
+  display: none;
+  width: 100%;
+  max-width: 560px;
+  opacity: 0;
+  transition: 0.1s ease-out;
+}
+
+#hint-input.active {
+  display: initial;
+  opacity: 1;
+}
+
+.hint-input-list {
+  counter-reset: hint-input;
+  padding-left: 0;
+}
+
+
+.hint-input-list h4 {
+  position: relative;
+  margin: 0;
+  margin-bottom: 0.5em;
+}
+
+li.hint-input-entry {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.hint-input-entry::after {
+  content: attr(data-char-count);
+  position: absolute;
+  display: block;
+  bottom: 0;
+  right: 0;
+  padding: 0.5em;
+  color: var(--faint);
+  font-family: var(--keyFont);
+  font-size: small;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+  z-index: 1;
+}
+
+.hint-input-entry h4 {
+  display: flex;
+  margin: 0;
+  margin-bottom: 0.5em;
+  font-family: var(--keyFont);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  line-height: 1em;
+  text-align: left;
+}
+
+li.hint-input-entry h4::before {
+  counter-increment: hint-input;
+  content: counter(hint-input)'.';
+  align-self: flex-end;
+  margin-right: 0.5em;
+  color: var(--mid);
+  ;
+  font-size: small;
+  box-sizing: border-box;
+}
+
+.hint-input-entry textarea {
+  appearance: none;
+  padding: 1em;
+  color: var(--pop);
+  caret-color: var(--faint);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  border: 2px solid var(--faint);
+  border-radius: 5px;
+  overflow-y: auto !important;
+}
+
+.hint-input-entry textarea::placeholder {
+  color: var(--mid);
+  ;
+  font-style: italic;
+}
+
+.hint-input-entry textarea::-webkit-resizer {
+  display: none;
+}

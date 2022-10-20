@@ -28,15 +28,12 @@ export default function Play({ games }) {
   const { answerKey, answers, comments } = activePuzzle;
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
 
-  console.log({ PUZZLE_LINK });
-
   // =========== FETCH DATA ===========
 
   const fetchData = async () => {
     try {
       const response = await axios.get(PUZZLE_LINK);
       const { puzzle } = response.data;
-      console.log(puzzle);
       setActivePuzzle({
         ...puzzle,
         answers: new Map(
@@ -50,7 +47,6 @@ export default function Play({ games }) {
   };
 
   console.log(activePuzzle);
-  // console.log(activeGroup);
 
   useEffect(() => fetchData(), []);
 

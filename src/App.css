@@ -1234,7 +1234,6 @@ form#new-comment button {
 .jb-logo {
   --size: calc(var(--grid) * 4.5);
   width: var(--size);
-  /* height: var(--size); */
   filter: drop-shadow(0 2px 0 hsla(0, 0%, 0%, 0.05));
   fill: white;
 }

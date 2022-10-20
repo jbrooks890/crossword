@@ -14,6 +14,7 @@ export default function Main() {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${apiUrl}/puzzles`);
+      console.log(response.data.puzzles);
       setGames(response.data.puzzles);
     } catch (e) {
       console.log(e);

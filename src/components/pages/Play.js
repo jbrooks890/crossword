@@ -28,6 +28,8 @@ export default function Play({ games }) {
   const { answerKey, answers, comments } = activePuzzle;
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
 
+  console.log({ PUZZLE_LINK });
+
   // =========== FETCH DATA ===========
 
   const fetchData = async () => {
@@ -50,12 +52,6 @@ export default function Play({ games }) {
   // console.log(activeGroup);
 
   useEffect(() => fetchData(), []);
-  // useEffect(() => {
-  //   if (!puzzle) {
-  //     console.log(`%cFETCH THE PUZZLE`, "color: yellow");
-  //     fetchData();
-  //   }
-  // }, []);
 
   console.log(
     `%c${"=".repeat(15)}/ ${activeGroup} \\${"=".repeat(15)}`,
@@ -76,11 +72,6 @@ export default function Play({ games }) {
 
   // =========== FOCUS CELL ===========
   const focusCell = (id, group = activeGroup) => {
-    // console.log(
-    //   `%cCURRENT GROUP: ${activeGroup}`,
-    //   "color: orange; text-transform: uppercase"
-    // );
-    // console.log("running focus cell:", { id, group });
     group !== activeGroup && setGroup(group);
     cellData(id).input.focus();
   };

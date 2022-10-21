@@ -16,13 +16,14 @@ header h2#site-logo {
 
 header h2#site-logo svg {
   width: 100%;
-  mix-blend-mode: lighten;
+  /* mix-blend-mode: lighten; */
 }
 
 header h2#site-logo svg .border {
-  fill: var(--mid);
+  fill: var(--pop);
   /* fill: url(#main-grad); */
   /* display: none; */
+  /* filter: brightness(1.1); */
 }
 
 header h2#site-logo svg .inner {

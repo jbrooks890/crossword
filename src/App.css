@@ -8,60 +8,15 @@
 :root{
   --grid: 48px;
   /* ========== COLORS ========== */
-  /* --colorA: #dabfff;
-  --colorB: #907ad6;
-  --colorC: #4f518c;
-  --colorD: #2c2a4a;
-  --colorE: #7fdeff; */
-  /* --colorA: #80ffdb;
-  --colorB: #56cfe1;
-  --colorC: #5e60ce;
-  --colorD: #6930c3;
-  --colorE: #7400b8; */
-  /* ----------------------- */
-  /* --colorA: #ef476f;
-  --colorB: #ffd166;
-  --colorC: #06d6a0;
-  --colorG: #0cb0a9;
-  --colorD: #2ba4cd;
-  --colorE: #0c627f;
-  --colorF: #073b4c; */
-  /* ----------------------- */
-  /* --colorA: #edf2f4;
-  --colorB: #ef233c;
-  --colorC: #d90429;
-  --colorD: #8d99ae;
-  --colorE: #2b2d42; */
-  /* ------- LUXRAY ------- */
-  /* --colorA: #db3a34;
-  --colorB: #ffc857;
-  --colorC: #177e89;
-  --colorD: #084c61;
-  --colorE: #323031; */
-  /* ----------------------- */
-  /* --colorA: #db3a34;
-  --colorB: #ffc857;
-  --colorC: #177e89;
-  --colorD: #084c61;
-  --colorE: #323031; */
-  /* ----------------------- */
-  /* --colorA: #e5e5e5;
-  --colorB: #fca311;
-  --colorC: #1e325c;
-  --colorD: #14213d;
-  --colorE: #000000; */
-  /* ----------------------- */
-  /* --colorA: #F7FFF7;
-  --colorB: #FF6B6B;
-  --colorC: #FFE66D;
-  --colorD: #4ECDC4;
-  --colorE: #1A535C; */
-  --colorA: #cfd4fc;
+  --colorA: #eaedff;
   --colorB: #51f23f;
+  --colorB2: #a8f99f;
   --colorC: #004080;
+  --colorCd: #3640ae;
   --colorD: #5240c4;
   --colorE: #2c0f57;
   --colorF: #150330;
+  --colorG: #8840f2;
   --gradient: linear-gradient(
     45deg, 
     var(--colorB),
@@ -77,10 +32,10 @@
   --old_slate: hsl(215, 35%, 50%);
   --old_pink: hsl(322, 60%, 60%);
   /* ---------------------------- */
-  --pop: var(--colorC);
+  --pop: var(--colorG);
   --pop-alt: var(--colorB);
   --lite: var(--colorA);
-  --mid: var(--colorD);
+  --mid: var(--colorC);
   --dark: var(--colorE); 
   --darker: var(--colorF);
   --faint: hsla(0,0%,0%,0.1);
@@ -173,7 +128,15 @@ textarea::-webkit-resizer{
 
 
 header, footer {
-  padding: 1rem 2rem;
+  padding: 2rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex.center {
+  align-items: center;
 }
 
 /* --------- MAIN --------- */

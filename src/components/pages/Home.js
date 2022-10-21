@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../../styles/Home.css"
+import "../../styles/Home.css";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { ReactComponent as XWORD_FULL } from "../../assets/icons/xword-full-logo.svg";
@@ -40,7 +40,7 @@ export default function Home({ games }) {
         <XWORD_FULL />
       </h1>
       <h2>Play</h2>
-      <div id="game-list">{games.length && gamesData}</div>
+      <div id="game-list">{games.length > 0 && gamesData}</div>
     </div>
   );
 }

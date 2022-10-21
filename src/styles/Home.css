@@ -15,10 +15,11 @@ h1.home-page-logo {
 #xword-full-logo {
   width: 100%;
   height: 100%;
+  mix-blend-mode: darken;
 }
 
 #xword-full-logo .outline {
-  fill: var(--pop);
+  fill: var(--mid);
 }
 
 #xword-full-logo .letters * {

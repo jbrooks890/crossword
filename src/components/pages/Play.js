@@ -11,11 +11,12 @@ import CommentSection from "../CommentSection";
 import AnswerInput from "../AnswerInput";
 
 export default function Play({ games }) {
-  // console.log(games);
   const { id } = useParams();
-  // const puzzle = games.find(game => game._id === id); // TODO: TEST
-  // const [activePuzzle, setActivePuzzle] = useState(puzzle ? puzzle : {}); // TODO: TEST
-  const [activePuzzle, setActivePuzzle] = useState({});
+  const puzzle = games ? games.find(game => game._id === id) : null;
+  const [activePuzzle, setActivePuzzle] = useState(
+    puzzle ? format(puzzle) : {}
+  );
+  const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [game, setGame] = useState({
     user: "",
     input: { ...activePuzzle.answerKey },
@@ -24,34 +25,60 @@ export default function Play({ games }) {
     timer: 0,
     completed: false,
   });
-  const [activeGroup, setActiveGroup] = useState("");
+  const [activeGroup, setActiveGroup] = useState(
+    puzzle ? puzzle.answers[0].name : ""
+  );
   const { answerKey, answers, comments } = activePuzzle;
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
+  const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
 
   // =========== FETCH DATA ===========
 
   const fetchData = async () => {
+    console.log("running fetchData()");
     try {
       const response = await axios.get(PUZZLE_LINK);
       const { puzzle } = response.data;
-      setActivePuzzle({
-        ...puzzle,
-        answers: new Map(
-          puzzle.answers.map(entry => [entry.name, { ...entry }])
-        ),
-      });
+      setActivePuzzle(format(puzzle));
       setActiveGroup(puzzle.answers[0].name);
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => fetchData(), []);
+  // =========== FETCH COMMENTS ===========
 
-  console.log(
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(COMMENTS_LINK);
+      const { comments } = response.data;
+      setActivePuzzle(prev => ({
+        ...prev,
+        comments,
+      }));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const generate = () => {
+    // setActiveGroup(puzzle.answers[0].name);
+    comments.length && fetchComments();
+  };
+
+  useEffect(() => (puzzle ? generate() : fetchData()), []);
+
+  function format(puzzle) {
+    return {
+      ...puzzle,
+      answers: new Map(puzzle.answers.map(entry => [entry.name, { ...entry }])),
+    };
+  }
+
+  /* console.log(
     `%c${"=".repeat(15)}/ ${activeGroup} \\${"=".repeat(15)}`,
     "color: lime; text-transform: uppercase"
-  );
+  ); */
 
   // =========== GET CELL DATA ===========
   const cellData = id => {
@@ -386,7 +413,9 @@ export default function Play({ games }) {
               onHover={hoverGroup}
             />
           </Frame>
-          <CommentSection comments={comments} owner={id} />
+          {typeof comments[0] === "object" && (
+            <CommentSection comments={comments} owner={id} />
+          )}
         </>
       )}
     </div>

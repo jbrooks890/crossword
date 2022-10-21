@@ -104,6 +104,7 @@ h1, h2, h3{
 input {
   appearance: none;
   border: 2px solid hsla(0, 0%, 0%, 0.1);
+  outline: none;
 }
 
 textarea {

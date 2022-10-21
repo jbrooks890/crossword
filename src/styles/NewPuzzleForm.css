@@ -84,6 +84,7 @@
 }
 
 #newPuzzleForm input {
+  background-color: transparent;
   color: var(--pop);
   outline-color: var(--pop);
 }
@@ -104,6 +105,10 @@
 
 #newPuzzleForm label input[type='text']::placeholder {
   color: var(--faint);
+}
+
+#newPuzzleForm textarea {
+  background-color: transparent;
 }
 
 .newPuzzle-gridSize-wrap {
@@ -186,6 +191,10 @@
   display: flex;
   flex-direction: column;
   align-self: stretch;
+}
+
+.newPuzzle-complete >*:not(:last-child){
+  margin-bottom: 1rem;
 }
 
 #newPuzzleForm label[for="description"] {

@@ -29,14 +29,12 @@
   position: -webkit-sticky;
   position: sticky;
   top: 1em;
-  /* margin-bottom: 75%; */
-  background-color: white;
-  box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.05);
+  background-color: var(--lite);
+  box-shadow: 0 2px 5px var(--phantom);
   z-index: 10;
 }
 
 #hint-box::selection {
-  /* background-color: hsla(0, 0%, 0%, 0.025); */
   background-color: transparent;
 }
 
@@ -51,9 +49,9 @@
   left: 0;
   right: 0;
   width: 100%;
-  color: var(--pop);
+  color: var(--mid);
   /* height: 100%; */
-  background-color: white;
+  background-color: var(--lite);
   white-space: normal;
   opacity: 0;
 }

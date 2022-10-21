@@ -9,19 +9,19 @@
   display: block;
   line-height: 1em;
   padding: 1em;
-  color: var(--pop);
+  color: var(--dark);
   font-family: var(--keyFont);
   font-size: large;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border: 3px solid var(--pop);
+  border: 3px solid var(--dark);
   border-radius: 10px;
   transition: 0.1s ease-out
 }
 
 #button-cache button:hover {
-  background-color: var(--pop);
-  color: white;
+  background-color: var(--dark);
+  color: var(--lite);
 }
 
 #button-cache button:not(:last-of-type) {

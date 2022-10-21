@@ -7,29 +7,102 @@
 
 :root{
   --grid: 48px;
-  /* --------- COLORS --------- */
-  --pop: hsl(215, 35%, 50%);
-  /* --pop-alt: hsl(120, 75%, 60%); */
-  --pop-alt: hsl(322, 60%, 60%);
-  --lite: white;
-  --mid: silver;
+  /* ========== COLORS ========== */
+  /* --colorA: #dabfff;
+  --colorB: #907ad6;
+  --colorC: #4f518c;
+  --colorD: #2c2a4a;
+  --colorE: #7fdeff; */
+  /* --colorA: #80ffdb;
+  --colorB: #56cfe1;
+  --colorC: #5e60ce;
+  --colorD: #6930c3;
+  --colorE: #7400b8; */
+  /* ----------------------- */
+  /* --colorA: #ef476f;
+  --colorB: #ffd166;
+  --colorC: #06d6a0;
+  --colorG: #0cb0a9;
+  --colorD: #2ba4cd;
+  --colorE: #0c627f;
+  --colorF: #073b4c; */
+  /* ----------------------- */
+  /* --colorA: #edf2f4;
+  --colorB: #ef233c;
+  --colorC: #d90429;
+  --colorD: #8d99ae;
+  --colorE: #2b2d42; */
+  /* ------- LUXRAY ------- */
+  /* --colorA: #db3a34;
+  --colorB: #ffc857;
+  --colorC: #177e89;
+  --colorD: #084c61;
+  --colorE: #323031; */
+  /* ----------------------- */
+  /* --colorA: #db3a34;
+  --colorB: #ffc857;
+  --colorC: #177e89;
+  --colorD: #084c61;
+  --colorE: #323031; */
+  /* ----------------------- */
+  /* --colorA: #e5e5e5;
+  --colorB: #fca311;
+  --colorC: #1e325c;
+  --colorD: #14213d;
+  --colorE: #000000; */
+  /* ----------------------- */
+  /* --colorA: #F7FFF7;
+  --colorB: #FF6B6B;
+  --colorC: #FFE66D;
+  --colorD: #4ECDC4;
+  --colorE: #1A535C; */
+  --colorA: #cfd4fc;
+  --colorB: #51f23f;
+  --colorC: #004080;
+  --colorD: #5240c4;
+  --colorE: #2c0f57;
+  --colorF: #150330;
+  --gradient: linear-gradient(
+    45deg, 
+    var(--colorB),
+    var(--colorC),
+    var(--colorD),
+  );
+  --darkGradient: linear-gradient(
+    #2f115b,
+    var(--colorF)
+  );
+
+  /* ----------- OLD ----------- */
+  --old_slate: hsl(215, 35%, 50%);
+  --old_pink: hsl(322, 60%, 60%);
+  /* ---------------------------- */
+  --pop: var(--colorC);
+  --pop-alt: var(--colorB);
+  --lite: var(--colorA);
+  --mid: var(--colorD);
+  --dark: var(--colorE); 
+  --darker: var(--colorF);
   --faint: hsla(0,0%,0%,0.1);
   --phantom: hsla(0,0%,0%,0.05);
-  /* --------- FONTS --------- */
+  /* ========== FONTS ========== */
   --keyFont: 'Russo', sans-serif;
   --bodyFont: 'Odibee Sans', cursive;
-  --fontSize: 18px;
+  --fontSize: 21px;
   font-family: var(--bodyFont);
   font-size: var(--fontSize);
-  /* --------- BORDER --------- */
+  /* ========== BORDER ========== */
 }
 
-html {height: 100vh;}
+html {
+  height: 100vh;
+  background-color: var(--lite);
+}
 
 body, #root, .App {height: 100%;}
 
 body {
-  color: var(--pop);
+  color: var(--mid);
 }
 
 *::selection {
@@ -58,8 +131,11 @@ a:hover, a:focus {
 }
 
 button {
+  -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
+  margin: 0;
+  padding: 0;
   outline: none;
   background-color: transparent;
 }
@@ -95,10 +171,9 @@ textarea::-webkit-resizer{
   display: none;
 }
 
+
 header, footer {
-  background-color: var(--mid);;
   padding: 1rem 2rem;
-  color: var(--lite);
 }
 
 /* --------- MAIN --------- */
@@ -110,14 +185,4 @@ main {
   /* min-height: 100vh; */
   justify-content: center;
   padding: 2rem;
-}
-
-/* --------- NAV --------- */
-nav a {
-  font-family: var(--keyFont);
-  letter-spacing: 0.1em;
-}
-
-nav a:not(:last-of-type){
-  margin-right: 1.5em;
 }

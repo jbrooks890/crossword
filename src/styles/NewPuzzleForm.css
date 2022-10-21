@@ -9,7 +9,7 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: white;
+  background-color: var(--lite);
   border: 3px solid var(--faint);
   border-radius: 20px;
   box-sizing: border-box;
@@ -24,7 +24,7 @@
   width: calc(var(--grid)*10);
 }
 
-#newPuzzleForm :not(li):not(:last-child) {
+#newPuzzleForm > :not(li):not(:last-child) {
   margin-bottom: 1rem;
 }
 
@@ -37,7 +37,7 @@
   width: var(--size);
   height: var(--size);
   color: var(--faint);
-  background-color: white;
+  background-color: var(--lite);
   line-height: 1em;
   font-size: 1.5rem;
   box-sizing: border-box;
@@ -55,7 +55,7 @@
 }
 
 #newPuzzleForm .close-button:hover {
-  color: white;
+  color: var(--lite);
   background-color: var(--faint);
   z-index: 100;
 }
@@ -111,9 +111,9 @@
   align-items: center;
 }
 
-.newPuzzle-gridSize-wrap>*:not(:last-child) {
+/* .newPuzzle-gridSize-wrap > *:not(:last-child) {
   margin-right: 1rem;
-}
+} */
 
 .newPuzzle-gridSize-wrap .num-input,
 .newPuzzle-gridSize-link {
@@ -125,7 +125,7 @@
   --size: calc(var(--grid) * 1.5);
   width: var(--size);
   height: var(--size);
-  /* color: var(--mid);; */
+  /* color: var(--mid); */
   caret-color: transparent;
   font-family: var(--keyFont);
   font-size: large;
@@ -150,8 +150,8 @@
   justify-content: center;
   width: var(--grid);
   height: var(--grid);
+  margin-inline: 1rem;
   color: var(--mid);
-  ;
   font-size: 2rem;
   border: 3px solid transparent;
   /* border: none; */
@@ -178,7 +178,7 @@
 
 #newPuzzleForm button.newPuzzle-submit:hover {
   background-color: var(--pop);
-  color: white;
+  color: var(--lite);
   border-color: var(--pop);
 }
 
@@ -241,7 +241,7 @@
   padding: 0.25em 1em;
   background-color: var(--mid);
   ;
-  color: white;
+  color: var(--lite);
   font-family: var(--keyFont);
   font-size: 0.6rem;
   font-weight: 300;

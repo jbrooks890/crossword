@@ -30,6 +30,7 @@ h1.puzzle-title {
   position: relative;
   margin-block: 0.5em;
   padding: 0.5em;
+  color: var(--mid);
   line-height: 1em;
   outline: 2px solid transparent;
   border-radius: 5px;
@@ -52,8 +53,8 @@ h1.puzzle-title.editable:hover::after {
   bottom: 0;
   margin: 0;
   padding: 0.5em;
-  color: var(--mid);;
-  background-color: white;
+  color: var(--mid);
+  background-color: var(--lite);
   font-family: var(--keyFont);
   font-size: small;
   font-weight: 300;
@@ -67,6 +68,10 @@ h1.puzzle-title.editable:hover::after {
   position: relative;
   visibility: hidden;
 }
+
+/* .cell.junction:hover {
+  background-color: var(--mid);
+} */
 
 #cw-grid.preview .cell-input {
   color: transparent;
@@ -88,14 +93,10 @@ h1.puzzle-title.editable:hover::after {
 }
 
 .cell.build .cell-input::before{
-  --offset: -2px;
   content: '';
   position: absolute;
   display: block;
-  top: var(--offset);
-  bottom: var(--offset);
-  left: var(--offset);
-  right: var(--offset);
+  inset: -2px
 }
 
 .cell.build.edit-across .cell-input:focus{
@@ -128,21 +129,27 @@ h1.puzzle-title.editable:hover::after {
   height: var(--grid);
   background-color: transparent;
   caret-color: transparent;
-  color: hsl(215, 50%, 60%);
+  color: var(--mid);
   font-family: var(--keyFont);
   font-size: large;
   text-align: center;
   text-transform: uppercase;
   line-height: 1em;
   outline-color: var(--pop);
+  outline: none;
+  border-width: 2.5px;
   box-sizing: border-box;
   border-radius: 5px;
   z-index: 1;
 }
 
+.cell-input:focus{
+  border-color: var(--pop);
+}
+
 .cell-input::placeholder {
   background-color: transparent;
-  color: hsla(0, 0%, 0%, 0.1);
+  color: var(--faint);
   font-weight: 300;
 }
 
@@ -151,7 +158,7 @@ h1.puzzle-title.editable:hover::after {
 }
 
 .cell-input.show::placeholder {
-  color: hsl(240, 100%, 75%);
+  color: var(--pop);
   opacity: 0.5;
   font-weight: 300;
 }
@@ -159,14 +166,10 @@ h1.puzzle-title.editable:hover::after {
 .cell.assisted .cell-input {color: var(--pop-alt)}
 
 .axis-box {
-  --offset: -4px;
   content: '';
   position: absolute;
   display: block;
-  top: var(--offset);
-  bottom: var(--offset);
-  left: var(--offset);
-  right: var(--offset);
+  inset: -4px;
   box-sizing: border-box;
   opacity: 0;
   transition: 0.2s ease;
@@ -226,13 +229,13 @@ h1.puzzle-title.editable:hover::after {
   display: block;
   width: 25%;
   height: 100%;
-  background-color: hsl(0,0%,90%);
+  background-color: var(--faint);
   transition: 0.1s ease-out;
 }
 
 .axis-select button:hover::before,
 .axis-select button:hover::after{
-  background-color: var(--pop-alt);
+  background-color: var(--mid);
 }
 
 .axis-select button::before {
@@ -252,17 +255,17 @@ h1.puzzle-title.editable:hover::after {
  /* --------- DOWN (VERTICAL) --------- */
 
 form#crossword .down .down-box {
-  border-left: 3px solid var(--pop);
-  border-right: 3px solid var(--pop);
+  border-left: 3px solid var(--mid);
+  border-right: 3px solid var(--mid);
 }
 
 form#crossword .down.top .down-box {
-  border-top: 3px solid var(--pop);
+  border-top: 3px solid var(--mid);
   border-radius: 8px 8px 0 0;
 }
 
 form#crossword .down.bottom .down-box {
-  border-bottom: 3px solid var(--pop);
+  border-bottom: 3px solid var(--mid);
   border-radius: 0 0 8px 8px;
 }
 
@@ -270,16 +273,16 @@ form#crossword .down.bottom .down-box {
  /* --------- ACROSS (HORIZONTAL) --------- */
 
 form#crossword .across .across-box {
-  border-top: 3px solid var(--pop);
-  border-bottom: 3px solid var(--pop);
+  border-top: 3px solid var(--mid);
+  border-bottom: 3px solid var(--mid);
 }
 
 form#crossword .across.first .across-box {
-  border-left: 3px solid var(--pop);
+  border-left: 3px solid var(--mid);
   border-radius: 8px 0 0 8px;
 }
 
 form#crossword .across.last .across-box {
-  border-right: 3px solid var(--pop);
+  border-right: 3px solid var(--mid);
   border-radius: 0 8px 8px 0;
 }

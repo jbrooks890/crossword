@@ -1,0 +1,10 @@
+/* --------- NAV --------- */
+nav a {
+  color: var(--lite) !important;
+  font-family: var(--keyFont);
+  letter-spacing: 0.1em;
+}
+
+nav a:not(:last-of-type) {
+  margin-right: 1.5em;
+}

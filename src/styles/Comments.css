@@ -11,10 +11,12 @@
 #comment-section button {
   line-height: 1em;
   padding: 0.5em 1.5em;
-  background-color: var(--pop);
-  color: white;
+  background-color: var(--mid);
+  color: var(--lite);
+  /* font-size: 1rem; */
   border: none;
   border-radius: 2px;
+  /* mix-blend-mode: darken; */
 }
 
 #comment-section ::-webkit-resizer {
@@ -40,19 +42,21 @@ form#new-comment {
 
 .comment-input-box * {
   font-size: 1rem;
-  color: var(--pop);
+  color: var(--mid);
   caret-color: var(--faint);
 }
 
 .comment-input-box input {
   margin-bottom: 0.5em;
   font-family: var(--keyFont);
+  background-color: transparent;
   outline: none;
   border: none;
 }
 
 .comment-input-box ::placeholder {
-  color: hsl(0, 0%, 75%);
+  color: var(--mid);
+  opacity: 0.5;
 }
 
 .comment-input-box textarea {
@@ -75,8 +79,8 @@ form#new-comment button {
 
 #comment-list li.comment-entry {
   list-style-type: none;
-  background-color: hsl(0, 0%, 95%);
-  border: 2px solid hsl(0, 0%, 95%);
+  /* background-color: hsl(0, 0%, 95%); */
+  border: 2px solid var(--faint);
   /* box-shadow: 0 2px 2px var(--faint); */
   /* margin-bottom: 1rem; */
   margin: 0 2rem 1rem;
@@ -116,7 +120,7 @@ form#new-comment button {
   padding: 1em;
   font-size: 1rem;
   font-family: inherit;
-  color: var(--pop);
+  color: var(--mid);
   caret-color: var(--faint);
   border: none;
   outline: none;

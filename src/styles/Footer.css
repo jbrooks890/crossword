@@ -10,7 +10,7 @@ footer {
   width: var(--size);
   /* height: var(--size); */
   filter: drop-shadow(0 2px 0 var(--phantom));
-  fill: var(--lite);
+  fill: var(--mid);
 }
 
 .sm-cache {
@@ -37,7 +37,7 @@ footer {
 }
 
 svg.sm-icon {
-  fill: var(--lite);
+  fill: var(--mid);
   width: 100%;
   height: 100%;
   transition: 0.1s ease-out;
@@ -67,14 +67,15 @@ svg.sm-icon:hover {
 }
 
 .sm-list:hover+.sm-handler {
-  color: var(--lite);
+  color: var(--mid);
   opacity: 1;
   transform: translateY(0);
 }
 
 footer span.copyright {
   cursor: default;
-  color: var(--lite);
+  color: var(--mid);
+  font-size: .75rem;
 }
 
 footer span.copyright::selection {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "../../styles/Build.css";
-import BuildNav from "../BuildNav";
-import Frame from "../Frame";
-import Grid from "../Grid";
-import HintInput from "../HintInput";
+import BuildNav from "../frags/BuildNav";
+import Frame from "../frags/Frame";
+import Grid from "../frags/Grid";
+import HintInput from "../frags/HintInput";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
 
 export default function Build() {

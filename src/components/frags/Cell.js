@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getLetter } from "../services/customHooks";
+import { getLetter } from "../../services/customHooks";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   const {

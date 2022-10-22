@@ -1,4 +1,4 @@
-import "../styles/ButtonCache.css";
+import "../../styles/ButtonCache.css";
 
 export default function ButtonCache({ giveHint }) {
   return (

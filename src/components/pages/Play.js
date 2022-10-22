@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Frame from "../Frame";
-import HintBox from "../HintBox";
-import Grid from "../Grid";
-import ButtonCache from "../ButtonCache";
-import HintCache from "../HintCache";
+import Frame from "../frags/Frame";
+import HintBox from "../frags/HintBox";
+import Grid from "../frags/Grid";
+import ButtonCache from "../frags/ButtonCache";
+import HintCache from "../frags/HintCache";
 import apiUrl from "../../config";
-import CommentSection from "../CommentSection";
-import AnswerInput from "../AnswerInput";
+import CommentSection from "../frags/CommentSection";
+import AnswerInput from "../frags/AnswerInput";
 
 export default function Play({ games }) {
   const { id } = useParams();

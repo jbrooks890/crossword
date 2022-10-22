@@ -1,4 +1,4 @@
-import "../styles/HintCache.css"
+import "../../styles/HintCache.css"
 
 export default function HintCache({ hints, focusFirst, onHover }) {
   const groups = Array.from(hints.keys());

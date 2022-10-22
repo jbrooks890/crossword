@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../styles/Grid.css"
+import "../../styles/Grid.css";
 import Cell from "./Cell";
 
 export default function Grid({

@@ -8,3 +8,92 @@ nav a {
 nav a:not(:last-of-type) {
   margin-right: 1.5em;
 }
+
+/* --------- MOBILE NAV --------- */
+
+nav .mobileNav {
+  /* --size: 1.5rem; */
+  position: relative;
+  width: 1.5rem;
+  height: 1.25rem;
+  box-sizing: border-box;
+  /* border: 1px solid cyan; */
+}
+
+nav .mobileNav.open {
+  /* position: fixed; */
+  /* inset: 2rem 2rem auto auto; */
+  z-index: 3000;
+}
+
+nav .mobileNav > * {
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  background-color: var(--pop);
+  border-radius: 100px;
+  /* transition: 0.2s ease-out; */
+  /* transition-delay: 0.2s; */
+  transform-origin: 50% 50%;
+}
+
+nav .mobileNav .top {
+  top: 0;
+  transition:
+    top .1s .1s ease-in-out,
+    transform .1s .2s ease-in-out;
+}
+
+nav .mobileNav.open .top {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+nav .mobileNav .middle {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+nav .mobileNav.open .middle {
+  opacity: 0;
+}
+
+nav .mobileNav .bottom {
+  bottom: 0;
+  transition:
+    bottom .1s .1s ease-in-out,
+    transform .1s .2s ease-in-out;
+}
+
+nav .mobileNav.open .bottom {
+  bottom: 50%;
+  transform: translateY(50%) rotate(-45deg);
+}
+
+/* ~~~~~~~~ MODAL ~~~~~~~~ */
+
+.modal-wrapper.nav-modal {
+  inset: 0;
+  background-color: hsla(264, 88%, 10%,0.95);
+  backdrop-filter: blur(10px);
+}
+
+.modal-wrapper.nav-modal .modal{
+  /* width: 100%; */
+  padding: 2rem;
+}
+
+.modal-wrapper.nav-modal .modal-close {
+  display: none;
+}
+
+.modal-wrapper.nav-modal .modal a {
+  color: var(--lite);
+  font-family: var(--keyFont);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.nav-modal .modal a.active {
+  color: var(--pop);
+}

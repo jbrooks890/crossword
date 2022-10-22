@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/AnswerInput.css";
+import "../../styles/AnswerInput.css";
 
 export default function AnswerInput({ entry }) {
   const [active, setActive] = useState(false);

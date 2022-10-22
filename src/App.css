@@ -35,7 +35,7 @@
   --pop: var(--colorG);
   --pop-alt: var(--colorB);
   --lite: var(--colorA);
-  --mid: var(--colorC);
+  --mid: var(--colorD);
   --dark: var(--colorE); 
   --darker: var(--colorF);
   --faint: hsla(0,0%,0%,0.1);
@@ -138,6 +138,10 @@ header, footer {
 
 .flex.center {
   align-items: center;
+}
+
+.flex.col {
+  flex-direction: column;
 }
 
 /* --------- MAIN --------- */

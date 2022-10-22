@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import "../styles/Comments.css";
+import "../../styles/Comments.css";
 import CommentList from "./CommentList";
 import CommentNew from "./CommentNew";
 import axios from "axios";
-import apiUrl from "../config";
+import apiUrl from "../../config";
 
 export default function CommentSection({ comments, owner }) {
   const [allComments, setAllComments] = useState(comments);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import "../../styles/Grid.css";
 import Cell from "./Cell";
 
@@ -27,6 +28,8 @@ export default function Grid({
     activeRows: [],
   });
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
+  const $MOBILE = useMediaQuery();
+  const [mini, toggleMini] = useState($MOBILE);
 
   useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
 
@@ -261,13 +264,15 @@ export default function Grid({
   return (
     <div
       id="cw-grid"
-      className={["grid", preview ? "preview" : ""].join(" ")}
+      className={["grid", mini ? "mini" : "", preview ? "preview" : ""].join(
+        " "
+      )}
       style={{
         gridTemplate: `repeat(${
           editing && !preview ? rows : grid.activeRows.length
-        }, 48px) / repeat(${
+        }, ${mini ? "1fr" : "48px"}) / repeat(${
           editing && !preview ? cols : grid.activeCols.length
-        }, 48px)`,
+        }, ${mini ? "1fr" : "48px"})`,
       }}
     >
       {renderGrid()}

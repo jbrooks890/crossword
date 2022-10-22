@@ -30,7 +30,7 @@ nav .mobileNav > * {
   position: absolute;
   width: 100%;
   height: 3px;
-  background-color: var(--pop);
+  background-color: var(--mid);
   border-radius: 100px;
   /* transition: 0.2s ease-out; */
   /* transition-delay: 0.2s; */

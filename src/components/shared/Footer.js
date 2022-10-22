@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import "../../styles/Footer.css"
+import "../../styles/Footer.css";
 import Icons from "./Icons";
 import SocialMedia from "./SocialMedia";
-import {ReactComponent as MainGradient} from "../Gradients.svg"
+import { ReactComponent as MainGradient } from "../Gradients.svg";
 
 export default function Footer() {
   return (
@@ -12,7 +12,8 @@ export default function Footer() {
       </svg>
       <SocialMedia />
       <span className="copyright">
-        &copy;{new Date().getFullYear()} Julian Brooks. All rights reserved.
+        &copy;{new Date().getFullYear()} Designed and developed by Julian
+        Brooks. All rights reserved.
       </span>
       <Icons />
       <MainGradient />

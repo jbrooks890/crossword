@@ -9,6 +9,7 @@ import HintCache from "../frags/HintCache";
 import apiUrl from "../../config";
 import CommentSection from "../frags/CommentSection";
 import AnswerInput from "../frags/AnswerInput";
+import { ActiveGroupProvider } from "../shared/ActiveGroupProvider";
 
 export default function Play({ games }) {
   const { id } = useParams();
@@ -393,25 +394,27 @@ export default function Play({ games }) {
             puzzle={activePuzzle}
             submit={e => console.log("Puzzle completed!")}
           >
-            <div id="cw-grid-wrap">
-              <HintBox hint={answers.get(activeGroup).hint} />
-              <Grid
-                puzzle={activePuzzle}
-                // setGroup={setGroup}
-                controls={e => buttonControls(e)}
-                hoverGroup={hoverGroup}
-                focusCell={focusCell}
-                getLetter={getLetter}
-                operations={cellOperations}
+            <ActiveGroupProvider>
+              <div id="cw-grid-wrap">
+                <HintBox hint={answers.get(activeGroup).hint} />
+                <Grid
+                  puzzle={activePuzzle}
+                  // setGroup={setGroup}
+                  controls={e => buttonControls(e)}
+                  hoverGroup={hoverGroup}
+                  focusCell={focusCell}
+                  getLetter={getLetter}
+                  operations={cellOperations}
+                />
+                <AnswerInput entry={answers.get(activeGroup)} />
+              </div>
+              <ButtonCache giveHint={giveHint} />
+              <HintCache
+                hints={getHints()}
+                focusFirst={focusFirst}
+                onHover={hoverGroup}
               />
-              <AnswerInput entry={answers.get(activeGroup)} />
-            </div>
-            <ButtonCache giveHint={giveHint} />
-            <HintCache
-              hints={getHints()}
-              focusFirst={focusFirst}
-              onHover={hoverGroup}
-            />
+            </ActiveGroupProvider>
           </Frame>
           {typeof comments[0] === "object" && (
             <CommentSection comments={comments} owner={id} />

@@ -1,7 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { getLetter } from "../../services/customHooks";
+import { useActiveGroup } from "../shared/ActiveGroupProvider";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
+  const { activeGroup, setActiveGroup } = useActiveGroup();
+  // console.log({ activeGroup });
+
   const {
     isJunction,
     answer,

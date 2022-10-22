@@ -235,7 +235,8 @@ h1.puzzle-title.editable:hover::after {
 
 .axis-select button:hover::before,
 .axis-select button:hover::after{
-  background-color: var(--mid);
+  background-color: var(--pop);
+  filter: brightness(1.5);
 }
 
 .axis-select button::before {
@@ -285,4 +286,84 @@ form#crossword .across.first .across-box {
 form#crossword .across.last .across-box {
   border-right: 3px solid var(--mid);
   border-radius: 0 8px 8px 0;
+}
+
+/* ================================= *\
+|| MOBILE
+\* ================================= */
+
+@media only screen and (max-width:480px){
+  #cw-grid-wrap {
+    width: 100vw;
+    box-sizing: border-box;
+    /* overflow: hidden; */
+  }
+}
+
+/* <><><><><><><><><><><><> *\
+-------- MINI GRID --------
+\* <><><><><><><><><><><><> */
+
+:root{
+  --miniGrid-cells: 5px;
+}
+
+#cw-grid.mini {
+  --size: 95vw;
+  gap: 0;
+  width: var(--size);
+  height: var(--size);
+  box-sizing: border-box;
+}
+
+#cw-grid.mini .cell {
+  background-color: var(--mid);
+}
+
+#cw-grid.mini .axis-box,
+#cw-grid.mini .axis-select {
+  display: none;
+}
+
+#cw-grid.mini .cell-input {
+  display: none;
+  color: transparent;
+  border-color: transparent;
+  border-radius: 0;
+}
+
+#cw-grid.mini .cell.top:not(.junction) {
+  border-top-left-radius: var(--miniGrid-cells);
+  border-top-right-radius: var(--miniGrid-cells);
+}
+
+#cw-grid.mini .cell.bottom:not(.junction) {
+  border-bottom-left-radius: var(--miniGrid-cells);
+  border-bottom-right-radius: var(--miniGrid-cells);
+}
+
+#cw-grid.mini .cell.first:not(.junction) {
+  border-top-left-radius: var(--miniGrid-cells);
+  border-bottom-left-radius: var(--miniGrid-cells);
+}
+
+#cw-grid.mini .cell.last:not(.junction) {
+  border-top-right-radius: var(--miniGrid-cells);
+  border-bottom-right-radius: var(--miniGrid-cells);
+}
+
+#cw-grid.mini .cell.top.first {
+  border-top-left-radius: var(--miniGrid-cells);
+}
+
+#cw-grid.mini .cell.bottom.first {
+  border-bottom-left-radius: var(--miniGrid-cells);
+}
+
+#cw-grid.mini .cell.top.last {
+  border-top-right-radius: var(--miniGrid-cells);
+}
+
+#cw-grid.mini .cell.bottom.last {
+  border-bottom-right-radius: var(--miniGrid-cells);
 }

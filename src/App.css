@@ -169,5 +169,7 @@ main {
 \* ========================================= */
 
 @media only screen and (max-width: 480px) {
-  
+  main {
+    padding: 2rem 0;
+  }
 }

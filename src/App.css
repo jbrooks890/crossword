@@ -69,6 +69,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -153,4 +154,20 @@ main {
   /* min-height: 100vh; */
   justify-content: center;
   padding: 2rem;
+  /* overflow: hidden visible;  */
+}
+
+/* ========================================= *\
+|| >> PORTRAIT MODE <<
+\* ========================================= */
+@media (orientation: portrait){
+
+}
+
+/* ========================================= *\
+|| >> MOBILE <<
+\* ========================================= */
+
+@media only screen and (max-width: 480px) {
+  
 }

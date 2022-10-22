@@ -29,7 +29,7 @@ nav .mobileNav.open {
 nav .mobileNav > * {
   position: absolute;
   width: 100%;
-  height: 10%;
+  height: 3px;
   background-color: var(--pop);
   border-radius: 100px;
   /* transition: 0.2s ease-out; */

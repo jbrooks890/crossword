@@ -91,10 +91,6 @@ body.modal-lock {
     transition: var(--transition);
   }
 
-  body.side-menu #root {
-    /* transition: margin-right 0.5s; */
-  }
-
   body:not(.side-menu) #root {
     margin-right: 0;
     /* transition: margin-right 0.5s; */

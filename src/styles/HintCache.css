@@ -16,7 +16,9 @@
   transform: translateX(100%);
   transition: 0.2s ease-in-out;
   box-sizing: border-box;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
+  border: 2px solid var(--faint);
+  border-radius: 10px 0 0 10px;
   pointer-events: none;
   z-index: 1000;
 }
@@ -27,7 +29,8 @@
   /* max-width: none; */
   transform: translateX(0);
   pointer-events: initial;
-  /* opacity: 1; */
+  box-shadow: -1px -1px 10px hsla(0, 0%, 0%, 0.25);
+    /* opacity: 1; */
 }
 
 .hint-cache {

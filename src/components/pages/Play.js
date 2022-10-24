@@ -34,6 +34,7 @@ export default function Play({ games }) {
     puzzle ? puzzle.answers[0].name : ""
   );
   const { answerKey, answers, comments } = activePuzzle;
+  const [preview, setPreview] = useState([]);
   const [openHintCache, setOpenHintCache] = useState(false);
   const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
@@ -217,6 +218,14 @@ export default function Play({ games }) {
             e.preventDefault();
             focusNearest(id, index, [0, 1]);
             break;
+          case "0":
+            e.preventDefault();
+            focusFirst(undefined, true);
+            break;
+          case ".":
+            e.preventDefault();
+            focusLast(undefined, true);
+            break;
         }
         break;
     }
@@ -282,13 +291,13 @@ export default function Play({ games }) {
   };
 
   // =========== FOCUS LAST ===========
-  const focusLast = (name, strict = false) => {
+  const focusLast = (name = activeGroup, strict = false) => {
     const { group } = answers.get(name);
     const targets = group.filter(id => cellData(id).input.value.length === 0);
 
     targets.length
       ? focusCell(
-          strict ? group[group.length - 1] : targets[targets.lengt - 1],
+          strict ? group[group.length - 1] : targets[targets.length - 1],
           name
         )
       : focusNextGroup(name);
@@ -362,15 +371,15 @@ export default function Play({ games }) {
   };
 
   // =========== ON HOVER ===========
-  const hoverGroup = (name, direction) => {
-    if (!$CAN_HOVER) return;
-    answers.get(name).group.forEach(id => {
-      const axis = direction === "across" ? ".across-box" : ".down-box";
-      const cell = document.querySelector(`#${id} ${axis}`);
-      cell.classList.toggle("preview");
-    });
-    document.getElementById("hint-" + name).classList.toggle("preview");
-  };
+  // const hoverGroup = (name, direction) => {
+  //   if (!$CAN_HOVER) return;
+  //   answers.get(name).group.forEach(id => {
+  //     const axis = direction === "across" ? ".across-box" : ".down-box";
+  //     const cell = document.querySelector(`#${id} ${axis}`);
+  //     cell.classList.toggle("preview");
+  //   });
+  //   document.getElementById("hint-" + name).classList.toggle("preview");
+  // };
 
   // =========== GIVE HINT ===========
   const giveHint = () => {
@@ -385,7 +394,7 @@ export default function Play({ games }) {
 
   const cellOperations = {
     controls: e => buttonControls(e),
-    hoverGroup: hoverGroup,
+    // hoverGroup: hoverGroup,
     focusCell: focusCell,
     getLetter: getLetter,
   };
@@ -397,7 +406,9 @@ export default function Play({ games }) {
     <div id="play-page">
       {activeGroup && (
         <>
-          <ActiveGroupProvider state={[activeGroup, setActiveGroup]}>
+          <ActiveGroupProvider
+            state={[activeGroup, setActiveGroup, preview, setPreview]}
+          >
             <Frame
               puzzle={activePuzzle}
               submit={e => console.log("Puzzle completed!")}
@@ -412,16 +423,16 @@ export default function Play({ games }) {
                     puzzle={activePuzzle}
                     // setGroup={setGroup}
                     controls={e => buttonControls(e)}
-                    hoverGroup={hoverGroup}
+                    // hoverGroup={hoverGroup}
                     focusCell={focusCell}
                     getLetter={getLetter}
                     operations={cellOperations}
                   />
                   <HintCache
                     hints={getHints()}
-                    activeGroup={activeGroup}
+                    // activeGroup={activeGroup}
                     focusFirst={focusFirst}
-                    onHover={hoverGroup}
+                    // onHover={hoverGroup}
                     open={openHintCache}
                     close={() => setOpenHintCache(false)}
                   />
@@ -429,12 +440,6 @@ export default function Play({ games }) {
                 <AnswerInput entry={answers.get(activeGroup)} />
               </div>
               <ButtonCache giveHint={giveHint} />
-              {/* <HintCache
-                hints={getHints()}
-                activeGroup={activeGroup}
-                focusFirst={focusFirst}
-                onHover={hoverGroup}
-              /> */}
             </Frame>
           </ActiveGroupProvider>
           {typeof comments[0] === "object" && (

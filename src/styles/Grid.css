@@ -13,15 +13,11 @@
 }
 
 #puzzle-window {
-  --size: 95vmin;
   position: relative;
-  width: var(--size);
-  /* height: var(--size); */
-  max-width: 90vw;
   box-sizing: border-box;
   transition: 0.2s ease-in-out;
   overflow: hidden;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 #puzzle-window.flex {

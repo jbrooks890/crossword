@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { getLetter } from "../../services/customHooks";
 import { useActiveGroup } from "../shared/ActiveGroupProvider";
 
@@ -21,7 +21,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
-  const [activeGroup] = useActiveGroup();
+  const [activeGroup, _, previewGroup, setPreviewGroup] = useActiveGroup();
+  const cellInput = useRef();
+
+  // useEffect(() => id === "A1" && console.log({ previewGroup }), [previewGroup]);
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -110,10 +113,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         ),
         attributes: {
           ["data-groups"]: groups.map(group => group.name).join(" "),
-          onMouseEnter: () =>
-            groups.forEach(group => hoverGroup(group.name, group.dir)),
-          onMouseLeave: () =>
-            groups.forEach(group => hoverGroup(group.name, group.dir)),
+          onMouseEnter: () => setPreviewGroup(groups.map(group => group.name)),
+          // groups.forEach(group => hoverGroup(group.name, group.dir)),
+          onMouseLeave: () => setPreviewGroup([]),
+          // groups.forEach(group => hoverGroup(group.name, group.dir)),
         },
       },
       input: {
@@ -184,6 +187,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
                   target &&
                   target.name === activeGroup &&
                   "active",
+                previewGroup &&
+                  target &&
+                  previewGroup.includes(target.name) &&
+                  "preview",
               ])}
               onFocus={e =>
                 document.querySelector(`#${id} .cell-input`).focus()
@@ -193,17 +200,17 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         })}
       {!editing && isJunction && <AxisSelector />}
       <input
+        ref={cellInput}
         className={`cell-input ${id} ${answer ? "show" : null}`}
         type="text"
         size="1"
         maxLength="1"
         tabIndex="-1"
         onFocus={e => e.currentTarget.select()}
-        // onChange={updateGrid} // UPDATE GRID + FIND GROUPS
-        // onChange={updateAnswerKey}
         onChange={editing && !preview ? captureAnswer : undefined}
-        onClick={() =>
-          !editing && focusCell(id, !isJunction ? groups[0].name : undefined)
+        onClick={
+          () =>
+            !editing && focusCell(id, !isJunction ? groups[0].name : undefined) //TODO
         }
         onKeyDown={e => (editing ? editControls(e) : controls(e))}
         onKeyUp={e => (editing ? editControls(e) : controls(e))}

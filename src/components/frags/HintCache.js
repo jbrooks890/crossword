@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import "../../styles/HintCache.css";
 import { useActiveGroup } from "../shared/ActiveGroupProvider";
 
@@ -8,63 +9,43 @@ export default function HintCache({
   open,
   close,
   focusFirst,
-  onHover,
+  // onHover,
 }) {
-  const [activeGroup] = useActiveGroup();
+  const [activeGroup, _, previewGroup, setPreviewGroup] = useActiveGroup();
   const [refreshTrigger, triggerRefresh] = useState(true);
   const direction = activeGroup.split("-")[0];
   const groups = [...hints];
   const hintCache = useRef();
+  const $CAN_HOVER = useMediaQuery("hover");
 
-  // console.log({ open });
+  // console.log(groups);
 
-  // console.log({ active, open });
+  const format = arr =>
+    arr.map(([name, hint], i) => {
+      const hintName = `hint-${name}`;
+      const dir = name.split("-");
+      return (
+        <li
+          key={i}
+          id={hintName}
+          className={`hint ${name == activeGroup ? "active" : ""} ${
+            previewGroup.includes(name) ? "preview" : ""
+          }`}
+          data-hint-group={name}
+          data-hint={hint}
+          onClick={() => focusFirst(name, true)}
+          onMouseEnter={() => $CAN_HOVER && setPreviewGroup([name])}
+          onMouseLeave={() => $CAN_HOVER && setPreviewGroup([])}
+        >
+          {hint}
+        </li>
+      );
+    });
 
-  // useLayoutEffect(() => {
-  //   const { current } = hintCache;
-  //   if (open)
-  //     current.style.maxWidth = current.getBoundingClientRect().width + "px";
-  //   // console.log(current);
-  // }, [open]);
-
-  // useEffect(() => triggerRefresh(prev => !prev), [activeGroup]);
-
-  const across = groups.map(([name, hint], i) => {
-    const hintName = `hint-${name}`;
-    const dir = name.split("-");
-    return (
-      <li
-        key={i}
-        id={hintName}
-        className={`hint ${name == activeGroup ? "active" : ""}`}
-        data-hint-group={name}
-        data-hint={hint}
-        onClick={() => focusFirst(name, true)}
-        onMouseEnter={() => onHover(name, dir)}
-        onMouseLeave={() => onHover(name, dir)}
-      >
-        {hint}
-      </li>
-    );
-  });
-
-  const down = groups.map(([name, hint], i) => {
-    const dir = name.split("-");
-    return (
-      <li
-        key={i}
-        id={`hint-${name}`}
-        className={`hint ${name == activeGroup ? "active" : ""}`}
-        data-hint-group={name}
-        data-hint={hint}
-        onClick={() => focusFirst(name, true)}
-        onMouseEnter={() => onHover(name, dir)}
-        onMouseLeave={() => onHover(name, dir)}
-      >
-        {hint}
-      </li>
-    );
-  });
+  const across = format(
+    groups.filter(([name]) => name.split("-")[0] === "across")
+  );
+  const down = format(groups.filter(([name]) => name.split("-")[0] === "down"));
 
   return (
     <div

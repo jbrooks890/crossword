@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "../../styles/Modal.css";
-import useMediaQuery from "../../hooks/useMediaQuery";
 
 // TUTORIAL: https://upmostly.com/tutorials/modal-components-react-custom-hooks
 

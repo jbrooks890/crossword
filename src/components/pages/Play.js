@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Frame from "../frags/Frame";
@@ -9,7 +9,11 @@ import HintCache from "../frags/HintCache";
 import apiUrl from "../../config";
 import CommentSection from "../frags/CommentSection";
 import AnswerInput from "../frags/AnswerInput";
-import { ActiveGroupProvider } from "../shared/ActiveGroupProvider";
+import {
+  ActiveGroupProvider,
+  useActiveGroup,
+} from "../shared/ActiveGroupProvider";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 export default function Play({ games }) {
   const { id } = useParams();
@@ -30,6 +34,8 @@ export default function Play({ games }) {
     puzzle ? puzzle.answers[0].name : ""
   );
   const { answerKey, answers, comments } = activePuzzle;
+  const [openHintCache, setOpenHintCache] = useState(false);
+  const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
 
@@ -111,15 +117,15 @@ export default function Play({ games }) {
       // console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
       // console.log({ name });
 
-      if (answers.has(name)) {
+      /* if (answers.has(name)) {
         document
-          .querySelectorAll(".active")
+          .querySelectorAll(`.axis-box.active`)
           .forEach(cell => cell.classList.remove("active"));
       }
       document
         .querySelectorAll(`.axis-box.${name}`)
         .forEach(cell => cell.classList.add("active"));
-      document.querySelector(`#hint-${name}`).classList.add("active");
+      document.querySelector(`#hint-${name}`).classList.add("active"); */
 
       setActiveGroup(name);
     }
@@ -357,6 +363,7 @@ export default function Play({ games }) {
 
   // =========== ON HOVER ===========
   const hoverGroup = (name, direction) => {
+    if (!$CAN_HOVER) return;
     answers.get(name).group.forEach(id => {
       const axis = direction === "across" ? ".across-box" : ".down-box";
       const cell = document.querySelector(`#${id} ${axis}`);
@@ -390,32 +397,46 @@ export default function Play({ games }) {
     <div id="play-page">
       {activeGroup && (
         <>
-          <Frame
-            puzzle={activePuzzle}
-            submit={e => console.log("Puzzle completed!")}
-          >
-            <ActiveGroupProvider>
+          <ActiveGroupProvider state={[activeGroup, setActiveGroup]}>
+            <Frame
+              puzzle={activePuzzle}
+              submit={e => console.log("Puzzle completed!")}
+            >
               <div id="cw-grid-wrap">
-                <HintBox hint={answers.get(activeGroup).hint} />
-                <Grid
-                  puzzle={activePuzzle}
-                  // setGroup={setGroup}
-                  controls={e => buttonControls(e)}
-                  hoverGroup={hoverGroup}
-                  focusCell={focusCell}
-                  getLetter={getLetter}
-                  operations={cellOperations}
+                <HintBox
+                  hint={answers.get(activeGroup).hint}
+                  toggleCache={() => setOpenHintCache(prev => !prev)}
                 />
+                <div id="puzzle-window" className="flex">
+                  <Grid
+                    puzzle={activePuzzle}
+                    // setGroup={setGroup}
+                    controls={e => buttonControls(e)}
+                    hoverGroup={hoverGroup}
+                    focusCell={focusCell}
+                    getLetter={getLetter}
+                    operations={cellOperations}
+                  />
+                  <HintCache
+                    hints={getHints()}
+                    activeGroup={activeGroup}
+                    focusFirst={focusFirst}
+                    onHover={hoverGroup}
+                    open={openHintCache}
+                    close={() => setOpenHintCache(false)}
+                  />
+                </div>
                 <AnswerInput entry={answers.get(activeGroup)} />
               </div>
               <ButtonCache giveHint={giveHint} />
-              <HintCache
+              {/* <HintCache
                 hints={getHints()}
+                activeGroup={activeGroup}
                 focusFirst={focusFirst}
                 onHover={hoverGroup}
-              />
-            </ActiveGroupProvider>
-          </Frame>
+              /> */}
+            </Frame>
+          </ActiveGroupProvider>
           {typeof comments[0] === "object" && (
             <CommentSection comments={comments} owner={id} />
           )}

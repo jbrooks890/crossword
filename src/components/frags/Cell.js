@@ -3,9 +3,6 @@ import { getLetter } from "../../services/customHooks";
 import { useActiveGroup } from "../shared/ActiveGroupProvider";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
-  const { activeGroup, setActiveGroup } = useActiveGroup();
-  // console.log({ activeGroup });
-
   const {
     isJunction,
     answer,
@@ -24,6 +21,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
+  const [activeGroup] = useActiveGroup();
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -182,6 +180,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
                 `${dir}-box`,
                 "axis-box",
                 target && target.name,
+                activeGroup &&
+                  target &&
+                  target.name === activeGroup &&
+                  "active",
               ])}
               onFocus={e =>
                 document.querySelector(`#${id} .cell-input`).focus()

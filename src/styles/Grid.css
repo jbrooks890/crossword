@@ -12,11 +12,30 @@
   box-sizing: border-box;
 }
 
+#puzzle-window {
+  --size: 95vmin;
+  position: relative;
+  width: var(--size);
+  /* height: var(--size); */
+  max-width: 90vw;
+  box-sizing: border-box;
+  transition: 0.2s ease-in-out;
+  overflow: hidden;
+  border: 1px solid red;
+}
+
+#puzzle-window.flex {
+  align-items: flex-start;
+}
+
 #cw-grid {
+  flex-grow: 1;
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--faint);
   border-radius: 10px;
+  overflow: scroll;
+  transition: .2s ease-in-out;
 }
 
 #cw-grid.grid {

@@ -17,6 +17,12 @@ export default function useMediaQuery(
     case "hover":
       query = "(hover:hover)";
       break;
+    case "portrait":
+      query = "(orientation:portrait)";
+      break;
+    case "landscape":
+      query = "(orientation:landscape)";
+      break;
     default:
       query = isQuery ? str : null;
   }

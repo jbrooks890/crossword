@@ -17,7 +17,5 @@ export default function Nav() {
     </NavLink>
   ));
 
-  console.log({ $MOBILE });
-
   return <nav>{$MOBILE ? <MobileNav links={links} /> : links}</nav>;
 }

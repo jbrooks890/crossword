@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import "../../styles/Grid.css";
+import { useActiveGroup } from "../shared/ActiveGroupProvider";
 import Cell from "./Cell";
 
 export default function Grid({
@@ -30,6 +31,8 @@ export default function Grid({
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const $MOBILE = useMediaQuery();
   const [mini, toggleMini] = useState($MOBILE);
+  // const [activeGroup] = useActiveGroup();
+  // activeGroup && console.log({ activeGroup });
 
   useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
 
@@ -245,18 +248,6 @@ export default function Grid({
       ...findGroups($cols, false, $answerKey),
     ]);
   }
-
-  // useEffect(() => phase >= 1 && captureAnswers(), [grid]);
-  // editing && phase >= 1 && captureAnswers();
-
-  // console.log(grid);
-
-  // preview && console.log(`%cPREVIEW MODE`, "color: cyan");
-  // preview &&
-  //   console.log(
-  //     `%cwidth: ${grid.activeRows.length}\nheight: ${grid.activeCols.length}`,
-  //     "color: cyan"
-  //   );
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::

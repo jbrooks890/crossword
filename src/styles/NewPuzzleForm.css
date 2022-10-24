@@ -214,6 +214,7 @@
 }
 
 #newPuzzleForm #tag-input {
+  margin-bottom: 1rem;
   padding: 1em;
   caret-color: var(--faint);
   font-family: var(--keyFont);

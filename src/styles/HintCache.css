@@ -1,17 +1,54 @@
 /*  --------- HINT CACHE --------- */
 #hint-cache-wrap {
   display: flex;
-  width: 75vw;
+  flex-direction: column;
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 40%;
   justify-content: center;
   /* border: 1px solid blue; */
+  /* max-width: 0; */
+  background-color: var(--lite);
+  flex-shrink: 1;
+  height: 100%;
+  overflow: hidden;
+  /* opacity: 0; */
+  transform: translateX(100%);
+  transition: 0.2s ease-in-out;
+  box-sizing: border-box;
+  border: 1px solid blue;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+#hint-cache-wrap.active {
+  /* overflow-x: hidden;
+  overflow-y: scroll; */
+  /* max-width: none; */
+  transform: translateX(0);
+  pointer-events: initial;
+  /* opacity: 1; */
 }
 
 .hint-cache {
   counter-reset: hint;
+  display: none;
+  margin: 0;
   list-style-position: inside;
   list-style-type: none;
   padding-left: 0;
   padding: 1rem;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  /* border: 1px solid coral; */
+}
+
+.hint-cache.active {
+  display: block;
+}
+
+.hint-cache h3 {
+  margin-top: 0;
 }
 
 .hint-cache li {

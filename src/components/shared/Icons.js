@@ -8,6 +8,7 @@ import { ReactComponent as RESTART_ICON } from "../../assets/icons/clear-restart
 import { ReactComponent as LIKE_ICON } from "../../assets/icons/heart-icon.svg";
 import { ReactComponent as DIALOG_ICON } from "../../assets/icons/dialog-icon.svg";
 import { ReactComponent as EDIT_ICON } from "../../assets/icons/edit-icon.svg";
+import { ReactComponent as CHECK_ICON } from "../../assets/icons/check-icon.svg";
 
 export default function Icons() {
   return (
@@ -22,6 +23,7 @@ export default function Icons() {
       <LIKE_ICON />
       <DIALOG_ICON />
       <EDIT_ICON />
+      <CHECK_ICON />
     </svg>
   );
 }

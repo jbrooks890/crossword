@@ -8,14 +8,18 @@ export default function ButtonCache({ giveHint }) {
         // onClick={e => e.preventDefault()}
         type="reset"
       >
-        Reset
+        <svg>
+          <use href="#restart-icon" />
+        </svg>
       </button>
       <button
         className="cw-button"
         onClick={e => e.preventDefault()}
         type="submit"
       >
-        Submit
+        <svg>
+          <use href="#check-icon" />
+        </svg>
       </button>
       <button
         className="cw-button"
@@ -25,7 +29,18 @@ export default function ButtonCache({ giveHint }) {
         }}
         type="button"
       >
-        Hint
+        <svg viewBox="0 0 10 10">
+          <text
+            dominantBaseline="middle"
+            textAnchor="middle"
+            // textLength="100%"
+            // lengthAdjust={"spaceAndGlyphs"}
+            dx="50%"
+            dy="50%"
+          >
+            ?
+          </text>
+        </svg>
       </button>
     </div>
   );

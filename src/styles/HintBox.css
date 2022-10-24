@@ -45,9 +45,7 @@
 #hint-box::before {
   content: attr(data-hint-full);
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto;
   width: 100%;
   color: var(--mid);
   /* height: 100%; */

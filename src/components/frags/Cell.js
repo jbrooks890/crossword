@@ -24,7 +24,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   const [activeGroup, _, previewGroup, setPreviewGroup] = useActiveGroup();
   const cellInput = useRef();
 
-  // useEffect(() => id === "A1" && console.log({ previewGroup }), [previewGroup]);
+  // useEffect(() => id === "J3" && console.log(groups), []);
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -99,24 +99,24 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   // =========== FORMAT CELL ===========
 
   const formatCell = () => {
+    const groupNames = groups.map(group => group.name);
     return {
       cell: {
         classes: formatClassList(
           [
             answer && "show",
-            groups.map(group => group.name).join(" "),
+            groupNames.join(" "),
             groups.map(group => group.dir).join(" "),
             isJunction && "junction",
             display && display.join(" "),
             crop && "crop ",
+            activeGroup && groupNames.includes(activeGroup) && "active",
           ].filter(entry => entry)
         ),
         attributes: {
-          ["data-groups"]: groups.map(group => group.name).join(" "),
-          onMouseEnter: () => setPreviewGroup(groups.map(group => group.name)),
-          // groups.forEach(group => hoverGroup(group.name, group.dir)),
+          ["data-groups"]: groupNames.join(" "),
+          onMouseEnter: () => setPreviewGroup(groupNames),
           onMouseLeave: () => setPreviewGroup([]),
-          // groups.forEach(group => hoverGroup(group.name, group.dir)),
         },
       },
       input: {

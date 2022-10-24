@@ -333,6 +333,11 @@ form#crossword .across.last .across-box {
 
 #cw-grid.mini .cell {
   background-color: var(--mid);
+  border: 5px solid transparent;
+}
+
+#cw-grid.mini .cell.active{
+  background-color: var(--pop);
 }
 
 #cw-grid.mini .axis-box,

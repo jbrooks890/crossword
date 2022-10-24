@@ -9,10 +9,7 @@ import HintCache from "../frags/HintCache";
 import apiUrl from "../../config";
 import CommentSection from "../frags/CommentSection";
 import AnswerInput from "../frags/AnswerInput";
-import {
-  ActiveGroupProvider,
-  useActiveGroup,
-} from "../shared/ActiveGroupProvider";
+import { ActiveGroupProvider } from "../shared/ActiveGroupProvider";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
 export default function Play({ games }) {

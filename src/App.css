@@ -27,10 +27,6 @@
     #2f115b,
     var(--colorF)
   );
-
-  /* ----------- OLD ----------- */
-  --old_slate: hsl(215, 35%, 50%);
-  --old_pink: hsl(322, 60%, 60%);
   /* ---------------------------- */
   --pop: var(--colorG);
   --pop-alt: var(--colorB);

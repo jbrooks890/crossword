@@ -1,11 +1,14 @@
 import "../../styles/ButtonCache.css";
 
-export default function ButtonCache({ giveHint }) {
+export default function ButtonCache({ giveHint, clear }) {
   return (
     <div id="button-cache">
       <button
         className="cw-button reset"
-        // onClick={e => e.preventDefault()}
+        onClick={e => {
+          e.preventDefault();
+          clear();
+        }}
         type="reset"
       >
         <svg>

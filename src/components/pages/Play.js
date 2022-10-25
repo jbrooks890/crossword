@@ -368,13 +368,17 @@ export default function Play({ games }) {
 
   // =========== GIVE HINT ===========
   const giveHint = () => {
-    const remaining = Object.keys(answerKey).filter(
-      id => cellData(id).input.value.length === 0
+    const remaining = [...game.input.keys()].filter(
+      id => game.input.get(id).length === 0
     );
-    const cell = remaining[Math.floor(Math.random() * remaining.length)];
-    const { element, input } = cellData(cell);
-    element.classList.add("assisted");
-    input.value = answerKey[cell];
+    const id = remaining[Math.floor(Math.random() * remaining.length)];
+
+    game.assists.length < 3 &&
+      setGame(prev => ({
+        ...prev,
+        input: new Map([...prev.input, [id, answerKey[id]]]),
+        assists: [...prev.assists, id],
+      }));
   };
 
   // =========== UPDATE USER INPUT ===========
@@ -382,6 +386,18 @@ export default function Play({ games }) {
     setGame(prev => ({
       ...prev,
       input: new Map([...prev.input, [id, value]]),
+    }));
+
+  // =========== CLEAR PUZZLE ===========
+  const clearPuzzle = () =>
+    setGame(prev => ({
+      ...prev,
+      input: new Map(
+        [...prev.input].map(([id, value]) => [
+          id,
+          game.assists.includes(id) ? value : "",
+        ])
+      ),
     }));
 
   const cellOperations = {
@@ -399,7 +415,14 @@ export default function Play({ games }) {
       {activeGroup && (
         <>
           <ActiveGroupProvider
-            state={[activeGroup, setActiveGroup, preview, setPreview]}
+            state={[
+              activeGroup,
+              setActiveGroup,
+              preview,
+              setPreview,
+              game,
+              setGame,
+            ]}
           >
             <Frame
               puzzle={activePuzzle}
@@ -447,7 +470,7 @@ export default function Play({ games }) {
                   />
                 )}
               </div>
-              <ButtonCache giveHint={giveHint} />
+              <ButtonCache giveHint={giveHint} clear={clearPuzzle} />
             </Frame>
           </ActiveGroupProvider>
           {typeof comments[0] === "object" && (

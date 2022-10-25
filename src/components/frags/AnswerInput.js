@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "../../styles/AnswerInput.css";
+import { useActiveGroup } from "../shared/ActiveGroupProvider";
 
 export default function AnswerInput({
   entry,
@@ -8,24 +9,24 @@ export default function AnswerInput({
   focusNextGroup,
 }) {
   const [active, setActive] = useState(true);
-  const { dir, group, hint, name } = entry;
-  const elements = group.map(id =>
-    document.querySelector(`#${id} .cell-input`)
-  );
+  const { group, hint } = entry;
+  const game = useActiveGroup()[4];
+  const activeGroup = useActiveGroup()[0];
 
   const input = useRef();
   const proceedBtn = useRef();
-  // console.log(userInput);
+  const previousEntry = useMemo(() => userInput, [activeGroup]);
 
-  const displayEntryStyle = {};
+  // console.log(previousEntry);
 
-  // console.log(entry);
+  // useEffect(() => selectEmpty());
+
   const parseUserInput = e => {
     const { value } = e.currentTarget;
     // console.log({ value });
     for (let i = 0; i < group.length; i++) {
       const char = value.charAt(i);
-      updateInput(group[i], char ? char.toUpperCase() : " ");
+      updateInput(group[i], char && char !== " " ? char.toUpperCase() : "");
     }
   };
 
@@ -35,21 +36,39 @@ export default function AnswerInput({
     focusNextGroup();
   };
 
+  const selectEmpty = e => {
+    // const next = e.target.value.indexOf(" ");
+    // e.target.setSelectionRange(next, next + 1);
+
+    const next = [...userInput.values()].indexOf("");
+    // console.log({ next });
+    input.current.setSelectionRange(next, next + 1);
+  };
+
   const inputBtnCtrls = e => {
-    const { target, key } = e;
-    switch (key) {
-      case "Enter":
-        e.preventDefault();
-        proceedBtn.current.click();
+    const { target, key, type, which } = e;
+    const printable = which >= 65 && which <= 90;
+
+    switch (type) {
+      case "keyup":
+        printable && selectEmpty();
         break;
-      case "Tab":
-        e.preventDefault();
-        console.log(e);
+      case "keydown":
+        switch (key) {
+          case "Enter":
+            e.preventDefault();
+            proceedBtn.current.click();
+            break;
+          case "Tab":
+            e.preventDefault();
+            console.log(e);
+            break;
+        }
         break;
     }
   };
 
-  // console.log(userInput);
+  // console.log([...userInput.values()].join(""));
 
   return (
     <div
@@ -61,7 +80,9 @@ export default function AnswerInput({
         {[...userInput].map(([id, entry], i) => (
           <button
             key={i}
-            className="input-display-entry flex center"
+            className={`input-display-entry flex center ${
+              game.assists.includes(id) ? "assisted" : ""
+            }`}
             data-cell-id={id}
             onClick={e => {
               e.preventDefault();
@@ -82,12 +103,11 @@ export default function AnswerInput({
         maxLength={group.length}
         onInput={e => parseUserInput(e)}
         onKeyDown={e => inputBtnCtrls(e)}
-        onKeyUp={e =>
-          e.target.setSelectionRange(
-            e.target.selectionEnd,
-            e.target.selectionEnd + 1
-          )
-        }
+        onKeyUp={e => inputBtnCtrls(e)}
+        // onFocus={e => selectEmpty(e)}
+        value={[...userInput.values()]
+          .map(char => (char ? char : " "))
+          .join("")}
         // value={[...userInput.values()].join("")}
       />
       <button

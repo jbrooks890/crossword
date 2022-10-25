@@ -44,6 +44,11 @@
   margin-right: 0.2em;
 }
 
+.input-display-entry.assisted {
+  color: var(--pop-alt);
+  filter: brightness(0.9);
+}
+
 #answer-input-box {
   margin-bottom: 1rem;
   background-color: transparent;

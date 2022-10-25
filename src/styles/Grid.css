@@ -355,8 +355,15 @@ form#crossword .across.last .across-box {
 }
 
 #cw-grid.mini .cell {
-  background-color: var(--mid);
+  background-color: var(--dark);
   border: 5px solid transparent;
+}
+
+#cw-grid.mini .cell.user-entry {
+  background-color: var(--mid);
+}
+#cw-grid.mini .cell.assisted {
+  background-color: var(--pop-alt);
 }
 
 #cw-grid.mini .cell.active{

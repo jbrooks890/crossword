@@ -15,27 +15,39 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 export default function Play({ games }) {
   const { id } = useParams();
   const puzzle = games ? games.find(game => game._id === id) : null;
+  // const [loaded, setLoaded] = useState(Boolean(puzzle));
+  const [game, setGame] = useState();
   const [activePuzzle, setActivePuzzle] = useState(
-    puzzle ? format(puzzle) : {}
+    puzzle ? initialize(puzzle) : {}
   );
-  const [commentsLoaded, setCommentsLoaded] = useState(false);
-  const [game, setGame] = useState({
-    user: "",
-    input: { ...activePuzzle.answerKey },
-    assists: [],
-    startTime: 0, // Date obj
-    timer: 0,
-    completed: false,
-  });
+  const { answerKey, answers, comments } = activePuzzle;
   const [activeGroup, setActiveGroup] = useState(
     puzzle ? puzzle.answers[0].name : ""
   );
-  const { answerKey, answers, comments } = activePuzzle;
   const [preview, setPreview] = useState([]);
   const [openHintCache, setOpenHintCache] = useState(false);
-  const $CAN_HOVER = useMediaQuery("hover");
+
+  const $MOBILE = useMediaQuery();
+  // const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
+
+  useEffect(
+    () =>
+      Object.keys(activePuzzle).length > 0 &&
+      setGame({
+        user: "",
+        input: new Map(Object.keys(answerKey).map(id => [id, ""])),
+        assists: [],
+        startTime: 0, // Date obj
+        timer: 0,
+        completed: false,
+      }),
+    [activePuzzle]
+  );
+
+  // console.log({ loaded });
+  // console.log(game);
 
   // =========== FETCH DATA ===========
 
@@ -44,7 +56,7 @@ export default function Play({ games }) {
     try {
       const response = await axios.get(PUZZLE_LINK);
       const { puzzle } = response.data;
-      setActivePuzzle(format(puzzle));
+      setActivePuzzle(initialize(puzzle));
       setActiveGroup(puzzle.answers[0].name);
     } catch (e) {
       console.log(e);
@@ -73,7 +85,7 @@ export default function Play({ games }) {
 
   useEffect(() => (puzzle ? generate() : fetchData()), []);
 
-  function format(puzzle) {
+  function initialize(puzzle) {
     return {
       ...puzzle,
       answers: new Map(puzzle.answers.map(entry => [entry.name, { ...entry }])),
@@ -112,19 +124,6 @@ export default function Play({ games }) {
     // console.log(name);
 
     if (name !== activeGroup) {
-      // console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
-      // console.log({ name });
-
-      /* if (answers.has(name)) {
-        document
-          .querySelectorAll(`.axis-box.active`)
-          .forEach(cell => cell.classList.remove("active"));
-      }
-      document
-        .querySelectorAll(`.axis-box.${name}`)
-        .forEach(cell => cell.classList.add("active"));
-      document.querySelector(`#hint-${name}`).classList.add("active"); */
-
       setActiveGroup(name);
     }
   };
@@ -367,17 +366,6 @@ export default function Play({ games }) {
     return list;
   };
 
-  // =========== ON HOVER ===========
-  // const hoverGroup = (name, direction) => {
-  //   if (!$CAN_HOVER) return;
-  //   answers.get(name).group.forEach(id => {
-  //     const axis = direction === "across" ? ".across-box" : ".down-box";
-  //     const cell = document.querySelector(`#${id} ${axis}`);
-  //     cell.classList.toggle("preview");
-  //   });
-  //   document.getElementById("hint-" + name).classList.toggle("preview");
-  // };
-
   // =========== GIVE HINT ===========
   const giveHint = () => {
     const remaining = Object.keys(answerKey).filter(
@@ -388,6 +376,13 @@ export default function Play({ games }) {
     element.classList.add("assisted");
     input.value = answerKey[cell];
   };
+
+  // =========== UPDATE USER INPUT ===========
+  const updateUserInput = (id, value) =>
+    setGame(prev => ({
+      ...prev,
+      input: new Map([...prev.input, [id, value]]),
+    }));
 
   const cellOperations = {
     controls: e => buttonControls(e),
@@ -411,10 +406,12 @@ export default function Play({ games }) {
               submit={e => console.log("Puzzle completed!")}
             >
               <div id="cw-grid-wrap">
-                <HintBox
-                  hint={answers.get(activeGroup).hint}
-                  toggleCache={() => setOpenHintCache(prev => !prev)}
-                />
+                {!$MOBILE && (
+                  <HintBox
+                    hint={answers.get(activeGroup).hint}
+                    toggleCache={() => setOpenHintCache(prev => !prev)}
+                  />
+                )}
                 <div id="puzzle-window" className="flex">
                   <Grid
                     puzzle={activePuzzle}
@@ -434,7 +431,21 @@ export default function Play({ games }) {
                     close={() => setOpenHintCache(false)}
                   />
                 </div>
-                <AnswerInput entry={answers.get(activeGroup)} />
+                {$MOBILE && game && (
+                  <AnswerInput
+                    entry={answers.get(activeGroup)}
+                    // userInput={$CURRENT.group.map(id => game.input.get(id))}
+                    userInput={
+                      new Map(
+                        [...game.input].filter(([id]) =>
+                          answers.get(activeGroup).group.includes(id)
+                        )
+                      )
+                    }
+                    updateInput={updateUserInput}
+                    focusNextGroup={focusNextGroup}
+                  />
+                )}
               </div>
               <ButtonCache giveHint={giveHint} />
             </Frame>

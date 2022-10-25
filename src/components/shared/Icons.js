@@ -9,6 +9,8 @@ import { ReactComponent as LIKE_ICON } from "../../assets/icons/heart-icon.svg";
 import { ReactComponent as DIALOG_ICON } from "../../assets/icons/dialog-icon.svg";
 import { ReactComponent as EDIT_ICON } from "../../assets/icons/edit-icon.svg";
 import { ReactComponent as CHECK_ICON } from "../../assets/icons/check-icon.svg";
+import { ReactComponent as HELP_ICON } from "../../assets/icons/xword-help.svg";
+import { ReactComponent as LIST_ICON } from "../../assets/icons/list-icon.svg";
 
 export default function Icons() {
   return (
@@ -24,6 +26,8 @@ export default function Icons() {
       <DIALOG_ICON />
       <EDIT_ICON />
       <CHECK_ICON />
+      <HELP_ICON />
+      <LIST_ICON />
     </svg>
   );
 }

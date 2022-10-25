@@ -13,7 +13,7 @@ export default function Frame({ children, puzzle, submit, setFormActive }) {
           >
             {puzzle.name}
           </h1>
-          {!editing && <CommunityCache />}
+          {/* {!editing && <CommunityCache />} */}
         </>
       )}
       {children}

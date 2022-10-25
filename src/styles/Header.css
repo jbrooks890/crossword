@@ -22,12 +22,14 @@ header h2#site-logo svg {
 
 header h2#site-logo svg .border {
   fill: var(--pop);
-  /* fill: url(#main-grad); */
-  /* display: none; */
-  /* filter: brightness(1.1); */
 }
 
-header h2#site-logo svg .inner {
-  fill: black;
-  /* display: none; */
+/* ========================================= *\
+|| >> MOBILE <<
+\* ========================================= */
+
+@media only screen and (max-width: 480px) {
+  header h2#site-logo {
+    width: calc(var(--grid)* 2);;
+  }
 }

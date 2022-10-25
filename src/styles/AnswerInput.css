@@ -4,9 +4,8 @@
   position: -webkit-sticky;
   position: sticky;
   display: none;
-  background-color: white;
+  background-color: var(--lite);
   bottom: 2rem;
-  align-self: center;
   margin-top: 1rem;
   padding: 1em 2em;
   border: 2px solid var(--faint);
@@ -17,11 +16,46 @@
 }
 
 #answer-input.active {
-  display: block;
+  display: flex;
   opacity: 1;
   z-index: 11;
 }
 
 .answer-input-hint {
   margin-bottom: 0.5em;
+  text-align: left;
+}
+
+.input-display-entry {
+  --size: 2ch;
+  width:var(--size);
+  height:var(--size);
+  /* padding: 0.25em; */
+  color: inherit;
+  border: none;
+  border-bottom: 2px solid var(--faint);
+  box-sizing: border-box;
+  font-family: var(--keyFont);
+  font-size: larger;
+  /* border-radius: 5px; */
+}
+
+.input-display-entry:not(.last-of-type){
+  margin-right: 0.2em;
+}
+
+#answer-input-box {
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border: none;
+  text-align: center;
+}
+
+#answer-input .proceed {
+  --size: 1.5rem;
+  width: var(--size);
+  height: var(--size);
+  border: none;
+  background-color: var(--mid);
+  clip-path: var(--arrow-right);
 }

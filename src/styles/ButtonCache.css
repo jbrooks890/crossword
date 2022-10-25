@@ -5,6 +5,10 @@
   margin-block: 1rem;
 }
 
+#button-cache {
+  align-self: center;
+}
+
 #button-cache button {
   --size: 4rem;
   display: flex;
@@ -32,10 +36,13 @@
   /* border: 1px solid red; */
   fill: var(--mid);
   transition: 0.1s ease-out, transform 0.1s ease-out 0.1s;
+  box-sizing: border-box;
 }
 
-#button-cache button svg text {
-  font-family: var(--keyFont);
+#button-cache button.help.cw-button svg{
+  --size: 1.6rem;
+  width: var(--size);
+  height: var(--size);
 }
 
 #button-cache button:hover {
@@ -46,8 +53,9 @@
 
 #button-cache button:hover svg {
   fill: var(--pop);
+  stroke: transparent;
   transform: scale(1.1);
-  filter: drop-shadow(1px 1px 1px var(--faint));
+  filter: brightness(1.25) drop-shadow(1px 1px 1px var(--faint));
 }
 
 #button-cache button:not(:last-of-type) {

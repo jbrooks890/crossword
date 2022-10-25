@@ -47,6 +47,9 @@
   font-family: var(--bodyFont);
   font-size: var(--fontSize);
   /* ========== BORDER ========== */
+  /* ========== SHAPES ========== */
+  --arrow-left: polygon(0 50%, 100% 100%, 60% 50%, 100% 0);
+  --arrow-right: polygon(0 0, 40% 50%, 0 100%, 100% 50%);
 }
 
 html {
@@ -138,11 +141,16 @@ header, footer {
 }
 
 .flex.center {
+  justify-content: center;
   align-items: center;
 }
 
 .flex.col {
   flex-direction: column;
+}
+
+.grid {
+  display: grid;
 }
 
 /* --------- MAIN --------- */
@@ -169,6 +177,15 @@ main {
 \* ========================================= */
 
 @media only screen and (max-width: 480px) {
+
+  :root {
+    font-size: 18px;
+  }
+
+  header,footer {
+    padding: 1rem;
+  }
+
   main {
     padding: 2rem 0;
   }

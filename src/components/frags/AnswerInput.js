@@ -156,11 +156,12 @@ export default function AnswerInput({
         className="proceed"
         onClick={e => proceedToNext(e)}
       />
-      <button className="hint-cache-toggle" onClick={e => e.preventDefault()}>
+      {/* <button className="hint-cache-toggle" onClick={e => e.preventDefault()}>
         <svg>
           <use href="#list-icon" />
         </svg>
-      </button>
+      </button> */}
+      <button className="hint-cache-toggle" onClick={e => e.preventDefault()} />
     </div>
   );
 }

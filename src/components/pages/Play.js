@@ -29,7 +29,7 @@ export default function Play({ games }) {
 
   const $MOBILE = useMediaQuery();
   const [gridMini, toggleGridMini] = useState($MOBILE);
-  
+
   // const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
@@ -451,9 +451,7 @@ export default function Play({ games }) {
                   />
                   <HintCache
                     hints={getHints()}
-                    // activeGroup={activeGroup}
                     focusFirst={focusFirst}
-                    // onHover={hoverGroup}
                     open={openHintCache}
                     close={() => setOpenHintCache(false)}
                   />

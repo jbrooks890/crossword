@@ -6,6 +6,8 @@ import Cell from "./Cell";
 
 export default function Grid({
   puzzle,
+  mini,
+  toggleMini,
   controls,
   hoverGroup,
   focusCell,
@@ -30,7 +32,7 @@ export default function Grid({
   });
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const $MOBILE = useMediaQuery();
-  const [mini, toggleMini] = useState($MOBILE);
+  // const [mini, toggleMini] = useState($MOBILE);
   // const [activeGroup] = useActiveGroup();
   // activeGroup && console.log({ activeGroup });
 

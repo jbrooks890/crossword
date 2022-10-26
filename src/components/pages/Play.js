@@ -28,6 +28,8 @@ export default function Play({ games }) {
   const [openHintCache, setOpenHintCache] = useState(false);
 
   const $MOBILE = useMediaQuery();
+  const [gridMini, toggleGridMini] = useState($MOBILE);
+  
   // const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
@@ -438,6 +440,8 @@ export default function Play({ games }) {
                 <div id="puzzle-window" className="flex">
                   <Grid
                     puzzle={activePuzzle}
+                    mini={gridMini}
+                    toggleMini={toggleGridMini}
                     // setGroup={setGroup}
                     controls={e => buttonControls(e)}
                     // hoverGroup={hoverGroup}

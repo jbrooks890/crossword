@@ -10,14 +10,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     display,
     crop,
     controls,
-    hoverGroup,
     focusCell,
     axis,
     toggleAxis,
-    operations,
     preview,
-    updateGrid,
-    updateAnswerKey,
     captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;

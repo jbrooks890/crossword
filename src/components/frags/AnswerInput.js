@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../../styles/AnswerInput.css";
 import { useActiveGroup } from "../shared/ActiveGroupProvider";
 
@@ -13,55 +13,107 @@ export default function AnswerInput({
   const game = useActiveGroup()[4];
   const activeGroup = useActiveGroup()[0];
 
-  const input = useRef();
+  // console.log(group);
+
+  const inputs = useRef([]);
   const proceedBtn = useRef();
-  const previousEntry = useMemo(() => userInput, [activeGroup]);
 
-  // console.log(previousEntry);
+  // useEffect(() => console.log(inputs));
+  useEffect(() => selectEmpty(), [activeGroup]);
 
-  // useEffect(() => selectEmpty());
-
-  const parseUserInput = e => {
-    const { value } = e.currentTarget;
-    // console.log({ value });
-    for (let i = 0; i < group.length; i++) {
-      const char = value.charAt(i);
-      updateInput(group[i], char && char !== " " ? char.toUpperCase() : "");
-    }
-  };
+  // =========== PROCEED TO NEXT ===========
 
   const proceedToNext = e => {
     e.preventDefault();
-    input.current.value = "";
     focusNextGroup();
   };
 
-  const selectEmpty = e => {
+  // =========== SELECT EMPTY ===========
+
+  const selectEmpty = () => {
+    // console.log("running select empty");
     // const next = e.target.value.indexOf(" ");
     // e.target.setSelectionRange(next, next + 1);
 
-    const next = [...userInput.values()].indexOf("");
-    // console.log({ next });
-    input.current.setSelectionRange(next, next + 1);
+    const target = group.indexOf(
+      [...userInput.keys()].find(id => userInput.get(id) === "")
+    );
+
+    // console.log(userInput);
+    // console.log({ target });
+    target >= 0 && inputs.current[target].focus();
   };
 
-  const inputBtnCtrls = e => {
+  // =========== FOCUS INPUT ===========
+
+  const focusInput = (e, index) => {
+    e.preventDefault();
+    // input.current.focus();
+    // input.current.setSelectionRange(index, index + 1);
+  };
+
+  // =========== FOCUS NEXT ===========
+  const focusNext = current =>
+    current === group.length - 1
+      ? selectEmpty()
+      : inputs.current[current + 1].focus();
+
+  // =========== FOCUS NEXT ===========
+  const focusDir = (index, direction = []) =>
+    index === group.length - 1
+      ? selectEmpty()
+      : inputs.current[index + 1].focus();
+
+  // =========== MOVE TO ===========
+  const moveTo = destination => {
+    const target =
+      inputs.current[
+        destination >= 0 && destination < group.length ? destination : null
+      ];
+    target && target.focus();
+  };
+
+  // =========== BUTTON CONTROLS: INPUT ===========
+
+  const inputBtnCtrls = (e, id, index) => {
     const { target, key, type, which } = e;
+    const { value: content } = target;
     const printable = which >= 65 && which <= 90;
+
+    // console.log({ key, which, printable });
 
     switch (type) {
       case "keyup":
-        printable && selectEmpty();
+        // if (printable) focusNext(index);
         break;
       case "keydown":
+        if (printable)
+          e.target.addEventListener("keyup", () => moveTo(index + 1), {
+            once: true,
+          });
+
         switch (key) {
           case "Enter":
             e.preventDefault();
             proceedBtn.current.click();
             break;
           case "Tab":
+            // e.preventDefault();
+            // console.log(e);
+            break;
+          case "Backspace":
+            // !content && moveTo(index - 1);
+            e.target.addEventListener("keyup", () => moveTo(index - 1), {
+              once: true,
+            });
+            break;
+          case "ArrowLeft":
             e.preventDefault();
-            console.log(e);
+            moveTo(index - 1);
+            break;
+          case "ArrowRight":
+            e.preventDefault();
+            moveTo(index + 1);
             break;
         }
         break;
@@ -69,6 +121,9 @@ export default function AnswerInput({
   };
 
   // console.log([...userInput.values()].join(""));
+
+  // --------------------------------
+  // :::::::::::: RENDER ::::::::::::
 
   return (
     <div
@@ -78,43 +133,34 @@ export default function AnswerInput({
       <div className="answer-input-hint">{hint}</div>
       <div className="input-display flex">
         {[...userInput].map(([id, entry], i) => (
-          <button
+          <input
             key={i}
-            className={`input-display-entry flex center ${
+            ref={id => (inputs.current[i] = id)}
+            className={`input-display-entry ${
               game.assists.includes(id) ? "assisted" : ""
             }`}
             data-cell-id={id}
-            onClick={e => {
-              e.preventDefault();
-              input.current.focus();
-              input.current.setSelectionRange(i, i + 1);
-            }}
-          >
-            {entry}
-          </button>
+            type="text"
+            maxLength="1"
+            value={entry}
+            onClick={e => e.target.select()}
+            onFocus={e => e.target.select()}
+            onKeyDown={e => inputBtnCtrls(e, id, i)}
+            // onKeyUp={e => inputBtnCtrls(e, id, i)}
+            onChange={e => updateInput(id, e.target.value.toUpperCase())}
+          />
         ))}
       </div>
-
-      <input
-        ref={input}
-        id="answer-input-box"
-        type="text"
-        name="answer-input"
-        maxLength={group.length}
-        onInput={e => parseUserInput(e)}
-        onKeyDown={e => inputBtnCtrls(e)}
-        onKeyUp={e => inputBtnCtrls(e)}
-        // onFocus={e => selectEmpty(e)}
-        value={[...userInput.values()]
-          .map(char => (char ? char : " "))
-          .join("")}
-        // value={[...userInput.values()].join("")}
-      />
       <button
         ref={proceedBtn}
         className="proceed"
         onClick={e => proceedToNext(e)}
       />
+      <button className="hint-cache-toggle" onClick={e => e.preventDefault()}>
+        <svg>
+          <use href="#list-icon" />
+        </svg>
+      </button>
     </div>
   );
 }

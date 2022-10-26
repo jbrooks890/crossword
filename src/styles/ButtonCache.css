@@ -45,19 +45,26 @@
   height: var(--size);
 }
 
-#button-cache button:hover {
-  background-color: var(--dark);
-  border-color: var(--dark);
-  color: var(--lite);
-}
-
-#button-cache button:hover svg {
-  fill: var(--pop);
-  stroke: transparent;
-  transform: scale(1.1);
-  filter: brightness(1.25) drop-shadow(1px 1px 1px var(--faint));
-}
-
 #button-cache button:not(:last-of-type) {
   margin-right: 1rem;
+}
+
+/* ================================= *\
+|| HOVERABLE
+\* ================================= */
+
+@media (hover:hover){
+  
+  #button-cache button:hover {
+    background-color: var(--dark);
+    border-color: var(--dark);
+    color: var(--lite);
+  }
+
+  #button-cache button:hover svg {
+    fill: var(--pop);
+    stroke: transparent;
+    transform: scale(1.1);
+    filter: brightness(1.25) drop-shadow(1px 1px 1px var(--faint));
+  }
 }

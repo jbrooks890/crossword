@@ -32,8 +32,6 @@ export default function Play({ games }) {
 
   const wrapper = useRef();
 
-  useEffect(() => activeGroup && console.log(activePuzzle), []);
-
   // const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;

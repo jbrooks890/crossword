@@ -53,8 +53,8 @@
   margin: 0;
   list-style-position: inside;
   list-style-type: none;
-  padding-left: 0;
   padding: 1rem;
+  padding-top: 0;
   overflow-y: scroll;
   box-sizing: border-box;
   /* border: 1px solid coral; */

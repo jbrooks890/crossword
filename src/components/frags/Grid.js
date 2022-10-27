@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import useMediaQuery from "../../hooks/useMediaQuery";
 import "../../styles/Grid.css";
-import { useActiveGroup } from "../shared/ActiveGroupProvider";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import Cell from "./Cell";
 
 export default function Grid({

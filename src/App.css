@@ -43,6 +43,8 @@
   font-family: var(--bodyFont);
   font-size: var(--fontSize);
   /* ========== BORDER ========== */
+  --outside: 20px;
+  --inside: 10px;
   /* ========== SHAPES ========== */
   --arrow-left: polygon(0 50%, 100% 100%, 60% 50%, 100% 0);
   --arrow-right: polygon(0 0, 40% 50%, 0 100%, 100% 50%);

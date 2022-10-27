@@ -7,18 +7,17 @@ export default function AnswerInput({
   userInput,
   updateInput,
   focusNextGroup,
+  hintCacheOpen,
+  toggleHintCache,
 }) {
   const [active, setActive] = useState(true);
   const { group, hint } = entry;
   const game = useActiveGroup()[4];
   const activeGroup = useActiveGroup()[0];
 
-  // console.log(group);
-
   const inputs = useRef([]);
   const proceedBtn = useRef();
 
-  // useEffect(() => console.log(inputs));
   useEffect(() => selectEmpty(), [activeGroup]);
 
   // =========== PROCEED TO NEXT ===========
@@ -31,38 +30,12 @@ export default function AnswerInput({
   // =========== SELECT EMPTY ===========
 
   const selectEmpty = () => {
-    // console.log("running select empty");
-    // const next = e.target.value.indexOf(" ");
-    // e.target.setSelectionRange(next, next + 1);
-
     const target = group.indexOf(
       [...userInput.keys()].find(id => userInput.get(id) === "")
     );
 
-    // console.log(userInput);
-    // console.log({ target });
     target >= 0 && inputs.current[target].focus();
   };
-
-  // =========== FOCUS INPUT ===========
-
-  const focusInput = (e, index) => {
-    e.preventDefault();
-    // input.current.focus();
-    // input.current.setSelectionRange(index, index + 1);
-  };
-
-  // =========== FOCUS NEXT ===========
-  const focusNext = current =>
-    current === group.length - 1
-      ? selectEmpty()
-      : inputs.current[current + 1].focus();
-
-  // =========== FOCUS NEXT ===========
-  const focusDir = (index, direction = []) =>
-    index === group.length - 1
-      ? selectEmpty()
-      : inputs.current[index + 1].focus();
 
   // =========== MOVE TO ===========
   const moveTo = destination => {
@@ -115,6 +88,10 @@ export default function AnswerInput({
             e.preventDefault();
             moveTo(index + 1);
             break;
+          case " ":
+            e.preventDefault();
+            moveTo(index + 1);
+            break;
         }
         break;
     }
@@ -156,12 +133,17 @@ export default function AnswerInput({
         className="proceed"
         onClick={e => proceedToNext(e)}
       />
-      {/* <button className="hint-cache-toggle" onClick={e => e.preventDefault()}>
+      <button
+        className="hint-cache-toggle"
+        onClick={e => {
+          e.preventDefault();
+          toggleHintCache();
+        }}
+      >
         <svg>
           <use href="#list-icon" />
         </svg>
-      </button> */}
-      <button className="hint-cache-toggle" onClick={e => e.preventDefault()} />
+      </button>
     </div>
   );
 }

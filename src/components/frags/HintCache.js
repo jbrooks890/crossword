@@ -1,24 +1,38 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import "../../styles/HintCache.css";
 import { useActiveGroup } from "../shared/ActiveGroupProvider";
 
 export default function HintCache({
   hints,
-  // activeGroup,
   open,
   close,
   focusFirst,
-  // onHover,
+  gridMini,
+  groupCells,
 }) {
-  const [activeGroup, _, previewGroup, setPreviewGroup] = useActiveGroup();
-  const [refreshTrigger, triggerRefresh] = useState(true);
-  const direction = activeGroup.split("-")[0];
+  const [activeGroup, setActiveGroup, previewGroup, setPreviewGroup, game] =
+    useActiveGroup();
+  // const direction = activeGroup.split("-")[0];
   const groups = [...hints];
   const hintCache = useRef();
   const $CAN_HOVER = useMediaQuery("hover");
+  const [direction, setDirection] = useState(activeGroup.split("-")[0]);
 
-  // console.log(groups);
+  // console.log(game);
+
+  // console.log(Wrapper.current);
+  // useEffect(() => console.log(Wrapper.current));
+  useEffect(() => {
+    const currentDir = activeGroup.split("-")[0];
+    direction !== currentDir && setDirection(currentDir);
+  }, [open]);
+
+  const select = name => {
+    gridMini ? setActiveGroup(name) : focusFirst(name, true);
+    close();
+  };
 
   const format = arr =>
     arr.map(([name, hint], i) => {
@@ -33,14 +47,35 @@ export default function HintCache({
           }`}
           data-hint-group={name}
           data-hint={hint}
-          onClick={() => focusFirst(name, true)}
+          onClick={() => select(name)}
           onMouseEnter={() => $CAN_HOVER && setPreviewGroup([name])}
           onMouseLeave={() => $CAN_HOVER && setPreviewGroup([])}
         >
-          {hint}
+          <>
+            <div data-hint-count={i + 1} className="hint-text flex">
+              {hint}
+            </div>
+            {gridMini && (
+              <div className="user-entry-wrap flex center">
+                {groupCells.get(name).map(cell => (
+                  <div
+                    key={cell}
+                    className={`hint-user-entry flex center ${
+                      game.assists.includes(cell) ? "assisted" : ""
+                    }`}
+                  >
+                    {game.input.get(cell)}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         </li>
       );
     });
+
+  const toggleDir = () =>
+    setDirection(prev => (prev === "across" ? "down" : "across"));
 
   const across = format(
     groups.filter(([name]) => name.split("-")[0] === "across")
@@ -53,7 +88,9 @@ export default function HintCache({
       id="hint-cache-wrap"
       className={open ? "active" : "inactive"}
     >
-      <h3>{direction[0].toUpperCase() + direction.slice(1)}</h3>
+      <h3 onClick={() => toggleDir()}>
+        {direction[0].toUpperCase() + direction.slice(1)}
+      </h3>
       <ul
         id="across-hints"
         className={`hint-cache ${
@@ -68,6 +105,15 @@ export default function HintCache({
       >
         {down}
       </ul>
+      <button
+        className="close-button flex center"
+        onClick={e => {
+          e.preventDefault();
+          close();
+        }}
+      >
+        &times;
+      </button>
     </div>
   );
 }

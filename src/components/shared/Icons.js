@@ -27,7 +27,7 @@ export default function Icons() {
       <EDIT_ICON />
       <CHECK_ICON />
       <HELP_ICON />
-      {/* <LIST_ICON /> */}
+      <LIST_ICON />
     </svg>
   );
 }

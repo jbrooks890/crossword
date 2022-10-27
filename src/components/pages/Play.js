@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Frame from "../frags/Frame";
@@ -25,10 +25,14 @@ export default function Play({ games }) {
     puzzle ? puzzle.answers[0].name : ""
   );
   const [preview, setPreview] = useState([]);
-  const [openHintCache, setOpenHintCache] = useState(false);
+  const [hintCacheOpen, setHintCacheOpen] = useState(false);
 
   const $MOBILE = useMediaQuery();
   const [gridMini, toggleGridMini] = useState($MOBILE);
+
+  const wrapper = useRef();
+
+  useEffect(() => activeGroup && console.log(activePuzzle), []);
 
   // const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
@@ -119,12 +123,6 @@ export default function Play({ games }) {
 
   // =========== SET GROUP ===========
   const setGroup = name => {
-    // console.log(
-    //   `%cSET GROUP: ${activeGroup}`,
-    //   "color: plum; text-transform: uppercase"
-    // );
-    // console.log(name);
-
     if (name !== activeGroup) {
       setActiveGroup(name);
     }
@@ -430,11 +428,17 @@ export default function Play({ games }) {
               puzzle={activePuzzle}
               submit={e => console.log("Puzzle completed!")}
             >
-              <div id="cw-grid-wrap">
+              <div
+                ref={wrapper}
+                id="cw-grid-wrap"
+                className={`${gridMini ? "mini" : ""} ${
+                  hintCacheOpen ? "viewing-hints" : ""
+                }`}
+              >
                 {!$MOBILE && (
                   <HintBox
                     hint={answers.get(activeGroup).hint}
-                    toggleCache={() => setOpenHintCache(prev => !prev)}
+                    toggleCache={() => setHintCacheOpen(prev => !prev)}
                   />
                 )}
                 <div id="puzzle-window" className="flex">
@@ -442,24 +446,24 @@ export default function Play({ games }) {
                     puzzle={activePuzzle}
                     mini={gridMini}
                     toggleMini={toggleGridMini}
-                    // setGroup={setGroup}
                     controls={e => buttonControls(e)}
-                    // hoverGroup={hoverGroup}
                     focusCell={focusCell}
                     getLetter={getLetter}
                     operations={cellOperations}
                   />
-                  <HintCache
-                    hints={getHints()}
-                    focusFirst={focusFirst}
-                    open={openHintCache}
-                    close={() => setOpenHintCache(false)}
-                  />
+                  {!gridMini && (
+                    <HintCache
+                      hints={getHints()}
+                      focusFirst={focusFirst}
+                      open={hintCacheOpen}
+                      close={() => setHintCacheOpen(false)}
+                      gridMini={gridMini}
+                    />
+                  )}
                 </div>
                 {$MOBILE && game && (
                   <AnswerInput
                     entry={answers.get(activeGroup)}
-                    // userInput={$CURRENT.group.map(id => game.input.get(id))}
                     userInput={
                       new Map(
                         [...game.input].filter(([id]) =>
@@ -469,6 +473,25 @@ export default function Play({ games }) {
                     }
                     updateInput={updateUserInput}
                     focusNextGroup={focusNextGroup}
+                    hintCacheOpen={hintCacheOpen}
+                    toggleHintCache={() => setHintCacheOpen(prev => !prev)}
+                  />
+                )}
+                {gridMini && (
+                  <HintCache
+                    hints={getHints()}
+                    focusFirst={focusFirst}
+                    open={hintCacheOpen}
+                    close={() => setHintCacheOpen(false)}
+                    gridMini={gridMini}
+                    groupCells={
+                      new Map(
+                        [...answers].map(([group, entry]) => [
+                          group,
+                          entry.group,
+                        ])
+                      )
+                    }
                   />
                 )}
               </div>

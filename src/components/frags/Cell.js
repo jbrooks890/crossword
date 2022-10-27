@@ -17,8 +17,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
-  const [activeGroup, _, previewGroup, setPreviewGroup, game] =
-    useActiveGroup();
+  const $PLAY = useActiveGroup();
+  const [activeGroup, _, previewGroup, setPreviewGroup, game] = $PLAY
+    ? $PLAY
+    : [];
   const cellInput = useRef();
 
   // useEffect(() => id === "J3" && console.log(groups), []);
@@ -106,10 +108,10 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             groups.map(group => group.dir).join(" "),
             isJunction && "junction",
             display && display.join(" "),
-            crop && "crop ",
+            crop && "crop",
             activeGroup && groupNames.includes(activeGroup) && "active",
-            game.input.get(id) && "user-entry",
-            game.assists.includes(id) && "assisted",
+            game && game.input.get(id) && "user-entry",
+            game && game.assists.includes(id) && "assisted",
           ].filter(entry => entry)
         ),
         attributes: {

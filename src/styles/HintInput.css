@@ -71,6 +71,7 @@ li.hint-input-entry h4::before {
 .hint-input-entry textarea {
   appearance: none;
   padding: 1em;
+  background-color: var(--lite);
   color: var(--pop);
   caret-color: var(--faint);
   font-family: inherit;

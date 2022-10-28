@@ -9,7 +9,7 @@ import HintCache from "../frags/HintCache";
 import apiUrl from "../../config";
 import CommentSection from "../frags/CommentSection";
 import AnswerInput from "../frags/AnswerInput";
-import { ActiveGroupProvider } from "../shared/ActiveGroupProvider";
+import { PlayMasterProvider } from "../shared/PlayMasterProvider";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
 export default function Play({ games }) {
@@ -20,7 +20,7 @@ export default function Play({ games }) {
   const [activePuzzle, setActivePuzzle] = useState(
     puzzle ? initialize(puzzle) : {}
   );
-  const { answerKey, answers, comments } = activePuzzle;
+  const { LOADED, answerKey, answers, comments } = activePuzzle;
   const [activeGroup, setActiveGroup] = useState(
     puzzle ? puzzle.answers[0].name : ""
   );
@@ -38,11 +38,12 @@ export default function Play({ games }) {
 
   useEffect(
     () =>
-      Object.keys(activePuzzle).length > 0 &&
+      LOADED &&
       setGame({
         user: "",
         input: new Map(Object.keys(answerKey).map(id => [id, ""])),
         assists: [],
+        history: [],
         startTime: 0, // Date obj
         timer: 0,
         completed: false,
@@ -93,6 +94,7 @@ export default function Play({ games }) {
     return {
       ...puzzle,
       answers: new Map(puzzle.answers.map(entry => [entry.name, { ...entry }])),
+      LOADED: true,
     };
   }
 
@@ -412,7 +414,7 @@ export default function Play({ games }) {
     <div id="play-page">
       {activeGroup && (
         <>
-          <ActiveGroupProvider
+          <PlayMasterProvider
             state={[
               activeGroup,
               setActiveGroup,
@@ -493,9 +495,11 @@ export default function Play({ games }) {
                   />
                 )}
               </div>
-              <ButtonCache giveHint={giveHint} clear={clearPuzzle} />
+              {LOADED && (
+                <ButtonCache giveHint={giveHint} clear={clearPuzzle} />
+              )}
             </Frame>
-          </ActiveGroupProvider>
+          </PlayMasterProvider>
           {typeof comments[0] === "object" && (
             <CommentSection comments={comments} owner={id} />
           )}

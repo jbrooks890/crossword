@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "../../styles/AnswerInput.css";
-import { useActiveGroup } from "../shared/ActiveGroupProvider";
+import { usePlayMaster } from "../shared/PlayMasterProvider";
 
 export default function AnswerInput({
   entry,
@@ -12,8 +12,8 @@ export default function AnswerInput({
 }) {
   const [active, setActive] = useState(true);
   const { group, hint } = entry;
-  const game = useActiveGroup()[4];
-  const activeGroup = useActiveGroup()[0];
+  const activeGroup = usePlayMaster()[0];
+  const game = usePlayMaster()[4];
 
   const inputs = useRef([]);
   const proceedBtn = useRef();

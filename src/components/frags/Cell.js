@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { getLetter } from "../../services/customHooks";
-import { useActiveGroup } from "../shared/ActiveGroupProvider";
+import { usePlayMaster } from "../shared/PlayMasterProvider";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   const {
@@ -17,8 +17,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
-  const $PLAY = useActiveGroup();
-  const [activeGroup, _, previewGroup, setPreviewGroup, game] = $PLAY
+  const $PLAY = usePlayMaster();
+  const [activeGroup, _, previewGroup, setPreviewGroup, game, setGame] = $PLAY
     ? $PLAY
     : [];
   const cellInput = useRef();
@@ -150,7 +150,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       })}
     </div>
   );
-
+  // =========== FORMAT CLASS LIST ===========
   const formatClassList = arr =>
     arr
       .filter(entry => entry)
@@ -159,6 +159,13 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       .trim();
 
   // id === "H2" && console.log(formatCell());
+
+  // =========== UPDATE USER INPUT ===========
+  const updateUserInput = (id, value) =>
+    setGame(prev => ({
+      ...prev,
+      input: new Map([...prev.input, [id, value]]),
+    }));
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
@@ -208,7 +215,13 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         maxLength="1"
         tabIndex="-1"
         onFocus={e => e.currentTarget.select()}
-        onChange={editing && !preview ? captureAnswer : undefined}
+        onChange={
+          editing && !preview
+            ? captureAnswer
+            : game
+            ? e => updateUserInput(id, e.target.value)
+            : undefined
+        }
         onClick={
           () =>
             !editing && focusCell(id, !isJunction ? groups[0].name : undefined) //TODO
@@ -216,7 +229,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         onKeyDown={e => (editing ? editControls(e) : controls(e))}
         onKeyUp={e => (editing ? editControls(e) : controls(e))}
         placeholder={editing ? id : undefined}
-        // value={!editing && game.assists.includes(id) ? }
+        value={game && game.input.has(id) ? game.input.get(id) : ""}
       />
     </div>
   );

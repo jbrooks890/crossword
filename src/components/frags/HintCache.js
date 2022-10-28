@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import "../../styles/HintCache.css";
-import { useActiveGroup } from "../shared/ActiveGroupProvider";
+import { usePlayMaster } from "../shared/PlayMasterProvider";
 
 export default function HintCache({
   hints,
@@ -13,7 +13,7 @@ export default function HintCache({
   groupCells,
 }) {
   const [activeGroup, setActiveGroup, previewGroup, setPreviewGroup, game] =
-    useActiveGroup();
+    usePlayMaster();
   // const direction = activeGroup.split("-")[0];
   const groups = [...hints];
   const hintCache = useRef();

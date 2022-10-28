@@ -32,7 +32,7 @@ export default function Grid({
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const $MOBILE = useMediaQuery();
   // const [mini, toggleMini] = useState($MOBILE);
-  // const [activeGroup] = useActiveGroup();
+  // const [activeGroup] = usePlayMaster();
   // activeGroup && console.log({ activeGroup });
 
   useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);

@@ -127,15 +127,13 @@ export default function Grid({
     return grid.cells.map((cell, count) => {
       const { id, col, x, y } = cell;
       const groups = getGroups(id);
-      // groups.length && console.log({ id }, groups);
       return (
         <Cell
           key={count}
           cell_name={id}
           index={[x, y]}
           {...((!editing || phase >= 2) && formatCellData(id, col, x, y))}
-          // {...(groups.length > 0 && { groups })}
-          // {...(groups.length > 0 && formatCellData(groups, id, col, x, y))}
+          {...(groups.length && { groups })}
           controls={e => controls(e)}
           editorMode={editorMode}
           focusCell={focusCell} // PLAY
@@ -145,51 +143,6 @@ export default function Grid({
         />
       );
     });
-  };
-
-  // =========== FIND GROUP ===========
-  // "SET" = ROW or COLUMN
-  const findGroups = (sets, isRow, $keys) => {
-    const dir = isRow ? "across" : "down";
-    let groups = [];
-
-    // loop thru each row/column...
-    // collect entries until it hits a break (empty cell)...
-    // --OR hits the end of the row/column...
-    // THEN save the group.
-
-    sets.forEach(arr => {
-      let set = {
-        group: [],
-        sum: "",
-      };
-
-      for (let i = 0; i <= arr.length; i++) {
-        const cell = arr[i];
-        if ($keys[cell]) {
-          set.group.push(cell);
-          // set.sum += content.get(cell).toUpperCase();
-          set.sum += $keys[cell].toUpperCase();
-        } else {
-          // if the new group has at least 2 entries...
-          if (set.group.length > 1) {
-            // set.name = `${dir}-${set.group[0]}`;
-            groups.push({
-              ...set,
-              name: `${dir}-${set.group[0]}`,
-              dir: dir,
-              hint: "",
-            });
-          }
-          set = {
-            group: [],
-            sum: "",
-          };
-        }
-      }
-    });
-
-    return groups;
   };
 
   // =========== GROUP ANSWERS ===========
@@ -242,31 +195,31 @@ export default function Grid({
   useEffect(() => editing && groupAnswers(), [answerKey]);
 
   // =========== CAPTURE ANSWER ===========
-  function captureAnswer(e, id, _col, _row) {
-    // console.log(`%cCAPTURE ANSWERS`, "color: orange");
-    // console.log(`%cTEST---`, "color: red");
-    const { value } = e.target;
-    const { cols, rows, activeCols, activeRows } = grid;
-    const { answerKey } = puzzle;
-    const $answer = { [id]: value.toUpperCase() };
-    const $answerKey = { ...answerKey, ...$answer };
-    const $activeCols = [...activeCols, _col];
-    const $activeRows = [...activeRows, _row];
+  // function captureAnswer(e, id, _col, _row) {
+  //   // console.log(`%cCAPTURE ANSWERS`, "color: orange");
+  //   // console.log(`%cTEST---`, "color: red");
+  //   const { value } = e.target;
+  //   const { cols, rows, activeCols, activeRows } = grid;
+  //   const { answerKey } = puzzle;
+  //   const $answer = { [id]: value.toUpperCase() };
+  //   const $answerKey = { ...answerKey, ...$answer };
+  //   const $activeCols = [...activeCols, _col];
+  //   const $activeRows = [...activeRows, _row];
 
-    const $cols = Object.keys(cols)
-      .filter(col => $activeCols.includes(col))
-      .map(id => cols[id]);
-    const $rows = Object.keys(rows)
-      .filter(row => $activeRows.includes(Number(row)))
-      .map(id => rows[id]);
+  //   const $cols = Object.keys(cols)
+  //     .filter(col => $activeCols.includes(col))
+  //     .map(id => cols[id]);
+  //   const $rows = Object.keys(rows)
+  //     .filter(row => $activeRows.includes(Number(row)))
+  //     .map(id => rows[id]);
 
-    // console.log($cols, $rows);
+  //   // console.log($cols, $rows);
 
-    updatePuzzleGroups($answer, [
-      ...findGroups($rows, true, $answerKey),
-      ...findGroups($cols, false, $answerKey),
-    ]);
-  }
+  //   updatePuzzleGroups($answer, [
+  //     ...findGroups($rows, true, $answerKey),
+  //     ...findGroups($cols, false, $answerKey),
+  //   ]);
+  // }
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::

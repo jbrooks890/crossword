@@ -31,7 +31,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
 
   // useEffect(() => id === "J3" && console.log(groups), []);
 
-  // groups && console.log(groups);
+  // groups && groups.length && console.log(groups);
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {

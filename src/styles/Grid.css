@@ -36,7 +36,7 @@
 
 #cw-grid {
   flex-grow: 1;
-  flex-shrink: 1;
+  flex-shrink: 0;
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--faint);

@@ -55,7 +55,7 @@ export default function HintCache({
             <div data-hint-count={i + 1} className="hint-text flex">
               {hint}
             </div>
-            {gridMini && (
+            {gridMini && game && (
               <div className="user-entry-wrap flex center">
                 {groupCells.get(name).map(cell => (
                   <div

@@ -8,8 +8,8 @@
 
 #cw-grid-wrap {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
   box-sizing: border-box;
 }
 
@@ -36,6 +36,7 @@
 
 #cw-grid {
   flex-grow: 1;
+  flex-shrink: 1;
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--faint);

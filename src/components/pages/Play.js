@@ -15,12 +15,11 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 export default function Play({ games }) {
   const { id } = useParams();
   const puzzle = games ? games.find(game => game._id === id) : null;
-  // const [loaded, setLoaded] = useState(Boolean(puzzle));
-  const [game, setGame] = useState();
   const [activePuzzle, setActivePuzzle] = useState(
     puzzle ? initialize(puzzle) : {}
   );
   const { LOADED, answerKey, answers, comments } = activePuzzle;
+  const [game, setGame] = useState();
   const [activeGroup, setActiveGroup] = useState(
     puzzle ? puzzle.answers[0].name : ""
   );
@@ -36,23 +35,22 @@ export default function Play({ games }) {
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
 
-  useEffect(
-    () =>
-      LOADED &&
+  // useEffect(() => activePuzzle && console.log(activePuzzle));
+
+  useEffect(() => {
+    LOADED &&
+      !game &&
       setGame({
         user: "",
-        input: new Map(Object.keys(answerKey).map(id => [id, ""])),
+        input: activePuzzle ? clearUserInput(puzzle.answerKey) : null,
         assists: [],
         history: [],
         startTime: 0, // Date obj
         timer: 0,
         completed: false,
-      }),
-    [activePuzzle]
-  );
-
-  // console.log({ loaded });
-  // console.log(game);
+        READY: true,
+      });
+  }, [activePuzzle]);
 
   // =========== FETCH DATA ===========
 
@@ -83,12 +81,16 @@ export default function Play({ games }) {
     }
   };
 
-  const generate = () => {
+  // =========== GENERATE ===========
+
+  const getComments = () => {
     // setActiveGroup(puzzle.answers[0].name);
     comments.length && fetchComments();
   };
 
-  useEffect(() => (puzzle ? generate() : fetchData()), []);
+  useEffect(() => (puzzle ? getComments() : fetchData()), []);
+
+  // =========== INITIALIZE ===========
 
   function initialize(puzzle) {
     return {
@@ -98,10 +100,20 @@ export default function Play({ games }) {
     };
   }
 
-  /* console.log(
-    `%c${"=".repeat(15)}/ ${activeGroup} \\${"=".repeat(15)}`,
-    "color: lime; text-transform: uppercase"
-  ); */
+  // =========== CLEAR USER INPUT ===========
+
+  function clearUserInput(answerKey) {
+    return new Map(Object.keys(answerKey).map(id => [id, ""]));
+  }
+
+  // =========== RESET USER INPUT ===========
+
+  function resetUserInput(answerKey) {
+    setGame(prev => ({
+      ...prev,
+      input: clearUserInput(answerKey),
+    }));
+  }
 
   // =========== GET CELL DATA ===========
   const cellData = id => {
@@ -412,7 +424,7 @@ export default function Play({ games }) {
 
   return (
     <div id="play-page">
-      {activeGroup && (
+      {LOADED && activeGroup && (
         <>
           <PlayMasterProvider
             state={[
@@ -431,7 +443,7 @@ export default function Play({ games }) {
               <div
                 ref={wrapper}
                 id="cw-grid-wrap"
-                className={`${gridMini ? "mini" : ""} ${
+                className={`flex col ${gridMini ? "mini" : ""} ${
                   hintCacheOpen ? "viewing-hints" : ""
                 }`}
               >
@@ -461,7 +473,7 @@ export default function Play({ games }) {
                     />
                   )}
                 </div>
-                {$MOBILE && game && (
+                {gridMini && game && (
                   <AnswerInput
                     entry={answers.get(activeGroup)}
                     userInput={

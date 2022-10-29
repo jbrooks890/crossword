@@ -4,6 +4,7 @@ import BuildNav from "../frags/BuildNav";
 import Frame from "../frags/Frame";
 import Grid from "../frags/Grid";
 import HintInput from "../frags/HintInput";
+import { BuildMasterProvider } from "../shared/BuildMasterProvider";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
 
 export default function Build() {
@@ -168,130 +169,56 @@ export default function Build() {
     });
   };
 
-  // -------------------------------------------------
-  // <><><><><><><><> CELL OPERATIONS <><><><><><><><>
-  // -------------------------------------------------
-
-  // =========== CONTROLS ===========
-  // const editControls = e => {
-  //   const {
-  //     type,
-  //     key,
-  //     altKey,
-  //     ctrlKey,
-  //     shiftKey,
-  //     currentTarget: input,
-  //     which,
-  //   } = e;
-  //   const { parentElement: cell } = input;
-  //   const { id } = cell;
-  //   const content = input.value;
-  //   const printable = which >= 65 && which <= 90;
-
-  //   switch (type) {
-  //     // ++++++ KEY UP ++++++
-  //     case "keyup":
-  //       printable && toNext();
-  //       break;
-  //     // ++++++ KEY DOWN ++++++
-  //     case "keydown":
-  //       // console.log(key);
-  //       switch (key) {
-  //         case " ":
-  //           e.preventDefault();
-  //           toggleAxis(prev => !prev);
-  //           break;
-  //         case "Backspace":
-  //           if (content.length < 1) {
-  //           }
-  //           break;
-  //         case "ArrowLeft":
-  //           e.preventDefault();
-  //           navTo(index, [-1, 0]);
-  //           break;
-  //         case "ArrowRight":
-  //           e.preventDefault();
-  //           navTo(index, [1, 0]);
-  //           break;
-  //         case "ArrowUp":
-  //           e.preventDefault();
-  //           navTo(index, [0, -1]);
-  //           break;
-  //         case "ArrowDown":
-  //           e.preventDefault();
-  //           navTo(index, [0, 1]);
-  //           break;
-  //       }
-  //       break;
-  //   }
-  // };
-
-  // =========== TO NEXT ===========
-  // const toNext = () => {
-  //   const [x, y] = index;
-  //   const next = axis ? getLetter(x + 1) + y : getLetter(x) + (y + 1);
-  //   document.querySelector(`.${next}.cell-input`).focus();
-  // };
-
-  // =========== TO CELL ===========
-  // const navTo = (index, diff) => {
-  //   //DIFF = [x,y]
-  //   const [x, y] = index;
-  //   const [a, b] = diff;
-  //   const destination = getLetter(x + a) + (y + b);
-  //   document.querySelector(`.${destination}.cell-input`).focus();
-  // };
-
-  // console.log(`%c${activeSection}`, "color: lime");
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
 
   return (
     <div id="build-page">
-      <Frame
-        puzzle={newPuzzle}
-        submit={newPuzzleSubmit}
-        setFormActive={setFormActive}
-      >
-        {(phase === 0 || formActive) && (
-          <NewPuzzleForm
-            puzzle={newPuzzle}
-            phase={phase}
-            updatePuzzle={e => updatePuzzle(e)}
-            start={e => newPuzzleStart(e)}
-            addTag={e => addTag(e)}
-            editTag={editTag}
-            deleteTag={deleteTag}
-            active={formActive}
-            setFormActive={setFormActive}
-          />
-        )}
-        {phase > 0 && (
-          <>
-            <BuildNav
-              sections={sectionTabs}
-              active={activeSection}
-              changeSection={setActiveSection}
+      <BuildMasterProvider state={[newPuzzle, setNewPuzzle]}>
+        <Frame
+          puzzle={newPuzzle}
+          submit={newPuzzleSubmit}
+          setFormActive={setFormActive}
+        >
+          {(phase === 0 || formActive) && (
+            <NewPuzzleForm
+              puzzle={newPuzzle}
+              phase={phase}
+              updatePuzzle={e => updatePuzzle(e)}
+              start={e => newPuzzleStart(e)}
+              addTag={e => addTag(e)}
+              editTag={editTag}
+              deleteTag={deleteTag}
+              active={formActive}
+              setFormActive={setFormActive}
             />
-            <div id="cw-grid-wrap">
-              <Grid
-                puzzle={newPuzzle}
-                active={activeSection === 0 || activeSection === 2}
-                preview={activeSection === 2}
-                updatePuzzleGroups={updatePuzzleGroups}
-                updateAnswerKey={updateAnswerKey}
+          )}
+          {phase > 0 && (
+            <>
+              <BuildNav
+                sections={sectionTabs}
+                active={activeSection}
+                changeSection={setActiveSection}
               />
-              {phase === 2 && (
+              <div id="cw-grid-wrap" className="flex">
+                <Grid
+                  puzzle={newPuzzle}
+                  active={activeSection === 0 || activeSection === 2}
+                  preview={activeSection === 2}
+                  updatePuzzleGroups={updatePuzzleGroups}
+                  updateAnswerKey={updateAnswerKey}
+                  setNewPuzzle={setNewPuzzle}
+                />
                 <HintInput
                   active={activeSection === 1}
                   groups={newPuzzle.answers}
                   update={updateHint}
                 />
-              )}
-            </div>
-          </>
-        )}
-      </Frame>
+              </div>
+            </>
+          )}
+        </Frame>
+      </BuildMasterProvider>
     </div>
   );
 }

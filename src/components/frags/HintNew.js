@@ -3,8 +3,6 @@ import { useState } from "react";
 export default function HintNew({ entry, update }) {
   const { name, sum, hint } = entry;
   const maxLength = 200;
-  // console.log(entry);
-  // console.log(`${name} hint: ${hint}`);
 
   return (
     <li

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "../../styles/Grid.css";
-import useMediaQuery from "../../hooks/useMediaQuery";
 import Cell from "./Cell";
 
 export default function Grid({
@@ -14,6 +13,7 @@ export default function Grid({
   updatePuzzleGroups,
   updateAnswerKey,
   preview,
+  setNewPuzzle,
   ...props
 }) {
   const { cols, rows, editorMode, answerKey, answers } = puzzle;
@@ -30,23 +30,9 @@ export default function Grid({
     activeRows: [],
   });
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
-  const $MOBILE = useMediaQuery();
-  // const [mini, toggleMini] = useState($MOBILE);
-  // const [activeGroup] = usePlayMaster();
-  // activeGroup && console.log({ activeGroup });
 
   useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
-
-  // ------------------------------------------------
-  // <><><><><><><><> TESTING (TODO) <><><><><><><><>
-  // ------------------------------------------------
-
-  // console.log(
-  //   `%c${"<>".repeat(8)}\\ GRID /${"<>".repeat(8)}`,
-  //   "color: coral; text-transform: uppercase"
-  // );
-
-  // console.log(grid);
+  // useEffect(() => console.log(grid), [grid.activeCells]);
 
   // =========== GET LETTER ===========
   function getLetter(n) {
@@ -57,18 +43,21 @@ export default function Grid({
     return String.fromCharCode(first + n).toUpperCase();
   }
 
-  // =========== FORMAT CELL DATA ===========
-  function formatCellData(id, col, x, y) {
-    // id === "A0" && console.log("%cNOT SUPPOSED TO BE RUNNING!!!", "color: red");
-    // console.log(`%cFORMAT CELL: ${id}`, "color: red");
-    // console.log(answers);
-    const groupNames = [...answers.keys()];
-    const groups = groupNames
+  const getGroups = id =>
+    [...answers.keys()]
       .filter(entry => answers.get(entry).group.includes(id))
       .map(entry => answers.get(entry));
+
+  // =========== FORMAT CELL DATA ===========
+  function formatCellData(id, col, x, y) {
+    // const groupNames = [...answers.keys()];
+    // const groups = groupNames
+    //   .filter(entry => answers.get(entry).group.includes(id))
+    //   .map(entry => answers.get(entry));
+    const groups = getGroups(id);
     let display = [];
 
-    groups.size && console.log({ id }, "GROUPS", groups); // TODO
+    // groups.size && console.log({ id }, "GROUPS", groups); // TODO
 
     groups.forEach(entry => {
       let { group, dir } = entry;
@@ -137,44 +126,24 @@ export default function Grid({
   const renderGrid = () => {
     return grid.cells.map((cell, count) => {
       const { id, col, x, y } = cell;
+      const groups = getGroups(id);
+      // groups.length && console.log({ id }, groups);
       return (
         <Cell
           key={count}
           cell_name={id}
           index={[x, y]}
           {...((!editing || phase >= 2) && formatCellData(id, col, x, y))}
+          // {...(groups.length > 0 && { groups })}
+          // {...(groups.length > 0 && formatCellData(groups, id, col, x, y))}
           controls={e => controls(e)}
           editorMode={editorMode}
-          hoverGroup={hoverGroup} // BOTH
           focusCell={focusCell} // PLAY
           axis={axis} // EDITOR
           toggleAxis={toggleAxis} // EDITOR
-          operations={operations}
           preview={preview}
-          updateGrid={e => updateGrid(e, id, col, y)} // EDITOR
-          updateAnswerKey={e => editing && updateAnswerKey(e, id)}
-          captureAnswer={e => e.target.value && captureAnswer(e, id, col, y)}
-          // captureAnswers={captureAnswers}
         />
       );
-    });
-  };
-
-  // =========== UPDATE GRID ===========
-
-  const updateGrid = (e, id, col, row) => {
-    const { value } = e.target;
-    setGrid(prev => {
-      const { content } = prev;
-      if (value) {
-        return {
-          ...prev,
-          content: content.set(id, value),
-        };
-      } else {
-        content.delete(id);
-        return { ...prev };
-      }
     });
   };
 
@@ -222,6 +191,55 @@ export default function Grid({
 
     return groups;
   };
+
+  // =========== GROUP ANSWERS ===========
+  const groupAnswers = () => {
+    const activeTracks = [...grid.activeCols, ...grid.activeRows];
+    const { cols, rows, activeCols, activeRows, activeCells } = grid;
+
+    const groups = [];
+
+    const search = (track, active) => {
+      let group = [];
+      let dir = track === rows ? "across" : "down";
+
+      // console.log(active, track);
+
+      active.forEach(set => {
+        for (let i = 0; i <= track[set].length; i++) {
+          const cell = track[set][i];
+          // console.log({ cell });
+          if (answerKey[cell]) {
+            group.push(cell);
+          } else {
+            if (group.length > 1) {
+              const name = `${dir}-${group[0]}`;
+              groups.push([
+                name,
+                {
+                  name,
+                  dir,
+                  group,
+                  sum: group.map(cell => answerKey[cell]).join(""),
+                  hint: "",
+                },
+              ]);
+            }
+            group = [];
+          }
+        }
+      });
+    };
+
+    search(cols, activeCols);
+    search(rows, activeRows);
+    setNewPuzzle(prev => ({
+      ...prev,
+      answers: new Map(groups),
+    }));
+  };
+
+  useEffect(() => editing && groupAnswers(), [answerKey]);
 
   // =========== CAPTURE ANSWER ===========
   function captureAnswer(e, id, _col, _row) {

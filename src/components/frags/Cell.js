@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { getLetter } from "../../services/customHooks";
+import { useBuildMaster } from "../shared/BuildMasterProvider";
 import { usePlayMaster } from "../shared/PlayMasterProvider";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
@@ -14,16 +15,23 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     axis,
     toggleAxis,
     preview,
-    captureAnswer,
+    // captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
   const $PLAY = usePlayMaster();
   const [activeGroup, _, previewGroup, setPreviewGroup, game, setGame] = $PLAY
     ? $PLAY
     : [];
+  const $BUILD = useBuildMaster();
+  const [newPuzzle, setNewPuzzle] = $BUILD ? $BUILD : [];
+
+  // newPuzzle && id === "A0" && console.log(newPuzzle);
+
   const cellInput = useRef();
 
   // useEffect(() => id === "J3" && console.log(groups), []);
+
+  // groups && console.log(groups);
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -98,6 +106,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   // =========== FORMAT CELL ===========
 
   const formatCell = () => {
+    // console.log(groups);
     const groupNames = groups.map(group => group.name);
     return {
       cell: {
@@ -176,6 +185,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         "cell",
         axis ? "edit-across" : "edit-down",
         editing && !preview ? "build" : formatCell().cell.classes,
+        // editing && "build",
+        // groups && groups.length > 0 && formatCell().cell.classes,
       ])}
       data-coord-x={index[0]}
       data-coord-y={index[1]}
@@ -217,7 +228,14 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         onFocus={e => e.currentTarget.select()}
         onChange={
           editing && !preview
-            ? captureAnswer
+            ? e =>
+                setNewPuzzle(prev => ({
+                  ...prev,
+                  answerKey: {
+                    ...prev.answerKey,
+                    [id]: e.target.value.toUpperCase(),
+                  },
+                }))
             : game
             ? e => updateUserInput(id, e.target.value)
             : undefined
@@ -229,7 +247,13 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         onKeyDown={e => (editing ? editControls(e) : controls(e))}
         onKeyUp={e => (editing ? editControls(e) : controls(e))}
         placeholder={editing ? id : undefined}
-        value={game && game.input.has(id) ? game.input.get(id) : ""}
+        value={
+          game && game.input.has(id)
+            ? game.input.get(id)
+            : editing
+            ? newPuzzle.answerKey[id]
+            : ""
+        }
       />
     </div>
   );

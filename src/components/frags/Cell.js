@@ -28,8 +28,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
 
   const cellInput = useRef();
 
-  // useEffect(() => console.log({ id, member }, groups), []);
-
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
     const {
@@ -109,7 +107,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       cell: {
         classes: formatClassList(
           [
-            answer && "show",
+            member && "show",
             groupNames.join(" "),
             groups.map(group => group.dir).join(" "),
             isJunction && "junction",
@@ -184,6 +182,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         // editing && !preview ? "build" : formatCell().cell.classes,
         editing && "build",
         crop && "crop",
+        // member && "show",
         member && formatCell().cell.classes,
         // groups && groups.length && groups.map(group => group.name).join(" "),
       ])}

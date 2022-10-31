@@ -113,7 +113,7 @@ h1.puzzle-title.editable:hover::after {
 }
 
 .cell.show,
-.cell.build:not(.preview .cell.crop) {
+.cell.build:not(.preview .cell) {
   display: block;
   visibility: visible;
 }

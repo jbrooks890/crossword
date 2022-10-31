@@ -84,6 +84,7 @@ export default function Grid({
       groups,
       display: display.length && display,
       crop: !grid.activeCols.includes(col) || !grid.activeRows.includes(y),
+      member: grid.activeCells.includes(id),
     };
   }
 

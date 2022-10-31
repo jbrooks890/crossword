@@ -10,6 +10,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     groups,
     display,
     crop,
+    member,
     controls,
     focusCell,
     axis,

@@ -1,7 +1,7 @@
 #hint-input {
   /* display: none; */
   display: block;
-  width: 100%;
+  width: calc(var(--grid)*8);
   max-width: 560px;
   margin-left: 1rem;
   /* opacity: 0; */

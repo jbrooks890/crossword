@@ -83,7 +83,7 @@ export default function Grid({
       answer: answerKey[id] ? answerKey[id] : null,
       groups,
       display: display.length && display,
-      crop: !grid.activeCols.includes(col) || !grid.activeRows.includes(y),
+      // crop: !grid.activeCols.includes(col) || !grid.activeRows.includes(y),
       member: grid.activeCells.includes(id),
     };
   }
@@ -183,9 +183,9 @@ export default function Grid({
           cell_name={id}
           index={[x, y]}
           // {...((!editing || phase >= 2) && formatCellData(id, col, x, y))}
-          {...((editing ? groups.length > 0 : true) &&
-            formatCellData(id, col, x, y))}
+          {...((!editing || preview) && formatCellData(id, col, x, y))}
           {...(groups.length && { groups })}
+          crop={!grid.activeCols.includes(col) || !grid.activeRows.includes(y)}
           controls={e => controls(e)}
           editorMode={editorMode}
           focusCell={focusCell} // PLAY

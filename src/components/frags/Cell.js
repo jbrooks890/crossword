@@ -28,6 +28,8 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
 
   const cellInput = useRef();
 
+  // useEffect(() => console.log({ id, member }, groups), []);
+
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
     const {

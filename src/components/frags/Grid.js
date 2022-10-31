@@ -88,64 +88,6 @@ export default function Grid({
     };
   }
 
-  // =========== CREATE GRID ===========
-  function createGrid() {
-    console.log("%cCREATE GRID", "color:red");
-    const $answerKey = Object.keys(answerKey);
-    const totalCells = cols * rows;
-
-    let $grid = {
-      cells: [],
-      cols: {},
-      rows: {},
-      activeCells: [], // [A0, A1, A2...]
-      activeCols: [], // [A, B, C, D...]
-      activeRows: [], // [0,1,2,3...]
-    };
-
-    for (let count = 0; count < totalCells; count++) {
-      let x = count % cols;
-      let y = Math.floor(count / cols);
-      let col = getLetter(x);
-      let id = col + y;
-
-      $grid.cols[col] ? $grid.cols[col].push(id) : ($grid.cols[col] = [id]);
-      $grid.rows[y] ? $grid.rows[y].push(id) : ($grid.rows[y] = [id]);
-      $grid.cells.push({ id, col, x, y });
-
-      if ($answerKey.includes(id)) {
-        !$grid.activeCells.includes(id) && $grid.activeCells.push(id);
-        !$grid.activeCols.includes(col) && $grid.activeCols.push(col);
-        !$grid.activeRows.includes(y) && $grid.activeRows.push(y);
-      }
-    }
-
-    return $grid;
-  }
-
-  // =========== RENDER GRID ===========
-  const renderGrid = () => {
-    return grid.cells.map((cell, count) => {
-      const { id, col, x, y } = cell;
-      const groups = getGroups(id);
-      return (
-        <Cell
-          key={count}
-          cell_name={id}
-          index={[x, y]}
-          {...((!editing || phase >= 2) && formatCellData(id, col, x, y))}
-          {...(groups.length && { groups })}
-          controls={e => controls(e)}
-          editorMode={editorMode}
-          focusCell={focusCell} // PLAY
-          axis={axis} // EDITOR
-          toggleAxis={toggleAxis} // EDITOR
-          preview={preview}
-        />
-      );
-    });
-  };
-
   // =========== GROUP ANSWERS ===========
   const groupAnswers = () => {
     const activeTracks = [...grid.activeCols, ...grid.activeRows];
@@ -195,32 +137,65 @@ export default function Grid({
 
   useEffect(() => editing && groupAnswers(), [answerKey]);
 
-  // =========== CAPTURE ANSWER ===========
-  // function captureAnswer(e, id, _col, _row) {
-  //   // console.log(`%cCAPTURE ANSWERS`, "color: orange");
-  //   // console.log(`%cTEST---`, "color: red");
-  //   const { value } = e.target;
-  //   const { cols, rows, activeCols, activeRows } = grid;
-  //   const { answerKey } = puzzle;
-  //   const $answer = { [id]: value.toUpperCase() };
-  //   const $answerKey = { ...answerKey, ...$answer };
-  //   const $activeCols = [...activeCols, _col];
-  //   const $activeRows = [...activeRows, _row];
+  // =========== CREATE GRID ===========
+  function createGrid() {
+    console.log("%cCREATE GRID", "color:red");
+    const $answerKey = Object.keys(answerKey);
+    const totalCells = cols * rows;
 
-  //   const $cols = Object.keys(cols)
-  //     .filter(col => $activeCols.includes(col))
-  //     .map(id => cols[id]);
-  //   const $rows = Object.keys(rows)
-  //     .filter(row => $activeRows.includes(Number(row)))
-  //     .map(id => rows[id]);
+    let $grid = {
+      cells: [],
+      cols: {},
+      rows: {},
+      activeCells: [], // [A0, A1, A2...]
+      activeCols: [], // [A, B, C, D...]
+      activeRows: [], // [0,1,2,3...]
+    };
 
-  //   // console.log($cols, $rows);
+    for (let count = 0; count < totalCells; count++) {
+      let x = count % cols;
+      let y = Math.floor(count / cols);
+      let col = getLetter(x);
+      let id = col + y;
 
-  //   updatePuzzleGroups($answer, [
-  //     ...findGroups($rows, true, $answerKey),
-  //     ...findGroups($cols, false, $answerKey),
-  //   ]);
-  // }
+      $grid.cols[col] ? $grid.cols[col].push(id) : ($grid.cols[col] = [id]);
+      $grid.rows[y] ? $grid.rows[y].push(id) : ($grid.rows[y] = [id]);
+      $grid.cells.push({ id, col, x, y });
+
+      if ($answerKey.includes(id)) {
+        !$grid.activeCells.includes(id) && $grid.activeCells.push(id);
+        !$grid.activeCols.includes(col) && $grid.activeCols.push(col);
+        !$grid.activeRows.includes(y) && $grid.activeRows.push(y);
+      }
+    }
+
+    return $grid;
+  }
+
+  // =========== RENDER GRID ===========
+  const renderGrid = () => {
+    return grid.cells.map((cell, count) => {
+      const { id, col, x, y } = cell;
+      const groups = getGroups(id);
+      return (
+        <Cell
+          key={count}
+          cell_name={id}
+          index={[x, y]}
+          // {...((!editing || phase >= 2) && formatCellData(id, col, x, y))}
+          {...((editing ? groups.length > 0 : true) &&
+            formatCellData(id, col, x, y))}
+          {...(groups.length && { groups })}
+          controls={e => controls(e)}
+          editorMode={editorMode}
+          focusCell={focusCell} // PLAY
+          axis={axis} // EDITOR
+          toggleAxis={toggleAxis} // EDITOR
+          preview={preview}
+        />
+      );
+    });
+  };
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::

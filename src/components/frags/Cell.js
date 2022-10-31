@@ -26,13 +26,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   const $BUILD = useBuildMaster();
   const [newPuzzle, setNewPuzzle] = $BUILD ? $BUILD : [];
 
-  // newPuzzle && id === "A0" && console.log(newPuzzle);
-
   const cellInput = useRef();
-
-  // useEffect(() => id === "J3" && console.log(groups), []);
-
-  // groups && groups.length && console.log(groups);
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -118,7 +112,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             groups.map(group => group.dir).join(" "),
             isJunction && "junction",
             display && display.join(" "),
-            crop && "crop",
+            // crop && "crop",
             activeGroup && groupNames.includes(activeGroup) && "active",
             game && game.input.get(id) && "user-entry",
             game && game.assists.includes(id) && "assisted",
@@ -185,9 +179,11 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       className={formatClassList([
         "cell",
         axis ? "edit-across" : "edit-down",
-        editing && !preview ? "build" : formatCell().cell.classes,
-        // editing && "build",
-        // groups && groups.length > 0 && formatCell().cell.classes,
+        // editing && !preview ? "build" : formatCell().cell.classes,
+        editing && "build",
+        crop && "crop",
+        member && formatCell().cell.classes,
+        // groups && groups.length && groups.map(group => group.name).join(" "),
       ])}
       data-coord-x={index[0]}
       data-coord-y={index[1]}

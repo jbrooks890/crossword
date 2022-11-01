@@ -9,7 +9,7 @@ import NewPuzzleForm from "../shared/NewPuzzleForm";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
-    name: "Boogie",
+    name: "",
     type: "Crossword",
     description: "",
     cols: 10,
@@ -19,6 +19,13 @@ export default function Build() {
     answerKey: {},
     answers: [],
     tags: [],
+  });
+  const [puzzleValidation, setPuzzleValidation] = useState({
+    name: "",
+    description: "",
+    answerKey: "",
+    answers: new Map(),
+    attempted: false,
   });
   const sectionTabs = ["Grid", "Hints", "Preview"];
   const [activeSection, setActiveSection] = useState(0);
@@ -31,6 +38,11 @@ export default function Build() {
     [newPuzzle.answers.group, activeSection, newPuzzle.answerKey]
   );
   // console.log(newPuzzle);
+
+  useEffect(
+    () => puzzleValidation.attempted && console.log(puzzleValidation),
+    [puzzleValidation]
+  );
 
   // =========== UPDATE PUZZLE ===========
 
@@ -122,18 +134,6 @@ export default function Build() {
     }));
   };
 
-  // =========== NEW PUZZLE SUBMIT ===========
-
-  const newPuzzleSubmit = e => {
-    e.preventDefault();
-    console.log(`%cSUBMIT PUZZLE`, "color: cyan");
-    console.log(e);
-    // setNewPuzzle(prev => ({
-    //   ...prev,
-    //   editorMode: { ...prev.editorMode, phase: 1 },
-    // }));
-  };
-
   // =========== ADD TAG ===========
 
   const addTag = $tag => {
@@ -169,6 +169,95 @@ export default function Build() {
     });
   };
 
+  // =========== VALIDATE NEW PUZZLE!! ===========
+
+  function validatePuzzle() {
+    const { name, description, answerKey, answers } = newPuzzle;
+    let errors = {};
+
+    // NAME
+    if (!name || name.length < 5)
+      errors.name = "Name must be at least 5 characters";
+
+    // DESCRIPTION
+    if (!description || description.length < 10)
+      errors.description = "Description must be at least 10 characters";
+
+    // ANSWER KEY
+    if (Object.keys(answerKey).length === 0)
+      errors.answerKey = "Puzzle has no content.";
+
+    // ANSWERS
+    let answerErrors = [];
+    answers.forEach((content, groupName) => {
+      const { name, dir, group, sum, hint } = content;
+      let groupErrors = {};
+
+      Object.keys(content).forEach(type => {
+        switch (type) {
+          case "name":
+            if (!name) groupErrors["name"] = `${groupName} has no group name.`;
+            break;
+          case "dir":
+            if (!dir) {
+              groupErrors["dir"] = `${groupName} has no directional axis.`;
+            } else if (!(dir === "across" || dir === "down")) {
+              groupErrors[
+                "dir"
+              ] = `${groupName} has invalid directional axis: ${dir}`;
+            }
+            break;
+          case "group":
+            if (!group.length) {
+              groupErrors["group"] = `${groupName} has no content.`;
+            }
+            break;
+          case "sum":
+            if (!sum) groupErrors.sum = `${groupName} has no answer sum.`;
+            break;
+          case "hint":
+            // console.log("HINT");
+            if (!hint) {
+              groupErrors["hint"] = `Hint required.`;
+            } else if (hint.length < 10) {
+              groupErrors["hint"] = `Hint is less than 10 characters.`;
+            }
+            break;
+        }
+      });
+
+      if (Object.keys(groupErrors).length > 0) {
+        // console.log({ groupName, groupErrors });
+        answerErrors.push([groupName, groupErrors]);
+      }
+    });
+
+    if (answerErrors.length) {
+      console.log(answerErrors);
+      errors.answers = new Map(answerErrors);
+    }
+
+    if (Object.keys(errors).length) {
+      // console.log("errors:", errors);
+      setPuzzleValidation({ ...errors, attempted: true });
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  // =========== NEW PUZZLE SUBMIT ===========
+
+  const newPuzzleSubmit = e => {
+    e.preventDefault();
+
+    validatePuzzle()
+      ? console.log(`%cSUBMIT PUZZLE`, "color: cyan")
+      : console.log("Puzzle has errors!");
+
+    // console.log(newPuzzle);
+  };
+
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
 
@@ -191,6 +280,8 @@ export default function Build() {
               deleteTag={deleteTag}
               active={formActive}
               setFormActive={setFormActive}
+              validation={puzzleValidation}
+              validate={validatePuzzle}
             />
           )}
           {phase > 0 && (
@@ -200,20 +291,24 @@ export default function Build() {
                 active={activeSection}
                 changeSection={setActiveSection}
               />
-              <div id="cw-grid-wrap" className="flex">
-                <Grid
-                  puzzle={newPuzzle}
-                  active={activeSection === 0 || activeSection === 2}
-                  preview={activeSection === 2}
-                  updatePuzzleGroups={updatePuzzleGroups}
-                  updateAnswerKey={updateAnswerKey}
-                  setNewPuzzle={setNewPuzzle}
-                />
-                <HintInput
-                  active={activeSection === 1}
-                  groups={newPuzzle.answers}
-                  update={updateHint}
-                />
+              <div id="cw-grid-wrap" className="flex center">
+                <div id="puzzle-window" className="flex">
+                  <Grid
+                    puzzle={newPuzzle}
+                    active={activeSection === 0 || activeSection === 2}
+                    preview={activeSection === 2}
+                    updatePuzzleGroups={updatePuzzleGroups}
+                    updateAnswerKey={updateAnswerKey}
+                    setNewPuzzle={setNewPuzzle}
+                  />
+                  <HintInput
+                    active={activeSection === 1}
+                    groups={newPuzzle.answers}
+                    update={updateHint}
+                    validation={puzzleValidation}
+                    validate={validatePuzzle}
+                  />
+                </div>
               </div>
             </>
           )}

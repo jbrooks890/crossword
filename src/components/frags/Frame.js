@@ -1,17 +1,19 @@
 import CommunityCache from "./CommunityCache";
 
 export default function Frame({ children, puzzle, submit, setFormActive }) {
-  const { active: editing, phase } = puzzle.editorMode;
+  const { name, editorMode } = puzzle;
+  const { active: editing, phase } = editorMode;
+  // console.log(Boolean(name));
 
   return (
     <form id="crossword" onSubmit={submit}>
-      {(!editing || phase > 0) && puzzle.name && (
+      {(!editing || phase > 0) && (
         <>
           <h1
             className={`puzzle-title ${editing ? "editable" : ""}`}
-            onClick={() => setFormActive(true)}
+            onClick={() => (editing ? setFormActive(true) : null)}
           >
-            {puzzle.name}
+            {name ? name : editing ? "New Puzzle" : ""}
           </h1>
           {/* {!editing && <CommunityCache />} */}
         </>

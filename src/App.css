@@ -151,6 +151,12 @@ header, footer {
   display: grid;
 }
 
+.violation {
+  color: red;
+  font-size: .75rem;
+  text-align: inherit;
+}
+
 /* --------- MAIN --------- */
 
 main {

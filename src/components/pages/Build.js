@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import apiUrl from "../../config";
 import "../../styles/Build.css";
 import BuildNav from "../frags/BuildNav";
 import Frame from "../frags/Frame";
@@ -6,6 +7,7 @@ import Grid from "../frags/Grid";
 import HintInput from "../frags/HintInput";
 import { BuildMasterProvider } from "../shared/BuildMasterProvider";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
+import axios from "axios";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
@@ -218,9 +220,9 @@ export default function Build() {
           case "hint":
             // console.log("HINT");
             if (!hint) {
-              groupErrors["hint"] = `Hint required.`;
+              groupErrors["hint"] = `hint required.`;
             } else if (hint.length < 10) {
-              groupErrors["hint"] = `Hint is less than 10 characters.`;
+              groupErrors["hint"] = `hint must be at least 10 characters.`;
             }
             break;
         }
@@ -237,13 +239,9 @@ export default function Build() {
       errors.answers = new Map(answerErrors);
     }
 
-    if (Object.keys(errors).length) {
-      // console.log("errors:", errors);
-      setPuzzleValidation({ ...errors, attempted: true });
-      return false;
-    } else {
-      return true;
-    }
+    setPuzzleValidation({ ...errors, attempted: true });
+
+    return !Object.keys(errors).length;
   }
 
   // =========== NEW PUZZLE SUBMIT ===========
@@ -252,7 +250,17 @@ export default function Build() {
     e.preventDefault();
 
     validatePuzzle()
-      ? console.log(`%cSUBMIT PUZZLE`, "color: cyan")
+      ? axios({
+          url: `${apiUrl}/puzzles`,
+          method: "POST",
+          data: {
+            ...newPuzzle,
+            answers: [...newPuzzle.answers.values()],
+            editorMode: { active: false, phase: 0 },
+            likes: 0,
+            comments: [],
+          },
+        })
       : console.log("Puzzle has errors!");
 
     // console.log(newPuzzle);

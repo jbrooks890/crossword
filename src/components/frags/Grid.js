@@ -35,8 +35,9 @@ export default function Grid({
   const [dropPreview, setDropPreview] = useState([]);
 
   useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
+
   const $DnD = useDragDrop();
-  const { holding } = $DnD ? $DnD : {};
+  const { holding, setHolding } = $DnD ? $DnD : {};
 
   // =========== GET GROUPS ===========
 
@@ -166,6 +167,8 @@ export default function Grid({
 
     holding.callback();
 
+    setHolding({});
+    setDropPreview([]);
     setNewPuzzle(prev => ({
       ...prev,
       answerKey: {

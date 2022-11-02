@@ -143,6 +143,14 @@ h1.puzzle-title.editable:hover::after {
   border-right: var(--border);
 }
 
+.cell.drop-preview .cell-input {
+  border-color: var(--pop);
+}
+
+.cell.drop-preview .cell-input::placeholder{
+  color: var(--pop);
+}
+
 .cell-input {
   cursor: pointer;
   position: relative;
@@ -310,6 +318,16 @@ form#crossword .across.first .across-box {
 form#crossword .across.last .across-box {
   border-right: 3px solid var(--mid);
   border-radius: 0 8px 8px 0;
+}
+
+/* ================================= *\
+|| HOVER
+\* ================================= */
+
+@media (hover:hover){
+  .cell.build:hover .cell-input {
+    border-color: var(--mid);
+  }
 }
 
 /* ================================= *\

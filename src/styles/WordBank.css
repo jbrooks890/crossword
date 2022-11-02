@@ -1,0 +1,76 @@
+.word-bank {
+  text-align: left;
+}
+
+.word-bank-new h5{
+  margin: 0;
+  margin-bottom: 0.1em;
+  color: var(--mid);
+  font-family: var(--keyFont);
+  font-weight: normal;
+  line-height: 1em;
+}
+
+.word-bank-new input {
+  cursor: pointer;
+  padding: .5em;
+  background-color: transparent;
+  color: var(--mid);
+  caret-color: var(--faint);
+  font-size: 1rem;
+  font-family: var(--keyFont);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 2px solid var(--faint);
+  border-radius: 5px;
+}
+
+.word-bank-list {
+  padding-left: 0;
+  padding-inline: .5rem;
+  list-style-type: none;
+}
+
+.word-bank-list li {
+  cursor: move;
+  margin-bottom: .5rem;
+  padding: .5em 1em;
+  background-color: var(--mid);
+  color: var(--lite);
+  font-family: var(--keyFont);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  border-radius: 5px;
+}
+
+.word-bank-list li.placed, 
+.word-bank-list li.floating {
+  cursor: pointer;
+  background-color: var(--faint);
+}
+
+/* .word-bank-list li.floating span {
+  --size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--mid);
+  letter-spacing: 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+.word-bank-list li.floating span:not(:last-of-type) {
+  margin-right: 4px;
+} */
+
+/* ================================= *\
+|| HOVER
+\* ================================= */
+
+@media (hover:hover) {
+
+}

@@ -8,6 +8,9 @@ import HintInput from "../frags/HintInput";
 import { BuildMasterProvider } from "../shared/BuildMasterProvider";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
 import axios from "axios";
+import WordBank from "../frags/WordBank";
+import BuildWindow from "../frags/BuildWindow";
+import DragDropProvider from "../shared/DragDropProvider";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
@@ -301,21 +304,27 @@ export default function Build() {
               />
               <div id="cw-grid-wrap" className="flex center">
                 <div id="puzzle-window" className="flex">
-                  <Grid
-                    puzzle={newPuzzle}
-                    active={activeSection === 0 || activeSection === 2}
-                    preview={activeSection === 2}
-                    updatePuzzleGroups={updatePuzzleGroups}
-                    updateAnswerKey={updateAnswerKey}
-                    setNewPuzzle={setNewPuzzle}
-                  />
-                  <HintInput
-                    active={activeSection === 1}
-                    groups={newPuzzle.answers}
-                    update={updateHint}
-                    validation={puzzleValidation}
-                    validate={validatePuzzle}
-                  />
+                  <DragDropProvider>
+                    <Grid
+                      puzzle={newPuzzle}
+                      active={activeSection === 0 || activeSection === 2}
+                      preview={activeSection === 2}
+                      updatePuzzleGroups={updatePuzzleGroups}
+                      updateAnswerKey={updateAnswerKey}
+                      setNewPuzzle={setNewPuzzle}
+                    />
+                    <BuildWindow>
+                      <WordBank section="Words" />
+                      <HintInput
+                        active={activeSection === 1}
+                        groups={newPuzzle.answers}
+                        update={updateHint}
+                        validation={puzzleValidation}
+                        validate={validatePuzzle}
+                        section="Hints"
+                      />
+                    </BuildWindow>
+                  </DragDropProvider>
                 </div>
               </div>
             </>

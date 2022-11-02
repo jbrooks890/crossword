@@ -138,6 +138,10 @@ header, footer {
   display: flex;
 }
 
+.flex.start {
+  align-items: flex-start;
+}
+
 .flex.center {
   justify-content: center;
   align-items: center;

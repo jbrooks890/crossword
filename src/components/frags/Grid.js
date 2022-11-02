@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../styles/Grid.css";
+import { debounce, getLetter } from "../../utility/helperFuncs";
+import { useDragDrop } from "../shared/DragDropProvider";
 import Cell from "./Cell";
 
 export default function Grid({
@@ -30,18 +32,13 @@ export default function Grid({
     activeRows: [],
   });
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
+  const [dropPreview, setDropPreview] = useState([]);
 
   useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
-  // useEffect(() => console.log(grid), [grid.activeCells]);
+  const $DnD = useDragDrop();
+  const { holding } = $DnD ? $DnD : {};
 
-  // =========== GET LETTER ===========
-  function getLetter(n) {
-    const first = "a".charCodeAt(0);
-    const last = "z".charCodeAt(0);
-    const length = last - first + 1; // letter range
-
-    return String.fromCharCode(first + n).toUpperCase();
-  }
+  // =========== GET GROUPS ===========
 
   const getGroups = id =>
     [...answers.keys()]
@@ -50,14 +47,8 @@ export default function Grid({
 
   // =========== FORMAT CELL DATA ===========
   function formatCellData(id, col, x, y) {
-    // const groupNames = [...answers.keys()];
-    // const groups = groupNames
-    //   .filter(entry => answers.get(entry).group.includes(id))
-    //   .map(entry => answers.get(entry));
     const groups = getGroups(id);
     let display = [];
-
-    // groups.size && console.log({ id }, "GROUPS", groups); // TODO
 
     groups.forEach(entry => {
       let { group, dir } = entry;
@@ -90,8 +81,7 @@ export default function Grid({
 
   // =========== GROUP ANSWERS ===========
   const groupAnswers = () => {
-    const activeTracks = [...grid.activeCols, ...grid.activeRows];
-    const { cols, rows, activeCols, activeRows, activeCells } = grid;
+    const { cols, rows, activeCols, activeRows } = grid;
 
     const groups = [];
 
@@ -136,6 +126,62 @@ export default function Grid({
   };
 
   useEffect(() => editing && groupAnswers(), [answerKey]);
+
+  // =========== GET DROP TARGETS ===========
+  const getDropTargets = (x, y, across, length) => {
+    let targets = [];
+    let base = across ? x : y;
+    let range = base + length;
+
+    for (across ? x : y; across ? x < range : y < range; across ? x++ : y++) {
+      targets.push(getLetter(x) + y);
+    }
+    // console.log("targets:", targets);
+    setDropPreview(targets);
+  };
+
+  // useEffect(() => console.log(getDropTargets(0, 0, false, 5)), []);
+
+  // =========== HANDLE DRAG PREVIEW ===========
+  const handleDragPreview = (e, index) => {
+    // console.log(`%cHANDLE DRAG PREVIEW!`, "color: lime");
+    // console.log("holding:", holding.entry);
+    const { cols, rows } = puzzle;
+    const { entry, orientation } = holding;
+    const [x, y] = index;
+    const dir = orientation === "across" ? x : y;
+    const axis = orientation === "across" ? rows : cols;
+    const range = dir + entry.length;
+
+    range <= axis &&
+      getDropTargets(x, y, orientation === "across", entry.length);
+  };
+
+  // =========== HANDLE DROP ===========
+  const handleDrop = e => {
+    e.preventDefault();
+    const newEntires = Object.fromEntries(
+      dropPreview.map(id => [id, holding.entry.charAt(dropPreview.indexOf(id))])
+    );
+
+    holding.callback();
+
+    setNewPuzzle(prev => ({
+      ...prev,
+      answerKey: {
+        ...prev.answerKey,
+        ...newEntires,
+      },
+    }));
+    // const dropped = e.dataTransfer.getData("word-bank-entry"); //TODO
+    // console.log(dropped);
+  };
+
+  const wordDrop = {
+    dragEnter: handleDragPreview,
+    dragLeave: () => setDropPreview([]),
+    drop: e => handleDrop(e),
+  };
 
   // =========== CREATE GRID ===========
   function createGrid() {
@@ -186,6 +232,12 @@ export default function Grid({
           {...((!editing || preview) && formatCellData(id, col, x, y))}
           {...(groups.length && { groups })}
           crop={!grid.activeCols.includes(col) || !grid.activeRows.includes(y)}
+          dropPreview={
+            editing && dropPreview.includes(id) && holding.entry
+              ? holding.entry.charAt(dropPreview.indexOf(id))
+              : null
+          }
+          {...(editing && wordDrop)}
           controls={e => controls(e)}
           editorMode={editorMode}
           focusCell={focusCell} // PLAY

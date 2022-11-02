@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { getLetter } from "../../services/customHooks";
+import { debounce, getLetter } from "../../utility/helperFuncs";
 import { useBuildMaster } from "../shared/BuildMasterProvider";
 import { usePlayMaster } from "../shared/PlayMasterProvider";
 
@@ -10,13 +10,16 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     groups,
     display,
     crop,
+    dropPreview,
+    dragEnter,
+    dragLeave,
+    drop,
     member,
     controls,
     focusCell,
     axis,
     toggleAxis,
     preview,
-    // captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
   const $PLAY = usePlayMaster();
@@ -171,6 +174,43 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       input: new Map([...prev.input, [id, value]]),
     }));
 
+  // // =========== GET DROP TARGETS ===========
+  // const getDropTargets = (x, y, dir, length) => {
+  //   let count = dir === "across" ? x : y;
+  //   let targets = [];
+  //   console.log({ count });
+  //   // while (count < count + length) {
+  //   //   // console.log({ count });
+  //   //   targets.push(getLetter(x) + y);
+  //   //   count++;
+  //   // }
+  //   return targets;
+  // };
+
+  // // =========== HANDLE DRAG PREVIEW ===========
+  // const handleDragPreview = debounce(e => {
+  //   const { cols, rows } = newPuzzle;
+  //   const { entry, orientation } = holding;
+  //   const [x, y] = index;
+  //   const dir = orientation === "across" ? x : y;
+  //   const axis = orientation === "across" ? rows : cols;
+
+  //   // console.log({ x, y }, dir + entry.length);
+
+  //   if (dir + entry.length < axis) {
+  //     // FILL ALL THE DROP TARGETS
+  //     const targets = getDropTargets(x, y, orientation, entry.length);
+  //     // console.log(targets);
+  //   }
+  // });
+
+  // // =========== HANDLE DROP ===========
+  // const handleDrop = e => {
+  //   e.preventDefault();
+  //   const dropped = e.dataTransfer.getData("word-bank-entry");
+  //   console.log(dropped);
+  // };
+
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
   return (
@@ -183,6 +223,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         editing && "build",
         crop && "crop",
         // member && "show",
+        dropPreview && "drop-preview",
         member && formatCell().cell.classes,
         // groups && groups.length && groups.map(group => group.name).join(" "),
       ])}
@@ -244,7 +285,11 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         }
         onKeyDown={e => (editing ? editControls(e) : controls(e))}
         onKeyUp={e => (editing ? editControls(e) : controls(e))}
-        placeholder={editing ? id : undefined}
+        onDragOver={e => editing && !preview && e.preventDefault()}
+        onDragEnter={e => (dragEnter ? dragEnter(e, index) : null)}
+        onDragLeave={dragLeave ? dragLeave : null}
+        onDrop={drop ? drop : null}
+        placeholder={dropPreview ? dropPreview : editing ? id : undefined}
         value={
           game && game.input.has(id)
             ? game.input.get(id)

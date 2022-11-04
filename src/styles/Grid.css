@@ -197,6 +197,12 @@ h1.puzzle-title.editable:hover::after {
 
 .cell.assisted .cell-input {color: var(--pop-alt)}
 
+.cell.build.member:not(.preview .cell) .cell-input {
+  background-color: var(--mid);
+  color: var(--lite);
+  border-color: transparent;
+}
+
 .axis-box {
   content: '';
   position: absolute;

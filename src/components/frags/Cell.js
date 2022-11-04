@@ -115,7 +115,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             groups.map(group => group.dir).join(" "),
             isJunction && "junction",
             display && display.join(" "),
-            // crop && "crop",
             activeGroup && groupNames.includes(activeGroup) && "active",
             game && game.input.get(id) && "user-entry",
             game && game.assists.includes(id) && "assisted",
@@ -174,43 +173,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       input: new Map([...prev.input, [id, value]]),
     }));
 
-  // // =========== GET DROP TARGETS ===========
-  // const getDropTargets = (x, y, dir, length) => {
-  //   let count = dir === "across" ? x : y;
-  //   let targets = [];
-  //   console.log({ count });
-  //   // while (count < count + length) {
-  //   //   // console.log({ count });
-  //   //   targets.push(getLetter(x) + y);
-  //   //   count++;
-  //   // }
-  //   return targets;
-  // };
-
-  // // =========== HANDLE DRAG PREVIEW ===========
-  // const handleDragPreview = debounce(e => {
-  //   const { cols, rows } = newPuzzle;
-  //   const { entry, orientation } = holding;
-  //   const [x, y] = index;
-  //   const dir = orientation === "across" ? x : y;
-  //   const axis = orientation === "across" ? rows : cols;
-
-  //   // console.log({ x, y }, dir + entry.length);
-
-  //   if (dir + entry.length < axis) {
-  //     // FILL ALL THE DROP TARGETS
-  //     const targets = getDropTargets(x, y, orientation, entry.length);
-  //     // console.log(targets);
-  //   }
-  // });
-
-  // // =========== HANDLE DROP ===========
-  // const handleDrop = e => {
-  //   e.preventDefault();
-  //   const dropped = e.dataTransfer.getData("word-bank-entry");
-  //   console.log(dropped);
-  // };
-
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
   return (
@@ -222,7 +184,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         // editing && !preview ? "build" : formatCell().cell.classes,
         editing && "build",
         crop && "crop",
-        // member && "show",
+        member && "member",
         dropPreview && "drop-preview",
         member && formatCell().cell.classes,
         // groups && groups.length && groups.map(group => group.name).join(" "),

@@ -22,7 +22,7 @@ export default function WordBankEntry({ entry, placed, setPlaced }) {
   }, [setHolding]);
 
   const handleDragStart = e => {
-    e.dataTransfer.setData("word-bank-entry", entry);
+    // e.dataTransfer.setData("word-bank-entry", entry);
     setTimeout(() => e.target.classList.add("floating"), 0);
     setFloating(true);
     setHolding({ entry, orientation, element: e.target, callback: setPlaced });

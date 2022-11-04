@@ -156,6 +156,7 @@ header, footer {
 }
 
 .violation {
+  margin-bottom: .5em;
   color: red;
   font-size: .75rem;
   text-align: inherit;

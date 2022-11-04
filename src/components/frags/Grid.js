@@ -75,13 +75,14 @@ export default function Grid({
       answer: answerKey[id] ? answerKey[id] : null,
       groups,
       display: display.length && display,
-      // crop: !grid.activeCols.includes(col) || !grid.activeRows.includes(y),
       member: grid.activeCells.includes(id),
     };
   }
 
   // =========== GROUP ANSWERS ===========
   const groupAnswers = () => {
+    console.log(`%cGROUPING ANSWERS!`, "color:lime");
+    console.log("answers:\n", answerKey);
     const { cols, rows, activeCols, activeRows } = grid;
 
     const groups = [];
@@ -140,8 +141,6 @@ export default function Grid({
     // console.log("targets:", targets);
     setDropPreview(targets);
   };
-
-  // useEffect(() => console.log(getDropTargets(0, 0, false, 5)), []);
 
   // =========== HANDLE DRAG PREVIEW ===========
   const handleDragPreview = (e, index) => {
@@ -231,7 +230,6 @@ export default function Grid({
           key={count}
           cell_name={id}
           index={[x, y]}
-          // {...((!editing || phase >= 2) && formatCellData(id, col, x, y))}
           {...((!editing || preview) && formatCellData(id, col, x, y))}
           {...(groups.length && { groups })}
           crop={!grid.activeCols.includes(col) || !grid.activeRows.includes(y)}
@@ -241,6 +239,7 @@ export default function Grid({
               : null
           }
           {...(editing && wordDrop)}
+          // member={grid.activeCells.includes(id)}
           controls={e => controls(e)}
           editorMode={editorMode}
           focusCell={focusCell} // PLAY

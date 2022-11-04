@@ -51,6 +51,10 @@
   background-color: var(--faint);
 }
 
+.word-bank-list li.holding {
+  position: absolute;
+}
+
 /* .word-bank-list li.floating span {
   --size: 48px;
   display: flex;

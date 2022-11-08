@@ -9,7 +9,7 @@ export default function WordBank({ puzzle }) {
   const sums = new Map(
     [...answers.values()].map(answer => [answer.sum, answer.name])
   );
-  console.log(sums);
+  // console.log(sums);
   const [wordBank, setWordBank] = useState(
     new Map([
       ["FANG", undefined],

@@ -35,6 +35,7 @@ export default function Build() {
   const sectionTabs = ["Grid", "Hints", "Preview"];
   const [activeSection, setActiveSection] = useState(0);
   const [formActive, setFormActive] = useState(true);
+  const [orientation, setOrientation] = useState(true); // ACROSS(T) / DOWN(F)
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
@@ -117,16 +118,16 @@ export default function Build() {
 
   // ============ UPDATE ANSWERS ============
 
-  const updateAnswerKey = (e, id, $answers) => {
-    const { value } = e.target;
-    if (value.length) {
-      console.log(`%cTEST`, "color:red");
-      setNewPuzzle(prev => ({
-        ...prev,
-        answerKey: { ...prev.answerKey, [id]: value.toUpperCase() },
-      }));
-    }
-  };
+  // const updateAnswerKey = (e, id, $answers) => {
+  //   const { value } = e.target;
+  //   if (value.length) {
+  //     console.log(`%cTEST`, "color:red");
+  //     setNewPuzzle(prev => ({
+  //       ...prev,
+  //       answerKey: { ...prev.answerKey, [id]: value.toUpperCase() },
+  //     }));
+  //   }
+  // };
 
   // =========== NEW PUZZLE START ===========
 
@@ -274,7 +275,9 @@ export default function Build() {
 
   return (
     <div id="build-page">
-      <BuildMasterProvider state={[newPuzzle, setNewPuzzle]}>
+      <BuildMasterProvider
+        state={[newPuzzle, setNewPuzzle, orientation, setOrientation]}
+      >
         <Frame
           puzzle={newPuzzle}
           submit={newPuzzleSubmit}
@@ -310,7 +313,7 @@ export default function Build() {
                       active={activeSection === 0 || activeSection === 2}
                       preview={activeSection === 2}
                       updatePuzzleGroups={updatePuzzleGroups}
-                      updateAnswerKey={updateAnswerKey}
+                      // updateAnswerKey={updateAnswerKey}
                       setNewPuzzle={setNewPuzzle}
                     />
                     <BuildWindow>

@@ -13,7 +13,7 @@ export default function Grid({
   focusCell,
   operations,
   updatePuzzleGroups,
-  updateAnswerKey,
+  // updateAnswerKey,
   preview,
   setNewPuzzle,
   ...props
@@ -34,11 +34,14 @@ export default function Grid({
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const [dropPreview, setDropPreview] = useState([]);
 
-  // useEffect(() => editing && groupAnswers(), [answerKey, answers.group]);
-  useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
-
   const $DnD = useDragDrop();
   const { holding, setHolding } = $DnD ? $DnD : {};
+
+  // -----------------------------------------------
+  // @@@@@@@@@@@@@@@@@ CREATE GRID @@@@@@@@@@@@@@@@@
+  // -----------------------------------------------
+
+  useEffect(() => setGrid(createGrid()), [answerKey]);
 
   // =========== GET GROUPS ===========
 
@@ -82,10 +85,11 @@ export default function Grid({
 
   // =========== GROUP ANSWERS ===========
   // function groupAnswers() {
-  const groupAnswers = () => {
-    console.log(`%cGROUPING ANSWERS!`, "color:lime");
+  const groupAnswers = (activeCols, activeRows) => {
+    console.log(`%cTEST!`, "color:coral");
     // console.log("answers:\n", answerKey);
-    const { cols, rows, activeCols, activeRows } = grid;
+    const { cols, rows } = grid;
+    console.log(activeCols, activeRows);
 
     const groups = [];
 
@@ -103,6 +107,7 @@ export default function Grid({
             group.push(cell);
           } else {
             if (group.length > 1) {
+              console.log(`%cGROUPING ANSWERS!`, "color:lime");
               const name = `${dir}-${group[0]}`;
               groups.push([
                 name,
@@ -114,12 +119,12 @@ export default function Grid({
                   hint: "",
                 },
               ]);
+              console.log(group);
             }
             group = [];
           }
         }
       });
-      console.log("group:", group);
     };
 
     search(cols, activeCols);
@@ -129,8 +134,6 @@ export default function Grid({
       answers: new Map(groups),
     }));
   };
-
-  useEffect(() => editing && groupAnswers(), [answerKey]);
 
   // =========== GET DROP TARGETS ===========
   const getDropTargets = (x, y, across, length) => {
@@ -192,7 +195,9 @@ export default function Grid({
   // =========== CREATE GRID ===========
   function createGrid() {
     console.log("%cCREATE GRID", "color:red");
+    // console.log("answers:\n", answerKey);
     const $answerKey = Object.keys(answerKey);
+    console.log("answers:\n", $answerKey);
     const totalCells = cols * rows;
 
     let $grid = {
@@ -221,6 +226,8 @@ export default function Grid({
       }
     }
 
+    const { activeCols, activeRows } = $grid;
+    editing && groupAnswers(activeCols, activeRows);
     return $grid;
   }
 

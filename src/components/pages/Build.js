@@ -314,7 +314,7 @@ export default function Build() {
                       setNewPuzzle={setNewPuzzle}
                     />
                     <BuildWindow>
-                      <WordBank section="Words" />
+                      <WordBank section="Words" puzzle={newPuzzle} />
                       <HintInput
                         active={activeSection === 1}
                         groups={newPuzzle.answers}

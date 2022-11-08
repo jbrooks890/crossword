@@ -71,6 +71,19 @@
   margin-right: 4px;
 } */
 
+.word-bank-error {
+  color: red;
+  height: 1em;
+  font-size: .75rem;
+  opacity: 0;
+  transition: .3s ease-out;
+}
+
+.word-bank-error.active{
+  opacity: 1;
+  /* transition: none; */
+}
+
 /* ================================= *\
 || HOVER
 \* ================================= */

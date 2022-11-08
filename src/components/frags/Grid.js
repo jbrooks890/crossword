@@ -34,6 +34,7 @@ export default function Grid({
   const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const [dropPreview, setDropPreview] = useState([]);
 
+  // useEffect(() => editing && groupAnswers(), [answerKey, answers.group]);
   useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
 
   const $DnD = useDragDrop();
@@ -80,9 +81,10 @@ export default function Grid({
   }
 
   // =========== GROUP ANSWERS ===========
+  // function groupAnswers() {
   const groupAnswers = () => {
     console.log(`%cGROUPING ANSWERS!`, "color:lime");
-    console.log("answers:\n", answerKey);
+    // console.log("answers:\n", answerKey);
     const { cols, rows, activeCols, activeRows } = grid;
 
     const groups = [];
@@ -117,6 +119,7 @@ export default function Grid({
           }
         }
       });
+      console.log("group:", group);
     };
 
     search(cols, activeCols);
@@ -160,11 +163,12 @@ export default function Grid({
   // =========== HANDLE DROP ===========
   const handleDrop = e => {
     e.preventDefault();
+    const { entry, callback, orientation } = holding;
     const newEntires = Object.fromEntries(
-      dropPreview.map(id => [id, holding.entry.charAt(dropPreview.indexOf(id))])
+      dropPreview.map(id => [id, entry.charAt(dropPreview.indexOf(id))])
     );
 
-    holding.callback();
+    // callback(entry, `${orientation}-${dropPreview[0]}`);
 
     setHolding({});
     setDropPreview([]);

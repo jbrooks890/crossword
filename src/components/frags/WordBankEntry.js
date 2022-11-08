@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { debounce } from "../../utility/helperFuncs";
 import { useDragDrop } from "../shared/DragDropProvider";
 
-export default function WordBankEntry({ entry, placed, setPlaced }) {
+export default function WordBankEntry({ entry, placed, setPlaced, placeWord }) {
   const [orientation, setOrientation] = useState("across");
   const [floating, setFloating] = useState(false);
   const entryItem = useRef();
@@ -25,7 +25,12 @@ export default function WordBankEntry({ entry, placed, setPlaced }) {
     // e.dataTransfer.setData("word-bank-entry", entry);
     setTimeout(() => e.target.classList.add("floating"), 0);
     setFloating(true);
-    setHolding({ entry, orientation, element: e.target, callback: setPlaced });
+    setHolding({
+      entry,
+      orientation,
+      element: e.target,
+      callback: placeWord,
+    });
   };
 
   return (

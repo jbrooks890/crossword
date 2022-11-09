@@ -13,8 +13,9 @@ export default function Grid({
   focusCell,
   operations,
   updatePuzzleGroups,
-  // updateAnswerKey,
   preview,
+  axis,
+  toggleAxis,
   setNewPuzzle,
   ...props
 }) {
@@ -31,7 +32,7 @@ export default function Grid({
     activeCols: [],
     activeRows: [],
   });
-  const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
+  // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const [dropPreview, setDropPreview] = useState([]);
 
   const $DnD = useDragDrop();
@@ -51,7 +52,7 @@ export default function Grid({
       .map(entry => answers.get(entry));
 
   // =========== FORMAT CELL DATA ===========
-  function formatCellData(id, col, x, y) {
+  function formatCellData(id) {
     const groups = getGroups(id);
     let display = [];
 
@@ -75,7 +76,7 @@ export default function Grid({
     });
 
     return {
-      isJunction: groups.length > 1,
+      // isJunction: groups.length > 1,
       answer: answerKey[id] ? answerKey[id] : null,
       groups,
       display: display.length && display,
@@ -86,10 +87,10 @@ export default function Grid({
   // =========== GROUP ANSWERS ===========
   // function groupAnswers() {
   const groupAnswers = (activeCols, activeRows) => {
-    console.log(`%cTEST!`, "color:coral");
+    // console.log(`%cTEST!`, "color:coral");
     // console.log("answers:\n", answerKey);
     const { cols, rows } = grid;
-    console.log(activeCols, activeRows);
+    // console.log(activeCols, activeRows);
 
     const groups = [];
 
@@ -107,7 +108,7 @@ export default function Grid({
             group.push(cell);
           } else {
             if (group.length > 1) {
-              console.log(`%cGROUPING ANSWERS!`, "color:lime");
+              // console.log(`%cGROUPING ANSWERS!`, "color:lime");
               const name = `${dir}-${group[0]}`;
               groups.push([
                 name,
@@ -119,7 +120,6 @@ export default function Grid({
                   hint: "",
                 },
               ]);
-              console.log(group);
             }
             group = [];
           }
@@ -153,20 +153,19 @@ export default function Grid({
     // console.log(`%cHANDLE DRAG PREVIEW!`, "color: lime");
     // console.log("holding:", holding.entry);
     const { cols, rows } = puzzle;
-    const { entry, orientation } = holding;
+    const { entry, axis } = holding;
     const [x, y] = index;
-    const dir = orientation === "across" ? x : y;
-    const axis = orientation === "across" ? rows : cols;
+    const dir = axis ? x : y;
+    const track = axis ? rows : cols;
     const range = dir + entry.length;
 
-    range <= axis &&
-      getDropTargets(x, y, orientation === "across", entry.length);
+    range <= track && getDropTargets(x, y, axis, entry.length);
   };
 
   // =========== HANDLE DROP ===========
   const handleDrop = e => {
     e.preventDefault();
-    const { entry, callback, orientation } = holding;
+    const { entry, axis } = holding;
     const newEntires = Object.fromEntries(
       dropPreview.map(id => [id, entry.charAt(dropPreview.indexOf(id))])
     );
@@ -182,8 +181,6 @@ export default function Grid({
         ...newEntires,
       },
     }));
-    // const dropped = e.dataTransfer.getData("word-bank-entry"); //TODO
-    // console.log(dropped);
   };
 
   const wordDrop = {
@@ -197,7 +194,7 @@ export default function Grid({
     console.log("%cCREATE GRID", "color:red");
     // console.log("answers:\n", answerKey);
     const $answerKey = Object.keys(answerKey);
-    console.log("answers:\n", $answerKey);
+    // console.log("answers:\n", $answerKey);
     const totalCells = cols * rows;
 
     let $grid = {
@@ -250,6 +247,7 @@ export default function Grid({
               : null
           }
           {...(editing && wordDrop)}
+          isJunction={groups.length > 1}
           // member={grid.activeCells.includes(id)}
           controls={e => controls(e)}
           editorMode={editorMode}

@@ -11,6 +11,8 @@ import { ReactComponent as EDIT_ICON } from "../../assets/icons/edit-icon.svg";
 import { ReactComponent as CHECK_ICON } from "../../assets/icons/check-icon.svg";
 import { ReactComponent as HELP_ICON } from "../../assets/icons/xword-help.svg";
 import { ReactComponent as LIST_ICON } from "../../assets/icons/list-icon.svg";
+import { ReactComponent as EYE_ICON } from "../../assets/icons/eye-con.svg";
+import { ReactComponent as AXIS_ICON } from "../../assets/icons/orientation-icon.svg";
 
 export default function Icons() {
   return (
@@ -28,6 +30,8 @@ export default function Icons() {
       <CHECK_ICON />
       <HELP_ICON />
       <LIST_ICON />
+      <EYE_ICON />
+      <AXIS_ICON />
     </svg>
   );
 }

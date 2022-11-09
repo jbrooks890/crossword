@@ -3,9 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import WordBankEntry from "./WordBankEntry";
 import { useBuildMaster } from "../shared/BuildMasterProvider";
 
-export default function WordBank({ puzzle }) {
+export default function WordBank({ puzzle, axis, toggleAxis }) {
   const { answers, rows, cols } = puzzle;
-  // const sums = [...answers.values()].map(entry => entry.sum);
   const sums = new Map(
     [...answers.values()].map(answer => [answer.sum, answer.name])
   );
@@ -18,17 +17,17 @@ export default function WordBank({ puzzle }) {
     ])
   );
   const [error, setError] = useState("");
-  // const [placed, setPlaced] = useState([]);
-  const newWord = useRef();
+  const [newPuzzle, setNewPuzzle] = useBuildMaster();
+  const [newWord, setNewWord] = useState("");
+  const newWordInput = useRef();
+  const newWordBtn = useRef();
 
   const maxLength = rows >= cols ? rows : cols;
 
-  // =========== RESET WORD ENTRY INPUT ===========
-  useEffect(() => {
-    newWord.current.value = "";
-  }, [wordBank]);
+  // console.log(wordBank, sums);
 
-  // useEffect(() => error && setError(""), [newWord.current]);
+  // =========== CLEAR ERROR ===========
+  useEffect(() => error && setError(""), [newWord]);
 
   // =========== REVERSE MAP ===========
 
@@ -52,10 +51,19 @@ export default function WordBank({ puzzle }) {
 
   const addWord = e => {
     e.preventDefault();
-    const { value } = e.target;
-    const entry = value.replace(" ", "").trim().toUpperCase();
-    value && setWordBank(prev => new Map([...prev]).set(entry, null));
-    // : setError(`${entry} is already in play.`);
+    // const { value } = e.target;
+    // const entry = value.replace(" ", "").trim().toUpperCase();
+    const entry = newWord.replace(" ", "").trim();
+    // console.log({ entry }, wordBank.has(entry));
+
+    if (newWord.length > 1) {
+      if (!wordBank.has(entry)) {
+        setWordBank(prev => new Map([...prev]).set(entry, undefined));
+        setNewWord("");
+      } else {
+        setError(`${entry} is already in play.`);
+      }
+    }
   };
 
   // =========== PLACE WORD (on the Grid) ===========
@@ -65,28 +73,84 @@ export default function WordBank({ puzzle }) {
     setWordBank(prev => new Map([...prev]).set(target, group));
   };
 
+  // =========== EDIT WORD ===========
+
+  const editWord = entry => {
+    setWordBank(
+      prev => new Map([...prev].filter(target => target[0] !== entry))
+    );
+    setNewWord(entry);
+    newWordInput.current.focus();
+  };
+
+  // =========== REMOVE WORD (from the Grid) ===========
+
+  const removeWord = (entry, placed) => {
+    const { answerKey, answers } = newPuzzle;
+    const newAnswerKey = { ...answerKey };
+
+    answers.get(placed).group.forEach(id => {
+      // UNLESS CELL IS A JUNCTION
+      const isJunction =
+        [...answers.values()].filter(entry => entry.group.includes(id)).length >
+        1;
+      !isJunction && delete newAnswerKey[id];
+    });
+
+    setWordBank(prev => new Map([...prev]).set(entry, undefined));
+    setNewPuzzle(prev => ({
+      ...prev,
+      answerKey: newAnswerKey,
+    }));
+  };
+
+  // =========== DELETE WORD (from word bank) ===========
+
+  const deleteWord = entry =>
+    setWordBank(
+      prev => new Map([...prev].filter(target => target[0] !== entry))
+    );
+
+  // --------------------------------
+  // :::::::::::: RENDER ::::::::::::
+
   return (
     <div className="word-bank">
-      <div className="word-bank-new flex col">
-        <h5>new word</h5>
+      <div className="word-bank-new flex">
+        {/* <h5>new word</h5> */}
         <input
-          ref={newWord}
+          ref={newWordInput}
           onKeyDown={e => e.key === "Enter" && addWord(e)}
           maxLength={maxLength}
-          onChange={() => (error ? setError("") : null)}
+          placeholder="New Word"
+          onChange={e => {
+            setNewWord(e.target.value.toUpperCase());
+          }}
+          value={newWord}
         />
+        <button
+          ref={newWordBtn}
+          className={newWord.length > 1 ? "active" : ""}
+          onClick={e => addWord(e)}
+        >
+          +
+        </button>
       </div>
       <div className={`word-bank-error ${error ? "active" : ""}`}>
         {error && error}
       </div>
       <ul className="word-bank-list flex col start">
-        {[...wordBank].map(([entry, group], i) => (
+        {[...wordBank].map(([entry, placed], i) => (
           <WordBankEntry
             key={i}
             entry={entry}
-            placed={group ? group : null}
-            // setPlaced={() => setPlaced(prev => [...prev, i])}
+            placed={placed ? placed : null}
+            axis={axis}
+            toggleAxis={toggleAxis}
             placeWord={placeWord}
+            editWord={() => editWord(entry)}
+            removeWord={() => removeWord(entry, placed)}
+            deleteWord={() => deleteWord(entry)}
           />
         ))}
       </ul>

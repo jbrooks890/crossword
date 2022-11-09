@@ -58,7 +58,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         switch (key) {
           case " ":
             e.preventDefault();
-            toggleAxis(prev => !prev);
+            toggleAxis();
             break;
           case "Backspace":
             if (content.length < 1) {
@@ -113,7 +113,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             member && "show",
             groupNames.join(" "),
             groups.map(group => group.dir).join(" "),
-            isJunction && "junction",
+            // isJunction && "junction",
             display && display.join(" "),
             activeGroup && groupNames.includes(activeGroup) && "active",
             game && game.input.get(id) && "user-entry",
@@ -186,6 +186,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         crop && "crop",
         member && "member",
         dropPreview && "drop-preview",
+        isJunction && "junction",
         member && formatCell().cell.classes,
         // groups && groups.length && groups.map(group => group.name).join(" "),
       ])}
@@ -221,7 +222,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       {!editing && isJunction && <AxisSelector />}
       <input
         ref={cellInput}
-        className={`cell-input ${id} ${answer ? "show" : null}`}
+        className={`cell-input ${id} ${answer ? "show" : ""}`}
         type="text"
         size="1"
         maxLength="1"
@@ -255,7 +256,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         value={
           game && game.input.has(id)
             ? game.input.get(id)
-            : editing
+            : editing && newPuzzle.answerKey[id]
             ? newPuzzle.answerKey[id]
             : ""
         }

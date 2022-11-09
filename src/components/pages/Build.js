@@ -22,7 +22,7 @@ export default function Build() {
     version: 1,
     editorMode: { active: true, phase: 0 },
     answerKey: {},
-    answers: [],
+    answers: new Map(),
     tags: [],
   });
   const [puzzleValidation, setPuzzleValidation] = useState({
@@ -33,15 +33,15 @@ export default function Build() {
     attempted: false,
   });
   const sectionTabs = ["Grid", "Hints", "Preview"];
-  const [activeSection, setActiveSection] = useState(0);
   const [formActive, setFormActive] = useState(true);
   const [orientation, setOrientation] = useState(true); // ACROSS(T) / DOWN(F)
+  const [previewMode, togglePreviewMode] = useState(false);
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
   useEffect(
     () => console.log(newPuzzle),
-    [newPuzzle.answers.group, activeSection, newPuzzle.answerKey]
+    [newPuzzle.answers.group, newPuzzle.answerKey]
   );
   // console.log(newPuzzle);
 
@@ -301,25 +301,33 @@ export default function Build() {
           {phase > 0 && (
             <>
               <BuildNav
-                sections={sectionTabs}
-                active={activeSection}
-                changeSection={setActiveSection}
+                axis={orientation}
+                toggleAxis={() => setOrientation(prev => !prev)}
+                previewing={previewMode}
+                togglePreviewing={() => togglePreviewMode(prev => !prev)}
               />
               <div id="cw-grid-wrap" className="flex center">
                 <div id="puzzle-window" className="flex">
                   <DragDropProvider>
                     <Grid
                       puzzle={newPuzzle}
-                      active={activeSection === 0 || activeSection === 2}
-                      preview={activeSection === 2}
+                      // active={activeSection === 0 || activeSection === 2}
+                      preview={previewMode}
                       updatePuzzleGroups={updatePuzzleGroups}
                       // updateAnswerKey={updateAnswerKey}
                       setNewPuzzle={setNewPuzzle}
+                      axis={orientation}
+                      toggleAxis={() => setOrientation(prev => !prev)}
                     />
                     <BuildWindow>
-                      <WordBank section="Words" puzzle={newPuzzle} />
+                      <WordBank
+                        section="Words"
+                        puzzle={newPuzzle}
+                        axis={orientation}
+                        toggleAxis={() => setOrientation(prev => !prev)}
+                      />
                       <HintInput
-                        active={activeSection === 1}
+                        // active={activeSection === 1}
                         groups={newPuzzle.answers}
                         update={updateHint}
                         validation={puzzleValidation}

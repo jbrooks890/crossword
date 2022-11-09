@@ -56,11 +56,11 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       case "keydown":
         // console.log(key);
         switch (key) {
-          case " ":
-            // console.log(`%cTOGGLE AXIS!`, "color:lime");
-            e.preventDefault();
-            toggleAxis();
-            break;
+          // case " ":
+          //   // console.log(`%cTOGGLE AXIS!`, "color:lime");
+          //   e.preventDefault();
+          //   toggleAxis();
+          //   break;
           case "Backspace":
             if (content.length < 1) {
             }

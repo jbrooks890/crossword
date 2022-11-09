@@ -163,7 +163,7 @@ export default function WordBank({ puzzle, wordList, axis, toggleAxis }) {
             entry={entry}
             placed={placed ? placed : null}
             axis={axis}
-            toggleAxis={toggleAxis}
+            // toggleAxis={toggleAxis}
             placeWord={placeWord}
             editWord={() => editWord(entry)}
             removeWord={() => removeWord(entry, placed)}

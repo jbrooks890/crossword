@@ -6,7 +6,7 @@ export default function WordBankEntry({
   entry,
   placed,
   axis,
-  toggleAxis,
+  // toggleAxis,
   placeWord,
   editWord,
   removeWord,
@@ -19,16 +19,16 @@ export default function WordBankEntry({
   const { setHolding } = useDragDrop();
 
   useEffect(() => !floating && entryItem.current.classList.remove("floating"));
-  useEffect(() => {
-    const toggle = e => {
-      if (e.key === " ") {
-        e.preventDefault();
-        toggleAxis();
-      }
-    };
-    window.addEventListener("keydown", toggle);
-    return () => window.removeEventListener("keydown", toggle);
-  }, [setHolding]);
+  // useEffect(() => {
+  //   const toggle = e => {
+  //     if (e.key === " ") {
+  //       e.preventDefault();
+  //       toggleAxis();
+  //     }
+  //   };
+  //   window.addEventListener("keydown", toggle);
+  //   return () => window.removeEventListener("keydown", toggle);
+  // }, [setHolding]);
 
   const handleDragStart = e => {
     // e.dataTransfer.setData("word-bank-entry", entry);
@@ -56,7 +56,7 @@ export default function WordBankEntry({
           setFloating(false);
           setHolding({});
         }}
-        onKeyDown={e => e.key === " " && floating && toggleAxis()}
+        // onKeyDown={e => e.key === " " && floating && toggleAxis()}
         onDoubleClick={e => {
           if (placed) {
             e.preventDefault();

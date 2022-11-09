@@ -51,6 +51,18 @@ export default function Build() {
     [puzzleValidation]
   );
 
+  useEffect(() => {
+    const toggleAxis = e => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        setOrientation(prev => !prev);
+      }
+    };
+
+    document.body.addEventListener("keydown", toggleAxis);
+    return () => document.body.removeEventListener("keydown", toggleAxis);
+  }, []);
+
   // =========== CLEAR ANSWERS ===========
   function clearAnswers() {
     setWordList([...newPuzzle.answers.values()].map(group => group.sum));
@@ -244,7 +256,6 @@ export default function Build() {
       });
 
       if (Object.keys(groupErrors).length > 0) {
-        // console.log({ groupName, groupErrors });
         answerErrors.push([groupName, groupErrors]);
       }
     });
@@ -293,6 +304,7 @@ export default function Build() {
           puzzle={newPuzzle}
           submit={newPuzzleSubmit}
           setFormActive={setFormActive}
+          // toggleAxis={() => setOrientation(prev => !prev)}
         >
           {(phase === 0 || formActive) && (
             <NewPuzzleForm
@@ -323,16 +335,11 @@ export default function Build() {
                   <DragDropProvider>
                     <Grid
                       puzzle={newPuzzle}
-                      // active={activeSection === 0 || activeSection === 2}
                       preview={previewMode}
                       updatePuzzleGroups={updatePuzzleGroups}
-                      // updateAnswerKey={updateAnswerKey}
                       setNewPuzzle={setNewPuzzle}
                       axis={orientation}
-                      toggleAxis={() => {
-                        console.log(`%cTOGGLE AXIS!`, "color:coral");
-                        setOrientation(prev => !prev);
-                      }}
+                      // toggleAxis={() => setOrientation(prev => !prev)}
                     />
                     <BuildWindow>
                       <WordBank
@@ -343,7 +350,6 @@ export default function Build() {
                         toggleAxis={() => setOrientation(prev => !prev)}
                       />
                       <HintInput
-                        // active={activeSection === 1}
                         groups={newPuzzle.answers}
                         update={updateHint}
                         validation={puzzleValidation}

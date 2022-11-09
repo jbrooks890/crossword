@@ -57,6 +57,7 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         // console.log(key);
         switch (key) {
           case " ":
+            // console.log(`%cTOGGLE AXIS!`, "color:lime");
             e.preventDefault();
             toggleAxis();
             break;

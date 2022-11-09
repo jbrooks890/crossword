@@ -36,6 +36,7 @@ export default function Build() {
   const [formActive, setFormActive] = useState(true);
   const [orientation, setOrientation] = useState(true); // ACROSS(T) / DOWN(F)
   const [previewMode, togglePreviewMode] = useState(false);
+  const [wordList, setWordList] = useState([]);
   const { phase } = newPuzzle.editorMode;
 
   // console.log(grid);
@@ -49,6 +50,16 @@ export default function Build() {
     () => puzzleValidation.attempted && console.log(puzzleValidation),
     [puzzleValidation]
   );
+
+  // =========== CLEAR ANSWERS ===========
+  function clearAnswers() {
+    setWordList([...newPuzzle.answers.values()].map(group => group.sum));
+    setNewPuzzle(prev => ({
+      ...prev,
+      answerKey: {},
+      answers: new Map(),
+    }));
+  }
 
   // =========== UPDATE PUZZLE ===========
 
@@ -305,6 +316,7 @@ export default function Build() {
                 toggleAxis={() => setOrientation(prev => !prev)}
                 previewing={previewMode}
                 togglePreviewing={() => togglePreviewMode(prev => !prev)}
+                clearAnswers={clearAnswers}
               />
               <div id="cw-grid-wrap" className="flex center">
                 <div id="puzzle-window" className="flex">
@@ -317,12 +329,16 @@ export default function Build() {
                       // updateAnswerKey={updateAnswerKey}
                       setNewPuzzle={setNewPuzzle}
                       axis={orientation}
-                      toggleAxis={() => setOrientation(prev => !prev)}
+                      toggleAxis={() => {
+                        console.log(`%cTOGGLE AXIS!`, "color:coral");
+                        setOrientation(prev => !prev);
+                      }}
                     />
                     <BuildWindow>
                       <WordBank
                         section="Words"
                         puzzle={newPuzzle}
+                        wordList={wordList}
                         axis={orientation}
                         toggleAxis={() => setOrientation(prev => !prev)}
                       />

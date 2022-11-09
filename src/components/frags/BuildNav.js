@@ -6,6 +6,7 @@ export default function BuildNav({
   toggleAxis,
   previewing,
   togglePreviewing,
+  clearAnswers,
 }) {
   const { holding } = useDragDrop;
 
@@ -36,7 +37,12 @@ export default function BuildNav({
         <AXIS_ICON />
       </button>
       {/* ------- RESET ------- */}
-      <button onClick={e => e.preventDefault()}>
+      <button
+        onClick={e => {
+          e.preventDefault();
+          clearAnswers();
+        }}
+      >
         <svg>
           <use href="#restart-icon" />
         </svg>

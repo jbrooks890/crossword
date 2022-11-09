@@ -3,12 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import WordBankEntry from "./WordBankEntry";
 import { useBuildMaster } from "../shared/BuildMasterProvider";
 
-export default function WordBank({ puzzle, axis, toggleAxis }) {
-  const { answers, rows, cols } = puzzle;
-  const sums = new Map(
-    [...answers.values()].map(answer => [answer.sum, answer.name])
-  );
-  // console.log(sums);
+export default function WordBank({ puzzle, wordList, axis, toggleAxis }) {
+  const { answerKey, answers, rows, cols } = puzzle;
   const [wordBank, setWordBank] = useState(
     new Map([
       ["FANG", undefined],
@@ -25,6 +21,7 @@ export default function WordBank({ puzzle, axis, toggleAxis }) {
   const maxLength = rows >= cols ? rows : cols;
 
   // console.log(wordBank, sums);
+  // console.log("CURRENT:", answers);
 
   // =========== CLEAR ERROR ===========
   useEffect(() => error && setError(""), [newWord]);
@@ -36,16 +33,27 @@ export default function WordBank({ puzzle, axis, toggleAxis }) {
 
   // =========== ADD BY GROUP ===========
 
-  const addByGroup = sums => {
+  const addByGroup = () => {
     const wordBankGroups = reverse(
       new Map([...wordBank].filter(entry => entry[1]))
     );
+    const sums = new Map(
+      [...answers.values()].map(answer => [answer.sum, answer.name])
+    );
+
+    // console.log("word bank groups:", wordBankGroups);
+    // console.log("sums:", sums);
+
     const newWords = new Map([...wordBank].filter(entry => !entry[1]));
-    const result = reverse(new Map([...wordBankGroups, ...reverse(sums)]));
+    // const result = reverse(new Map([...wordBankGroups, ...reverse(sums)]));
+    const result = reverse(new Map([...reverse(sums)]));
+
+    // console.log("new words:", newWords, "\nanswers:", result);
+
     return new Map([...newWords, ...result]);
   };
 
-  useEffect(() => setWordBank(addByGroup(sums)), [answers]);
+  useEffect(() => setWordBank(addByGroup()), [answers]);
 
   // =========== ADD WORD (to Word Bank) ===========
 
@@ -65,6 +73,15 @@ export default function WordBank({ puzzle, axis, toggleAxis }) {
       }
     }
   };
+
+  // =========== ADD BULK ===========
+
+  const bulkAdd = words =>
+    setWordBank(
+      prev => new Map([...prev, ...words.map(word => [word, undefined])])
+    );
+
+  useEffect(() => wordList.length && bulkAdd(wordList), [wordList.length]);
 
   // =========== PLACE WORD (on the Grid) ===========
 

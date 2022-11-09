@@ -304,7 +304,6 @@ export default function Build() {
           puzzle={newPuzzle}
           submit={newPuzzleSubmit}
           setFormActive={setFormActive}
-          // toggleAxis={() => setOrientation(prev => !prev)}
         >
           {(phase === 0 || formActive) && (
             <NewPuzzleForm

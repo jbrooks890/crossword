@@ -162,6 +162,11 @@ header, footer {
   text-align: inherit;
 }
 
+.placeholder {
+  font-family: var(--keyFont);
+  opacity: .5;
+}
+
 /* --------- MAIN --------- */
 
 main {

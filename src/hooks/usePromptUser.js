@@ -1,1 +1,1 @@
-export default function usePromptUser() {}
+export default function usePromptUser({ message, operations, abritrary }) {}

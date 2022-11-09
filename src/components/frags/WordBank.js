@@ -5,13 +5,7 @@ import { useBuildMaster } from "../shared/BuildMasterProvider";
 
 export default function WordBank({ puzzle, wordList, axis, toggleAxis }) {
   const { answerKey, answers, rows, cols } = puzzle;
-  const [wordBank, setWordBank] = useState(
-    new Map([
-      ["FANG", undefined],
-      ["SWORD", undefined],
-      ["DRAGON", undefined],
-    ])
-  );
+  const [wordBank, setWordBank] = useState(new Map());
   const [error, setError] = useState("");
   const [newPuzzle, setNewPuzzle] = useBuildMaster();
   const [newWord, setNewWord] = useState("");

@@ -53,14 +53,15 @@ export default function Build() {
 
   useEffect(() => {
     const toggleAxis = e => {
-      if (e.code === "Space") {
+      const { code, target } = e;
+      if (code === "Space" && target == document.body) {
         e.preventDefault();
         setOrientation(prev => !prev);
       }
     };
 
-    document.body.addEventListener("keydown", toggleAxis);
-    return () => document.body.removeEventListener("keydown", toggleAxis);
+    window.addEventListener("keydown", toggleAxis);
+    return () => window.removeEventListener("keydown", toggleAxis);
   }, []);
 
   // =========== CLEAR ANSWERS ===========
@@ -338,7 +339,7 @@ export default function Build() {
                       updatePuzzleGroups={updatePuzzleGroups}
                       setNewPuzzle={setNewPuzzle}
                       axis={orientation}
-                      // toggleAxis={() => setOrientation(prev => !prev)}
+                      toggleAxis={() => setOrientation(prev => !prev)}
                     />
                     <BuildWindow>
                       <WordBank

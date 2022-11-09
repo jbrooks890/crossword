@@ -17,7 +17,7 @@ export default function HintInput({
 
   return (
     <div id="hint-input" className={active ? "active" : ""}>
-      {[...groups.values()].length > 0 && (
+      {[...groups.values()].length > 0 ? (
         <>
           {across.length > 0 && (
             <ol className="hint-input-list across-list">
@@ -56,6 +56,8 @@ export default function HintInput({
             </ol>
           )}
         </>
+      ) : (
+        <p className="placeholder">Your puzzle has no words yet.</p>
       )}
     </div>
   );

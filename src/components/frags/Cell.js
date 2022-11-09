@@ -27,7 +27,9 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     ? $PLAY
     : [];
   const $BUILD = useBuildMaster();
-  const [newPuzzle, setNewPuzzle] = $BUILD ? $BUILD : [];
+  const [newPuzzle, setNewPuzzle, orientation, setOrientation] = $BUILD
+    ? $BUILD
+    : [];
 
   const cellInput = useRef();
 
@@ -56,11 +58,11 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       case "keydown":
         // console.log(key);
         switch (key) {
-          // case " ":
-          //   // console.log(`%cTOGGLE AXIS!`, "color:lime");
-          //   e.preventDefault();
-          //   toggleAxis();
-          //   break;
+          case " ":
+            // console.log(`%cTOGGLE AXIS!`, "color:lime");
+            e.preventDefault();
+            toggleAxis();
+            break;
           case "Backspace":
             if (content.length < 1) {
             }
@@ -68,18 +70,22 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
           case "ArrowLeft":
             e.preventDefault();
             navTo(index, [-1, 0]);
+            !orientation && setOrientation(true);
             break;
           case "ArrowRight":
             e.preventDefault();
             navTo(index, [1, 0]);
+            !orientation && setOrientation(true);
             break;
           case "ArrowUp":
             e.preventDefault();
             navTo(index, [0, -1]);
+            orientation && setOrientation(false);
             break;
           case "ArrowDown":
             e.preventDefault();
             navTo(index, [0, 1]);
+            orientation && setOrientation(false);
             break;
         }
         break;

@@ -52,6 +52,16 @@
   filter: brightness(1.25);
 }
 
+#build-nav button.inactive {
+  cursor: default;
+  border-color: var(--faint);
+  pointer-events: none;
+}
+
+#build-nav button.inactive svg {
+  fill: var(--faint);
+}
+
 #build-nav button:not(:last-of-type){
   margin-right: .5rem;
 }

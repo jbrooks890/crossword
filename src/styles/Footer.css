@@ -67,7 +67,7 @@ svg.sm-icon:hover {
 }
 
 .sm-list:hover+.sm-handler {
-  color: var(--mid);
+  color: var(--colorH);
   opacity: 1;
   transform: translateY(0);
 }
@@ -75,6 +75,7 @@ svg.sm-icon:hover {
 footer span.copyright {
   cursor: default;
   color: var(--mid);
+  filter: brightness(1.25);
   font-size: .75rem;
 }
 

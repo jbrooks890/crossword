@@ -51,6 +51,10 @@ export default function Build() {
     [puzzleValidation]
   );
 
+  // console.log(wordList);
+
+  // =========== TOGGLE AXIS WITH [ SPACE ] KEY ===========
+
   useEffect(() => {
     const toggleAxis = e => {
       const { code, target } = e;
@@ -324,6 +328,7 @@ export default function Build() {
           {phase > 0 && (
             <>
               <BuildNav
+                puzzle={newPuzzle}
                 axis={orientation}
                 toggleAxis={() => setOrientation(prev => !prev)}
                 previewing={previewMode}

@@ -11,8 +11,8 @@ export default function Footer() {
       </svg>
       <SocialMedia />
       <span className="copyright">
-        &copy;{new Date().getFullYear()} Designed and developed by Julian
-        Brooks. All rights reserved.
+        &copy;{new Date().getFullYear()} <strong>XWord</strong>. Designed and
+        developed by Julian Brooks. All rights reserved.
       </span>
       <Icons />
     </footer>

@@ -17,6 +17,7 @@
   --colorE: #2c0f57;
   --colorF: #150330;
   --colorG: #8840f2;
+  --colorH: #5d44ff;
   --gradient: linear-gradient(
     45deg, 
     var(--colorB),

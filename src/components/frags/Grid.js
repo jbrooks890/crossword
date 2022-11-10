@@ -34,6 +34,7 @@ export default function Grid({
   });
   // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const [dropPreview, setDropPreview] = useState([]);
+  const [fitFrame, setFitFrame] = useState(false);
 
   const $DnD = useDragDrop();
   const { holding, setHolding } = $DnD ? $DnD : {};
@@ -266,15 +267,18 @@ export default function Grid({
   return (
     <div
       id="cw-grid"
-      className={["grid", mini ? "mini" : "", preview ? "preview" : ""].join(
-        " "
-      )}
+      className={[
+        "grid",
+        mini ? "mini" : "",
+        preview ? "preview" : "",
+        fitFrame && "fit",
+      ].join(" ")}
       style={{
         gridTemplate: `repeat(${
           editing && !preview ? rows : grid.activeRows.length
-        }, ${mini ? "1fr" : "48px"}) / repeat(${
+        }, ${mini || fitFrame ? "1fr" : "48px"}) / repeat(${
           editing && !preview ? cols : grid.activeCols.length
-        }, ${mini ? "1fr" : "48px"})`,
+        }, ${mini || fitFrame ? "1fr" : "48px"})`,
       }}
     >
       {renderGrid()}

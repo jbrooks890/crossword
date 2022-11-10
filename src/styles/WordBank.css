@@ -96,9 +96,10 @@
   z-index: -1;
 }
 
-.word-bank-list li:hover .word-bank-entry-edit-cache,
+.word-bank-list li:not(.floating):hover .word-bank-entry-edit-cache,
 .word-bank-list .word-bank-entry-edit-cache.active {
   transform: translateX(100%);
+  transition-delay: .5s;
   opacity: 1;
   z-index: 0;
 }

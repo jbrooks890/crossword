@@ -6,29 +6,17 @@ export default function WordBankEntry({
   entry,
   placed,
   axis,
-  // toggleAxis,
   placeWord,
   editWord,
   removeWord,
   deleteWord,
 }) {
-  // const [orientation, setOrientation] = useState("across");
   const [floating, setFloating] = useState(false);
   const [modifying, setModifying] = useState(false);
   const entryItem = useRef();
   const { setHolding } = useDragDrop();
 
   useEffect(() => !floating && entryItem.current.classList.remove("floating"));
-  // useEffect(() => {
-  //   const toggle = e => {
-  //     if (e.key === " ") {
-  //       e.preventDefault();
-  //       toggleAxis();
-  //     }
-  //   };
-  //   window.addEventListener("keydown", toggle);
-  //   return () => window.removeEventListener("keydown", toggle);
-  // }, [setHolding]);
 
   const handleDragStart = e => {
     // e.dataTransfer.setData("word-bank-entry", entry);

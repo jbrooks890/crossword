@@ -70,22 +70,22 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
           case "ArrowLeft":
             e.preventDefault();
             navTo(index, [-1, 0]);
-            !orientation && setOrientation(true);
+            !orientation && toggleAxis();
             break;
           case "ArrowRight":
             e.preventDefault();
             navTo(index, [1, 0]);
-            !orientation && setOrientation(true);
+            !orientation && toggleAxis();
             break;
           case "ArrowUp":
             e.preventDefault();
             navTo(index, [0, -1]);
-            orientation && setOrientation(false);
+            orientation && toggleAxis();
             break;
           case "ArrowDown":
             e.preventDefault();
             navTo(index, [0, 1]);
-            orientation && setOrientation(false);
+            orientation && toggleAxis();
             break;
         }
         break;

@@ -2,6 +2,7 @@ import { ReactComponent as AXIS_ICON } from "../../assets/icons/orientation-icon
 import { useDragDrop } from "../shared/DragDropProvider";
 
 export default function BuildNav({
+  puzzle,
   axis,
   toggleAxis,
   previewing,
@@ -9,15 +10,18 @@ export default function BuildNav({
   clearAnswers,
 }) {
   const { holding } = useDragDrop;
+  const { answers } = puzzle;
 
   return (
     <div id="build-nav">
       {/* ------- PREVIEW ------- */}
       <button
-        className={`preview-btn ${previewing ? "active" : "inactive"}`}
+        className={`preview-btn ${previewing ? "active" : ""} ${
+          !answers.size ? "inactive" : ""
+        }`}
         onClick={e => {
           e.preventDefault();
-          togglePreviewing();
+          answers.size && togglePreviewing();
         }}
       >
         <svg>
@@ -38,9 +42,10 @@ export default function BuildNav({
       </button>
       {/* ------- RESET ------- */}
       <button
+        className={`reset-btn ${!answers.size ? "inactive" : ""}`}
         onClick={e => {
           e.preventDefault();
-          clearAnswers();
+          answers.size && clearAnswers();
         }}
       >
         <svg>

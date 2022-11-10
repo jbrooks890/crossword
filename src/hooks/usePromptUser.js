@@ -1,1 +1,6 @@
-export default function usePromptUser({ message, operations, abritrary }) {}
+export default function usePromptUser({
+  title,
+  message,
+  operations,
+  abritrary,
+}) {}

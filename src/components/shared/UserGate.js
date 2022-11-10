@@ -21,6 +21,8 @@ export default function UserGate({ inline }) {
       [e.name]: e.target.value,
     }));
 
+  const handleSubmit = e => e.preventDefault();
+
   const ShowPassword = ({ target }) => (
     <button
       className="show-password flex center"
@@ -39,6 +41,7 @@ export default function UserGate({ inline }) {
     <form
       id="user-gate"
       className={`flex col ${existingUser ? "sign-in" : "sign-up"}`}
+      onSubmit={e => handleSubmit(e)}
     >
       {!inline && (
         <h2 className="logo">

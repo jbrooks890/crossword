@@ -8,6 +8,7 @@ export default function Password({ label, display, onChange }) {
   const ShowPassword = () => (
     <button
       className="show-password flex center"
+      type="button"
       onClick={e => {
         e.preventDefault();
         toggleShowing(prev => !prev);

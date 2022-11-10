@@ -1,0 +1,106 @@
+#user-gate {
+  width: 25vw;
+  max-width: 480px;
+  background-color: var(--darker);
+  padding: 2rem;
+  border-radius: 15px;
+  transition: .2s ease-out;
+}
+
+#user-gate h2.logo {
+  align-self: center;
+  width: 50%;
+  /* margin-bottom: 2rem; */
+}
+
+#user-gate label {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  margin-block: 1rem;
+}
+
+#user-gate label::before {
+  content: attr(data-label);
+  display: block;
+  position: absolute;
+  top:0;
+  /* margin-bottom: .5em; */
+  padding-bottom: .5em;
+  font-family: var(--keyFont);
+  font-size: small;
+  text-transform: uppercase;
+  transform: translateY(-100%);
+  text-align: left;
+}
+
+#user-gate label .show-password {
+  --size: 2rem;
+  width: var(--size);
+  position: absolute;
+  inset: 0 0 0 auto;
+  border: none;
+}
+
+#user-gate label .show-password svg {
+  --size: 60%;
+  width: var(--size);
+  height: var(--size);
+  fill: var(--mid);
+  transition: opacity .1s ease-out;
+}
+
+#user-gate label .showing+.show-password svg{
+  opacity: .5;
+}
+
+#user-gate input,
+#user-gate button[type="submit"]{
+  background-color: transparent;
+  color: var(--mid);
+  border: 2px solid var(--mid);
+  border-radius: 5px;
+}
+
+#user-gate button[type="submit"]{
+  align-self: center;
+  margin-top: 1rem;
+  line-height: 1em;
+  padding-inline: 1rem;
+  transition: .1s ease-out;
+}
+
+#user-gate button[type="submit"]:focus {
+  background-color: var(--mid);
+  color: var(--darker);
+}
+
+#user-gate input {
+  padding: 1em;
+  font-size: .75rem;
+}
+
+
+#user-gate .register-user{
+  font-size: smaller;
+}
+
+#user-gate .register-user a {
+  cursor: pointer;
+  filter: brightness(1.25);
+  font-weight: 500;
+}
+
+/* ================= HOVER ================= */
+
+@media (hover:hover){
+  #user-gate button[type="submit"]:hover {
+      background-color: var(--mid);
+      color: var(--darker);
+    }
+
+  #user-gate .register-user a:hover{
+    color: var(--pop);
+  }
+}

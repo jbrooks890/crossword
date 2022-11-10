@@ -35,7 +35,8 @@
   --mid: var(--colorD);
   --dark: var(--colorE); 
   --darker: var(--colorF);
-  --faint: hsla(0,0%,0%,0.1);
+  --faint: rgba(44, 15, 87, 0.1);
+  --shadow: rgba(0,0%,0%,0.1);
   --phantom: hsla(0,0%,0%,0.05);
   /* ========== FONTS ========== */
   --keyFont: 'Russo', sans-serif;

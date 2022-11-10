@@ -5,6 +5,7 @@ import Build from "../pages/Build";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import Play from "../pages/Play";
+import Sandbox from "../pages/Sandbox";
 import axios from "axios";
 import apiUrl from "../../config";
 
@@ -30,6 +31,7 @@ export default function Main() {
         <Route path="/puzzles/:id" element={<Play games={games} />} />
         <Route path="/build" element={<Build />} />
         <Route path="/about" element={<About />} />
+        <Route path="/sandbox" element={<Sandbox />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </main>

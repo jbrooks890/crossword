@@ -86,12 +86,10 @@ export default function Grid({
   }
 
   // =========== GROUP ANSWERS ===========
-  // function groupAnswers() {
   const groupAnswers = (activeCols, activeRows) => {
     // console.log(`%cTEST!`, "color:coral");
     // console.log("answers:\n", answerKey);
     const { cols, rows } = grid;
-    // console.log(activeCols, activeRows);
 
     const groups = [];
 
@@ -118,7 +116,7 @@ export default function Grid({
                   dir,
                   group,
                   sum: group.map(cell => answerKey[cell]).join(""),
-                  hint: "",
+                  hint: answers.has(name) ? answers.get(name).hint : "",
                 },
               ]);
             }

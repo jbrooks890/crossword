@@ -1,16 +1,31 @@
 #user-gate {
-  width: 25vw;
-  max-width: 480px;
+  /* width: 50vw; */
+  min-width: 240px;
+  max-width: 640px;
   background-color: var(--darker);
-  padding: 2rem;
+  padding: 2rem 3rem;
   border-radius: 15px;
   transition: .2s ease-out;
+  box-sizing: border-box;
+}
+
+#user-gate.sign-in {
+  width: 25vw;
+}
+
+#user-gate.sign-up {
+  width: 50vw; 
 }
 
 #user-gate h2.logo {
   align-self: center;
-  width: 50%;
+  width: 10rem;
+  max-width: 50%;
   /* margin-bottom: 2rem; */
+}
+
+#user-gate .wrapper label:not(:last-of-type) {
+  margin-right: 1em;
 }
 
 #user-gate label {
@@ -30,6 +45,7 @@
   padding-bottom: .5em;
   font-family: var(--keyFont);
   font-size: small;
+  letter-spacing: .05em;
   text-transform: uppercase;
   transform: translateY(-100%);
   text-align: left;
@@ -57,9 +73,11 @@
 
 #user-gate input,
 #user-gate button[type="submit"]{
+  --color: var(--colorH);
   background-color: transparent;
-  color: var(--mid);
-  border: 2px solid var(--mid);
+  color: var(--color);
+  border: 2px solid var(--color);
+  /* filter: brightness(1.5); */
   border-radius: 5px;
 }
 
@@ -81,9 +99,20 @@
   font-size: .75rem;
 }
 
+#user-gate input::selection{
+  background-color: var(--mid);
+  color: var(--darker);
+}
+
+#user-gate input::placeholder{
+  color: var(--mid);
+  font-style: italic;
+  opacity: .75;
+}
+
 
 #user-gate .register-user{
-  font-size: smaller;
+  font-size: .75rem;
 }
 
 #user-gate .register-user a {

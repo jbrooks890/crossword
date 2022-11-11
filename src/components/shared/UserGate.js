@@ -1,12 +1,14 @@
 import "../../styles/UserGate.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Password from "../frags/Password";
 import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo-2.svg";
+import apiUrl from "../../config";
+import axios from "axios";
 
 export default function UserGate({ inline }) {
   const [existingUser, toggleExistingUser] = useState(true);
   const [userGateForm, setUserGateForm] = useState({
-    userName: "",
+    username: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -14,14 +16,70 @@ export default function UserGate({ inline }) {
     confirmPassword: "",
   });
   const [formValidation, setFormValidation] = useState({});
+  const LOGIN_URL = `${apiUrl}/login`;
+  const SIGNUP_URL = `${apiUrl}/users`;
+
+  // useEffect(() => console.log(userGateForm), [userGateForm]);
 
   const handleInput = e =>
     setUserGateForm(prev => ({
       ...prev,
-      [e.name]: e.target.value,
+      [e.target.name]: e.target.value,
     }));
 
-  const handleSubmit = e => e.preventDefault();
+  const handleSubmit = e => {
+    e.preventDefault();
+    existingUser ? logIn() : validateRegistration();
+  };
+
+  const logIn = async () => {
+    const { username, password } = userGateForm;
+    const response = await axios({
+      url: LOGIN_URL,
+      method: "POST",
+      data: { username, password },
+    });
+
+    console.log(response);
+  };
+
+  const validateRegistration = () => {
+    const keys = Object.keys(userGateForm);
+    const { username, firstName, lastName, email, password, confirmPassword } =
+      userGateForm;
+    const errors = {};
+
+    keys.forEach(key => {
+      switch (key) {
+        case "username":
+          // query database for a matching username
+          if (!username) {
+            errors.username = "Username required.";
+          }
+          break;
+        case "firstName":
+          if (!firstName) errors.firstName = "Required field";
+          break;
+        case "lastName":
+          if (!lastName) errors.lastName = "Required field";
+          break;
+        case "email":
+          // console.log("email", email.match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i));
+          break;
+        case "password":
+          if (password.length < 8) {
+            errors.password = "Password must be at least 8 characters";
+          }
+          break;
+        case "confirmPassword":
+          if (confirmPassword !== password)
+            errors.confirmPassword = "Passwords do not match.";
+          break;
+      }
+    });
+    console.log("errors:", errors);
+    if (Object.keys(errors).length) setFormValidation(errors);
+  };
 
   const ShowPassword = ({ target }) => (
     <button
@@ -50,28 +108,61 @@ export default function UserGate({ inline }) {
       )}
       {/* ------- USERNAME ------- */}
       <label
-        htmlFor="userName"
+        htmlFor="username"
         data-label={existingUser ? "username / email" : "username"}
         className={`required`}
       >
-        <input id="userName" type="text" />
+        <input name="username" type="text" onChange={e => handleInput(e)} />
       </label>
+
+      {!existingUser && (
+        <div className="name-section wrapper flex ">
+          {/* ------- FIRST NAME ------- */}
+          <label
+            htmlFor="firstName"
+            data-label="first name"
+            className={`required`}
+          >
+            <input
+              name="firstName"
+              type="text"
+              onChange={e => handleInput(e)}
+            />
+          </label>
+
+          {/* ------- LAST NAME ------- */}
+          <label
+            htmlFor="lastName"
+            data-label="last name"
+            className={`required`}
+          >
+            <input name="lastName" type="text" onChange={e => handleInput(e)} />
+          </label>
+        </div>
+      )}
 
       {/* ------- EMAIL ------- */}
       {!existingUser && (
         <label htmlFor="email" data-label="email">
-          <input type="email" id="email" />
+          <input
+            type="email"
+            name="email"
+            placeholder="janedoe@domain.com"
+            onChange={e => handleInput(e)}
+          />
         </label>
       )}
       {/* ------- PASSWORD ------- */}
-      <Password label={"password"} onChange={handleInput} />
+      <Password label={"password"} handleInput={e => handleInput(e)} />
 
       {/* ------- CONFIRM PASSWORD ------- */}
-      {!existingUser && <Password label={"confirmPassword"} />}
+      {!existingUser && (
+        <Password label={"confirmPassword"} handleInput={e => handleInput(e)} />
+      )}
 
       {/* ------- GO: SIGN-IN/UP ------- */}
 
-      <button type="submit">
+      <button type="submit" onMouseUp={e => e.currentTarget.blur()}>
         <h2>{existingUser ? "Login" : "Sign up"}</h2>
       </button>
 

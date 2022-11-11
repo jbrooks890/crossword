@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-export default function Password({ label, display, onChange }) {
+export default function Password({ label, display, handleInput }) {
   const [showing, toggleShowing] = useState(false);
 
   const target = useRef();
@@ -29,8 +29,9 @@ export default function Password({ label, display, onChange }) {
       <input
         ref={target}
         type={showing ? "text" : "password"}
-        id={label}
+        name={label}
         className={showing ? "showing" : ""}
+        onChange={handleInput}
       />
       <ShowPassword />
     </label>

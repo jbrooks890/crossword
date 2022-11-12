@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "../../styles/AnswerInput.css";
-import { usePlayMaster } from "../shared/PlayMasterProvider";
+import { usePlayMaster } from "../contexts/PlayMasterProvider";
 
 export default function AnswerInput({
   entry,

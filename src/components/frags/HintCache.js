@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import "../../styles/HintCache.css";
-import { usePlayMaster } from "../shared/PlayMasterProvider";
+import { usePlayMaster } from "../contexts/PlayMasterProvider";
 
 export default function HintCache({
   hints,

@@ -1,5 +1,5 @@
 import "../../styles/ButtonCache.css";
-import { usePlayMaster } from "../shared/PlayMasterProvider";
+import { usePlayMaster } from "../contexts/PlayMasterProvider";
 
 export default function ButtonCache({ giveHint, clear }) {
   const game = usePlayMaster()[4];

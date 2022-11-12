@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { debounce, getLetter } from "../../utility/helperFuncs";
-import { useBuildMaster } from "../shared/BuildMasterProvider";
-import { usePlayMaster } from "../shared/PlayMasterProvider";
+import { useBuildMaster } from "../contexts/BuildMasterProvider";
+import { usePlayMaster } from "../contexts/PlayMasterProvider";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   const {

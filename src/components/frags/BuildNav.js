@@ -1,5 +1,5 @@
 import { ReactComponent as AXIS_ICON } from "../../assets/icons/orientation-icon.svg";
-import { useDragDrop } from "../shared/DragDropProvider";
+import { useDragDrop } from "../contexts/DragDropProvider";
 
 export default function BuildNav({
   puzzle,

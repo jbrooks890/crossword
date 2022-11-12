@@ -19,6 +19,18 @@ export default function UserGate({ inline }) {
   const LOGIN_URL = `${apiUrl}/login`;
   const SIGNUP_URL = `${apiUrl}/users`;
 
+  const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+  const instructions = {
+    username: "",
+    password: "", // TODO
+    firstName: "",
+    lastName: "",
+    email: "",
+  };
+
   // useEffect(() => console.log(userGateForm), [userGateForm]);
 
   const handleInput = e =>
@@ -34,13 +46,17 @@ export default function UserGate({ inline }) {
 
   const logIn = async () => {
     const { username, password } = userGateForm;
-    const response = await axios({
-      url: LOGIN_URL,
-      method: "POST",
-      data: { username, password },
-    });
-
-    console.log(response);
+    try {
+      const response = await axios({
+        url: LOGIN_URL,
+        method: "POST",
+        data: { username, password },
+        // headers: { 'Content-Type': 'application/json' },
+        // withCredentials: true
+      });
+      const { accessToken, refreshToken } = response.data; //TODO: add roles
+      console.log(response);
+    } catch (err) {}
   };
 
   const validateRegistration = () => {
@@ -64,11 +80,17 @@ export default function UserGate({ inline }) {
           if (!lastName) errors.lastName = "Required field";
           break;
         case "email":
-          // console.log("email", email.match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i));
+          console.log(EMAIL_REGEX.test(email));
           break;
         case "password":
           if (password.length < 8) {
             errors.password = "Password must be at least 8 characters";
+          }
+          if (password.length > 24) {
+            errors.password = "Password cannot be more than 24 characters";
+          }
+          if (!PWD_REGEX.test(password)) {
+            errors.password = "Invalid user password";
           }
           break;
         case "confirmPassword":
@@ -112,7 +134,12 @@ export default function UserGate({ inline }) {
         data-label={existingUser ? "username / email" : "username"}
         className={`required`}
       >
-        <input name="username" type="text" onChange={e => handleInput(e)} />
+        <input
+          name="username"
+          type="text"
+          onChange={e => handleInput(e)}
+          autoComplete={existingUser ? "off" : "on"}
+        />
       </label>
 
       {!existingUser && (

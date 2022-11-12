@@ -90,7 +90,7 @@
 }
 
 #user-gate button[type="submit"]:focus {
-  background-color: var(--mid);
+  background-color: var(--colorH);
   color: var(--darker);
 }
 
@@ -125,7 +125,7 @@
 
 @media (hover:hover){
   #user-gate button[type="submit"]:hover {
-      background-color: var(--mid);
+      background-color: var(--colorH);
       color: var(--darker);
     }
 

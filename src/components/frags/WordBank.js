@@ -1,8 +1,8 @@
 import "../../styles/WordBank.css";
 import { useEffect, useRef, useState } from "react";
 import WordBankEntry from "./WordBankEntry";
-import { useBuildMaster } from "../shared/BuildMasterProvider";
-import { useDragDrop } from "../shared/DragDropProvider";
+import { useBuildMaster } from "../contexts/BuildMasterProvider";
+import { useDragDrop } from "../contexts/DragDropProvider";
 
 export default function WordBank({ puzzle, wordList, axis, toggleAxis }) {
   const { answerKey, answers, rows, cols } = puzzle;

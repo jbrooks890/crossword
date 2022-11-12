@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../styles/Grid.css";
 import { debounce, getLetter } from "../../utility/helperFuncs";
-import { useDragDrop } from "../shared/DragDropProvider";
+import { useDragDrop } from "../contexts/DragDropProvider";
 import Cell from "./Cell";
 
 export default function Grid({

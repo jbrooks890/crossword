@@ -9,7 +9,7 @@ import HintCache from "../frags/HintCache";
 import apiUrl from "../../config";
 import CommentSection from "../frags/CommentSection";
 import AnswerInput from "../frags/AnswerInput";
-import { PlayMasterProvider } from "../shared/PlayMasterProvider";
+import { PlayMasterProvider } from "../contexts/PlayMasterProvider";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
 export default function Play({ games }) {

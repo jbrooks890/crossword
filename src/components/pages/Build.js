@@ -5,12 +5,12 @@ import BuildNav from "../frags/BuildNav";
 import Frame from "../frags/Frame";
 import Grid from "../frags/Grid";
 import HintInput from "../frags/HintInput";
-import { BuildMasterProvider } from "../shared/BuildMasterProvider";
+import { BuildMasterProvider } from "../contexts/BuildMasterProvider";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
 import axios from "axios";
 import WordBank from "../frags/WordBank";
 import BuildWindow from "../frags/BuildWindow";
-import DragDropProvider from "../shared/DragDropProvider";
+import DragDropProvider from "../contexts/DragDropProvider";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({

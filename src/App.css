@@ -32,7 +32,7 @@
   --pop: var(--colorG);
   --pop-alt: var(--colorB);
   --lite: var(--colorA);
-  --mid: var(--colorD);
+  --mid: var(--colorH);
   --dark: var(--colorE); 
   --darker: var(--colorF);
   --faint: rgba(44, 15, 87, 0.1);
@@ -132,9 +132,9 @@ textarea::-webkit-resizer{
 }
 
 
-header, footer {
+/* header, footer {
   padding: 2rem;
-}
+} */
 
 .flex {
   display: flex;
@@ -162,6 +162,21 @@ header, footer {
   color: red;
   font-size: .75rem;
   text-align: inherit;
+}
+
+p.error {
+  margin: 0;
+  padding-bottom: 1em;
+  transition: .1s ease-out;
+}
+
+p.error.hide {
+  max-height: 0;
+  opacity: 0;
+}
+
+p.error.show{
+  opacity: 1;
 }
 
 .placeholder {

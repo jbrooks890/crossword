@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-export default function Password({ label, display, handleInput }) {
+export default function Password({ label, display, handleInput, value }) {
   const [showing, toggleShowing] = useState(false);
 
   const target = useRef();
@@ -13,6 +13,8 @@ export default function Password({ label, display, handleInput }) {
         e.preventDefault();
         toggleShowing(prev => !prev);
       }}
+      // onMouseEnter={() => toggleShowing(true)}
+      // onMouseLeave={() => toggleShowing(false)}
       tabIndex={-1}
     >
       <svg>
@@ -32,6 +34,7 @@ export default function Password({ label, display, handleInput }) {
         name={label}
         className={showing ? "showing" : ""}
         onChange={handleInput}
+        value={value}
       />
       <ShowPassword />
     </label>

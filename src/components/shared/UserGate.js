@@ -4,9 +4,10 @@ import Password from "../frags/Password";
 import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo-2.svg";
 import apiUrl from "../../config";
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContextProvider";
 
 export default function UserGate({ inline }) {
-  const [existingUser, toggleExistingUser] = useState(true);
+  const [loginMode, toggleLoginMode] = useState(true);
   const [userGateForm, setUserGateForm] = useState({
     username: "",
     firstName: "",
@@ -15,9 +16,16 @@ export default function UserGate({ inline }) {
     password: "", // TODO
     confirmPassword: "",
   });
+  const { username, firstName, lastName, email, password, confirmPassword } =
+    userGateForm;
+
+  const [successful, setSuccessful] = useState(false);
   const [formValidation, setFormValidation] = useState({});
+  const [loginErr, setLoginErr] = useState("");
   const LOGIN_URL = `${apiUrl}/login`;
   const SIGNUP_URL = `${apiUrl}/users`;
+  const { auth, setAuth } = useAuth();
+  const errorMsg = useRef();
 
   const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -33,6 +41,13 @@ export default function UserGate({ inline }) {
 
   // useEffect(() => console.log(userGateForm), [userGateForm]);
 
+  useEffect(() => {
+    errorMsg.current.style.maxHeight =
+      !inline &&
+      loginErr &&
+      errorMsg.current.getBoundingClientRect().height + "px";
+  }, [loginErr]);
+
   const handleInput = e =>
     setUserGateForm(prev => ({
       ...prev,
@@ -41,7 +56,7 @@ export default function UserGate({ inline }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    existingUser ? logIn() : validateRegistration();
+    loginMode ? logIn() : validateRegistration();
   };
 
   const logIn = async () => {
@@ -54,9 +69,32 @@ export default function UserGate({ inline }) {
         // headers: { 'Content-Type': 'application/json' },
         // withCredentials: true
       });
-      const { accessToken, refreshToken } = response.data; //TODO: add roles
-      console.log(response);
-    } catch (err) {}
+      const { accessToken } = response.data;
+      console.log(response.data); // TODO: remove in prod
+      loginErr && setLoginErr("");
+      setAuth({ username, accessToken });
+      setUserGateForm(prev => ({ ...prev, username: "", password: "" }));
+      setSuccessful(true);
+    } catch (err) {
+      if (!err?.response) {
+        setLoginErr("No Server Response");
+      } else if (err.response?.status) {
+        let message = () => {
+          switch (err.response.status) {
+            case 400:
+              return "Invalid username or password";
+              break;
+            case 401:
+              return "Unauthorized";
+              break;
+            default:
+              return "Login failed";
+              break;
+          }
+        };
+        setLoginErr(message());
+      }
+    }
   };
 
   const validateRegistration = () => {
@@ -117,10 +155,13 @@ export default function UserGate({ inline }) {
     </button>
   );
 
+  // --------------------------------
+  // :::::::::::: RENDER ::::::::::::
+
   return (
     <form
       id="user-gate"
-      className={`flex col ${existingUser ? "sign-in" : "sign-up"}`}
+      className={`flex col ${loginMode ? "sign-in" : "sign-up"}`}
       onSubmit={e => handleSubmit(e)}
     >
       {!inline && (
@@ -128,21 +169,30 @@ export default function UserGate({ inline }) {
           <XWORD_LOGO />
         </h2>
       )}
+      {!inline && (
+        <p
+          ref={errorMsg}
+          className={`error violation ${loginErr ? "show" : "hide"}`}
+        >
+          {loginErr}
+        </p>
+      )}
       {/* ------- USERNAME ------- */}
       <label
         htmlFor="username"
-        data-label={existingUser ? "username / email" : "username"}
+        data-label={loginMode ? "username / email" : "username"}
         className={`required`}
       >
         <input
           name="username"
           type="text"
           onChange={e => handleInput(e)}
-          autoComplete={existingUser ? "off" : "on"}
+          autoComplete={loginMode ? "off" : "on"}
+          value={username}
         />
       </label>
 
-      {!existingUser && (
+      {!loginMode && (
         <div className="name-section wrapper flex ">
           {/* ------- FIRST NAME ------- */}
           <label
@@ -154,6 +204,7 @@ export default function UserGate({ inline }) {
               name="firstName"
               type="text"
               onChange={e => handleInput(e)}
+              value={firstName}
             />
           </label>
 
@@ -163,46 +214,58 @@ export default function UserGate({ inline }) {
             data-label="last name"
             className={`required`}
           >
-            <input name="lastName" type="text" onChange={e => handleInput(e)} />
+            <input
+              name="lastName"
+              type="text"
+              onChange={e => handleInput(e)}
+              value={lastName}
+            />
           </label>
         </div>
       )}
 
       {/* ------- EMAIL ------- */}
-      {!existingUser && (
+      {!loginMode && (
         <label htmlFor="email" data-label="email">
           <input
             type="email"
             name="email"
             placeholder="janedoe@domain.com"
             onChange={e => handleInput(e)}
+            value={email}
           />
         </label>
       )}
       {/* ------- PASSWORD ------- */}
-      <Password label={"password"} handleInput={e => handleInput(e)} />
+      <Password
+        label={"password"}
+        handleInput={e => handleInput(e)}
+        value={password}
+      />
 
       {/* ------- CONFIRM PASSWORD ------- */}
-      {!existingUser && (
-        <Password label={"confirmPassword"} handleInput={e => handleInput(e)} />
+      {!loginMode && (
+        <Password
+          label={"confirmPassword"}
+          handleInput={e => handleInput(e)}
+          value={confirmPassword}
+        />
       )}
 
       {/* ------- GO: SIGN-IN/UP ------- */}
 
       <button type="submit" onMouseUp={e => e.currentTarget.blur()}>
-        <h2>{existingUser ? "Login" : "Sign up"}</h2>
+        <h2>{loginMode ? "Login" : "Sign up"}</h2>
       </button>
 
       {/* ------- REGISTER USER ------- */}
-      {existingUser ? (
+      {loginMode ? (
         <p className="register-user">
-          Not a member? <a onClick={() => toggleExistingUser(false)}>Sign up</a>
-          .
+          Not a member? <a onClick={() => toggleLoginMode(false)}>Sign up</a>.
         </p>
       ) : (
         <p className="register-user">
-          Have an account?{" "}
-          <a onClick={() => toggleExistingUser(true)}>Log in</a>.
+          Have an account? <a onClick={() => toggleLoginMode(true)}>Log in</a>.
         </p>
       )}
     </form>

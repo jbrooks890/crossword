@@ -1,6 +1,7 @@
 /*  ============ FOOTER  ============ */
 
 footer {
+  padding: 2rem;
   background-color: var(--darker);
   color: var(--mid);
 }

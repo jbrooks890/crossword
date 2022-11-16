@@ -18,6 +18,7 @@
   --colorF: #150330;
   --colorG: #8840f2;
   --colorH: hsl(248, 100%, 63%);
+  --colorI: #a398ff;
   --gradient: linear-gradient(
     45deg, 
     var(--colorB),
@@ -32,6 +33,7 @@
   --pop: var(--colorG);
   --pop-alt: var(--colorB);
   --lite: var(--colorA);
+  --brite: var(--colorI);
   --mid: var(--colorH);
   --dark: var(--colorE); 
   --darker: var(--colorF);

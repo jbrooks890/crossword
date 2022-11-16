@@ -1,13 +1,14 @@
 /* --------- NAV --------- */
 nav a {
+  margin-right: 1.5em;
   color: var(--lite);
   font-family: var(--keyFont);
   letter-spacing: 0.1em;
 }
 
-nav a:not(:last-of-type) {
+/* nav a:not(:last-of-type) {
   margin-right: 1.5em;
-}
+} */
 
 nav a.login {
   /* cursor: pointer; */

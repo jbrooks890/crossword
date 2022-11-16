@@ -11,6 +11,8 @@
 
 #user-gate.sign-in {
   width: 25vw;
+  min-width: 432px;
+  max-width: 520px;
 }
 
 #user-gate.sign-up {
@@ -75,8 +77,8 @@
 #user-gate button[type="submit"]{
   --color: var(--colorH);
   background-color: transparent;
-  color: var(--color);
-  border: 2px solid var(--color);
+  color: var(--brite);
+  border: 2px solid var(--mid);
   /* filter: brightness(1.5); */
   border-radius: 5px;
 }

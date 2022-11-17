@@ -76,7 +76,7 @@ svg.sm-icon:hover {
 footer span.copyright {
   cursor: default;
   color: var(--mid);
-  filter: brightness(1.25);
+  /* filter: brightness(1.25); */
   font-size: .75rem;
 }
 

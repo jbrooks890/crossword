@@ -30,7 +30,7 @@
   margin-right: 1em;
 }
 
-#user-gate label {
+#user-gate label:not(.custom-checkbox) {
   position: relative;
   display: flex;
   flex-grow: 1;
@@ -38,7 +38,7 @@
   margin-block: 1rem;
 }
 
-#user-gate label::before {
+#user-gate label:not(.custom-checkbox)::before {
   content: attr(data-label);
   display: block;
   position: absolute;
@@ -96,7 +96,15 @@
   color: var(--darker);
 }
 
-#user-gate input {
+#user-gate input[type="checkbox"]:checked{
+  background-color: var(--mid);
+}
+
+#user-gate .persist-check {
+  --color: var(--mid);
+}
+
+#user-gate input:not([type="checkbox"]) {
   padding: 1em;
   font-size: .75rem;
 }

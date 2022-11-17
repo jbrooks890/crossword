@@ -5,6 +5,7 @@ import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo-2.sv
 import apiUrl from "../../config";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContextProvider";
+import Checkbox from "../frags/Checkbox";
 
 export default function UserGate({ inline }) {
   const [loginMode, toggleLoginMode] = useState(true);
@@ -24,7 +25,7 @@ export default function UserGate({ inline }) {
   const [loginErr, setLoginErr] = useState("");
   const LOGIN_URL = `${apiUrl}/login`;
   const SIGNUP_URL = `${apiUrl}/users`;
-  const { auth, setAuth } = useAuth();
+  const { auth, setAuth, persist, setPersist } = useAuth();
   const errorMsg = useRef();
 
   const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
@@ -141,19 +142,9 @@ export default function UserGate({ inline }) {
     if (Object.keys(errors).length) setFormValidation(errors);
   };
 
-  const ShowPassword = ({ target }) => (
-    <button
-      className="show-password flex center"
-      onClick={e => {
-        e.preventDefault();
-        target.current.classList.toggle("showing");
-      }}
-    >
-      <svg>
-        <use href="#eye-con" />
-      </svg>
-    </button>
-  );
+  const togglePersist = () => setPersist(prev => !prev);
+
+  useEffect(() => localStorage.setItem("persist", persist), [persist]);
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
@@ -267,6 +258,18 @@ export default function UserGate({ inline }) {
         <p className="register-user">
           Have an account? <a onClick={() => toggleLoginMode(true)}>Log in</a>.
         </p>
+      )}
+
+      {/* ------- REMEMBER ME CHECKBOX ------- */}
+
+      {loginMode && (
+        <Checkbox
+          id="persist"
+          classList={["persist-check", "flex", "center"]}
+          label="Remember this device"
+          onChange={togglePersist}
+          def={persist}
+        />
       )}
     </form>
   );

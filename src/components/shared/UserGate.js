@@ -153,6 +153,7 @@ export default function UserGate({ inline }) {
     <form
       id="user-gate"
       className={`flex col ${loginMode ? "sign-in" : "sign-up"}`}
+      spellCheck="false"
       onSubmit={e => handleSubmit(e)}
     >
       {!inline && (

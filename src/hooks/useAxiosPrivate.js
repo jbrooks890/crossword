@@ -7,22 +7,22 @@ export default function useAxiosPrivate() {
   const refresh = useRefreshToken();
   const { auth } = useAuth();
 
-  //  ----------- REQUEST handler -----------
-
-  const requestIntercept = axiosPrivate.interceptors.request.use(
-    config => {
-      if (!config.headers["Authorization"]) {
-        config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
-      }
-      return config;
-    },
-    err => Promise.reject(err)
-  );
-
-  //  ----------- RESPONSE handler -----------
-
   useEffect(() => {
-    // TODO: what is this? VV
+    //  ----------- REQUEST handler -----------
+
+    const requestIntercept = axiosPrivate.interceptors.request.use(
+      config => {
+        if (!config.headers["Authorization"]) {
+          config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
+        }
+        return config;
+      },
+      err => Promise.reject(err)
+    );
+
+    //  ----------- RESPONSE handler -----------
+
+    // TODO: what are interceptors?
     const responseIntercept = axiosPrivate.interceptors.response.use(
       response => response,
       async err => {

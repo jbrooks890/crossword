@@ -4,14 +4,10 @@ import jwt_decode from "jwt-decode";
 
 export default function ProtectedContent({ allowedRoles }) {
   const { auth } = useAuth();
+  const { roles } = auth;
   const location = useLocation();
 
-  console.log(allowedRoles);
-
-  const decoded = auth?.accessToken ? jwt_decode(auth.accessToken) : undefined;
-  const roles = decoded?.credentials?.roles || [];
-  console.log(auth);
-  console.log(roles.join(", "));
+  // console.log(allowedRoles);
 
   return roles.find(role => allowedRoles?.includes(role)) ? (
     <Outlet />

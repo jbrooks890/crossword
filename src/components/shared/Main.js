@@ -12,6 +12,7 @@ import ProtectedContent from "./ProtectedContent";
 import Dashboard from "../pages/Dashboard";
 import axios from "../../apis/axios";
 import useAxios from "../../hooks/useAxios";
+import PersistLogin from "./PersistLogin";
 
 export default function Main() {
   const [games, setGames] = useState([]);
@@ -35,16 +36,18 @@ export default function Main() {
   return (
     <main>
       <Routes>
-        <Route path="/" element={<Home games={games} />} />
-        <Route path="/puzzles/:id" element={<Play />} />
-        <Route path="/build" element={<Build />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/sandbox" element={<Sandbox />} />
-        <Route path="/login" element={<UserGate isLogin={true} />} />
-        <Route path="/register" element={<UserGate isLogin={false} />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route element={<ProtectedContent allowedRoles={[8737]} />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<PersistLogin />}>
+          <Route path="/" element={<Home games={games} />} />
+          <Route path="/puzzles/:id" element={<Play />} />
+          <Route path="/build" element={<Build />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/sandbox" element={<Sandbox />} />
+          <Route path="/login" element={<UserGate isLogin={true} />} />
+          <Route path="/register" element={<UserGate isLogin={false} />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route element={<ProtectedContent allowedRoles={[8737]} />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

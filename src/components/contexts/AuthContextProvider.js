@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -9,8 +10,14 @@ export default function AuthContextProvider({ children }) {
     JSON.parse(localStorage.getItem("persist")) || false
   );
 
+  const setUser = token => {
+    const { credentials } = jwt_decode(token);
+    const { username, roles } = credentials;
+    setAuth({ username, roles, token });
+  };
+
   return (
-    <AuthContext.Provider value={{ auth, setAuth, persist, setPersist }}>
+    <AuthContext.Provider value={{ auth, setUser, persist, setPersist }}>
       {children}
     </AuthContext.Provider>
   );

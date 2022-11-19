@@ -25,7 +25,7 @@ export default function UserGate({ isLogin, inline }) {
   const [loginErr, setLoginErr] = useState("");
   const LOGIN_URL = `${apiUrl}/login`;
   const SIGNUP_URL = `${apiUrl}/users`;
-  const { auth, setAuth, persist, setPersist } = useAuth();
+  const { auth, setUser, persist, setPersist } = useAuth();
   const errorMsg = useRef();
 
   const navigate = useNavigate();
@@ -72,15 +72,19 @@ export default function UserGate({ isLogin, inline }) {
         url: LOGIN_URL,
         method: "POST",
         data: { username, password },
-        // headers: { 'Content-Type': 'application/json' },
-        // withCredentials: true
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       });
       const { accessToken } = response.data;
       console.log(response.data); // TODO: remove in prod
+
       loginErr && setLoginErr("");
-      setAuth({ username, accessToken });
+
+      // setAuth({ username, accessToken });
+      setUser(accessToken);
       setUserGateForm(prev => ({ ...prev, username: "", password: "" }));
       console.log({ from }); //TODO
+
       navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {

@@ -25,7 +25,9 @@ export default function Nav() {
       {
         <>
           {$MOBILE ? <MobileNav links={links} /> : links}
-          <a className="login">{auth?.username ? auth.username : "Login"}</a>
+          <NavLink className="login" to="/login">
+            {auth?.username ? auth.username : "Login"}
+          </NavLink>
         </>
       }
     </nav>

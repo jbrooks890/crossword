@@ -232,10 +232,7 @@ h1.puzzle-title.editable:hover::after {
   position: absolute;
   display: flex;
   align-items: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   box-sizing: border-box;
   transition: 0.1s ease-out;
   opacity: 0;

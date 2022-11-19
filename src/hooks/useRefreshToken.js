@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../apis/axios";
 import { useAuth } from "../components/contexts/AuthContextProvider";
 
 export default function useRefreshToken() {
@@ -9,11 +9,13 @@ export default function useRefreshToken() {
       withCredentials: true,
     });
     const token = response?.data.accessToken;
+    console.log({ token });
+
     setAuth(prev => {
       console.log(JSON.stringify(prev));
-      console.log({ token });
       return { ...prev, accessToken: token };
     });
+
     return token;
   };
 

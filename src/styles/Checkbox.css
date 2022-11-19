@@ -3,7 +3,7 @@
     --color: inherit;
     cursor: pointer;
     position: relative;
-    margin-top: 1em;
+    /* margin-top: 1em; */
     width: var(--size);
     height: var(--size);
     box-sizing: border-box;

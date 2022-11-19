@@ -1,5 +1,6 @@
 #user-gate {
   /* width: 50vw; */
+  align-self: center;
   min-width: 240px;
   max-width: 640px;
   background-color: var(--darker);

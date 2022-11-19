@@ -1,18 +1,13 @@
 import { useState, useEffect } from "react";
 import "../../styles/Home.css";
-import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
 import { ReactComponent as XWORD_FULL } from "../../assets/icons/xword-full-logo.svg";
-import apiUrl from "../../config";
 
 export default function Home({ games }) {
-  // const [games, setGames] = useState([]);
-  const [activeGame, setActiveGame] = useState({});
-
   const gamesData = games.map(puzzle => {
     const { _id, name, description } = puzzle;
     return (
-      <Link key={_id} to={`/puzzles/${_id}`}>
+      <Link key={_id} to={`/puzzles/${_id}`} state={puzzle}>
         <div className="puzzle-list-item">
           <h3>{name}</h3>
           <p>{description}</p>
@@ -20,8 +15,6 @@ export default function Home({ games }) {
       </Link>
     );
   });
-
-  // games.length && console.log(games);
 
   return (
     <div id="home-page">

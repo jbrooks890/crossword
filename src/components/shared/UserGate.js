@@ -6,9 +6,10 @@ import apiUrl from "../../config";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContextProvider";
 import Checkbox from "../frags/Checkbox";
+import { Link, useLocation, useNavigate, useNvigate } from "react-router-dom";
 
-export default function UserGate({ inline }) {
-  const [loginMode, toggleLoginMode] = useState(true);
+export default function UserGate({ isLogin, inline }) {
+  const [loginMode, toggleLoginMode] = useState(isLogin);
   const [userGateForm, setUserGateForm] = useState({
     username: "",
     firstName: "",
@@ -20,13 +21,16 @@ export default function UserGate({ inline }) {
   const { username, firstName, lastName, email, password, confirmPassword } =
     userGateForm;
 
-  const [successful, setSuccessful] = useState(false);
   const [formValidation, setFormValidation] = useState({});
   const [loginErr, setLoginErr] = useState("");
   const LOGIN_URL = `${apiUrl}/login`;
   const SIGNUP_URL = `${apiUrl}/users`;
   const { auth, setAuth, persist, setPersist } = useAuth();
   const errorMsg = useRef();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -41,6 +45,7 @@ export default function UserGate({ inline }) {
   };
 
   // useEffect(() => console.log(userGateForm), [userGateForm]);
+  useEffect(() => setLoginErr(""), [username, password, loginMode]);
 
   useEffect(() => {
     errorMsg.current.style.maxHeight =
@@ -75,7 +80,8 @@ export default function UserGate({ inline }) {
       loginErr && setLoginErr("");
       setAuth({ username, accessToken });
       setUserGateForm(prev => ({ ...prev, username: "", password: "" }));
-      setSuccessful(true);
+      console.log({ from }); //TODO
+      navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
         setLoginErr("No Server Response");
@@ -244,6 +250,18 @@ export default function UserGate({ inline }) {
         />
       )}
 
+      {/* ------- REMEMBER ME CHECKBOX ------- */}
+
+      {loginMode && (
+        <Checkbox
+          id="persist"
+          classList={["persist-check", "flex", "start", "middle"]}
+          label="Remember this device"
+          onChange={togglePersist}
+          def={persist}
+        />
+      )}
+
       {/* ------- GO: SIGN-IN/UP ------- */}
 
       <button type="submit" onMouseUp={e => e.currentTarget.blur()}>
@@ -259,18 +277,6 @@ export default function UserGate({ inline }) {
         <p className="register-user">
           Have an account? <a onClick={() => toggleLoginMode(true)}>Log in</a>.
         </p>
-      )}
-
-      {/* ------- REMEMBER ME CHECKBOX ------- */}
-
-      {loginMode && (
-        <Checkbox
-          id="persist"
-          classList={["persist-check", "flex", "center"]}
-          label="Remember this device"
-          onChange={togglePersist}
-          def={persist}
-        />
       )}
     </form>
   );

@@ -151,6 +151,10 @@ textarea::-webkit-resizer{
   align-items: center;
 }
 
+.flex.middle {
+  align-items: center;
+}
+
 .flex.col {
   flex-direction: column;
 }

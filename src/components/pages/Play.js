@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import Frame from "../frags/Frame";
 import HintBox from "../frags/HintBox";
@@ -12,9 +12,10 @@ import AnswerInput from "../frags/AnswerInput";
 import { PlayMasterProvider } from "../contexts/PlayMasterProvider";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
-export default function Play({ games }) {
+export default function Play() {
+  const location = useLocation();
+  const { state: puzzle } = location;
   const { id } = useParams();
-  const puzzle = games ? games.find(game => game._id === id) : null;
   const [activePuzzle, setActivePuzzle] = useState(
     puzzle ? initialize(puzzle) : {}
   );

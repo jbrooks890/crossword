@@ -1,5 +1,9 @@
 .word-bank {
+  flex-grow: 1;
   text-align: left;
+  overflow: hidden;
+  box-sizing: border-box;
+  /* border: 2px solid magenta; */
 }
 
 .word-bank-new h5{
@@ -52,8 +56,10 @@
 }
 
 .word-bank-list {
+  margin-block: 1em 0;
   padding-left: 0;
   padding-inline: .5rem;
+  overflow-y: scroll;
   list-style-type: none;
 }
 

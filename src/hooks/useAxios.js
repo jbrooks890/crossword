@@ -17,7 +17,6 @@ export default function useAxios() {
         ...config,
         signal: ctrl.signal,
       });
-      console.log(res); // TODO: remove after test
       setResponse(res.data);
     } catch (err) {
       console.log(err.message); // TODO: remove after test

@@ -116,7 +116,7 @@ export default function WordBank({ puzzle, wordList, axis, toggleAxis }) {
   // :::::::::::: RENDER ::::::::::::
 
   return (
-    <div className="word-bank">
+    <div className="word-bank flex col">
       <div className="word-bank-new flex">
         {/* <h5>new word</h5> */}
         <input
@@ -142,7 +142,10 @@ export default function WordBank({ puzzle, wordList, axis, toggleAxis }) {
       <div className={`word-bank-error ${error ? "active" : ""}`}>
         {error && error}
       </div>
-      <ul className="word-bank-list flex col start">
+      <ul
+        className="word-bank-list flex col start"
+        onMouseEnter={e => e.currentTarget.focus()}
+      >
         {[...wordBank].map(([entry, placed], i) => (
           <WordBankEntry
             key={i}

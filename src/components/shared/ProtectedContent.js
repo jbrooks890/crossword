@@ -1,6 +1,5 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContextProvider";
-import jwt_decode from "jwt-decode";
 
 export default function ProtectedContent({ allowedRoles }) {
   const { auth } = useAuth();
@@ -9,7 +8,7 @@ export default function ProtectedContent({ allowedRoles }) {
 
   // console.log(allowedRoles);
 
-  return roles.find(role => allowedRoles?.includes(role)) ? (
+  return roles?.find(role => allowedRoles?.includes(role)) ? (
     <Outlet />
   ) : auth?.user ? (
     <Navigate to="/unauthorized" state={{ from: location }} replace /> // TODO

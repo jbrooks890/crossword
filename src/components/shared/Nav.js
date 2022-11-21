@@ -3,10 +3,12 @@ import "../../styles/Nav.css";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import MobileNav from "./MobileNav";
 import { useAuth } from "../contexts/AuthContextProvider";
+import useLogout from "../../hooks/useLogout";
 
 export default function Nav() {
   const $MOBILE = useMediaQuery();
-  const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
+  const logout = useLogout();
 
   const links = Array.from(
     new Map([
@@ -25,9 +27,21 @@ export default function Nav() {
       {
         <>
           {$MOBILE ? <MobileNav links={links} /> : links}
-          <NavLink className="login" to="/login">
-            {auth?.username ? auth.username : "Login"}
-          </NavLink>
+          {auth?.username ? (
+            <a
+              className="login"
+              onClick={e => {
+                e.preventDefault();
+                logout();
+              }}
+            >
+              {auth.username}
+            </a>
+          ) : (
+            <NavLink className="login" to="/login">
+              Login
+            </NavLink>
+          )}
         </>
       }
     </nav>

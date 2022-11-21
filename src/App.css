@@ -142,6 +142,10 @@ textarea::-webkit-resizer{
   display: flex;
 }
 
+.flex.col {
+  flex-direction: column;
+}
+
 .flex.start {
   align-items: flex-start;
 }
@@ -155,9 +159,6 @@ textarea::-webkit-resizer{
   align-items: center;
 }
 
-.flex.col {
-  flex-direction: column;
-}
 
 .grid {
   display: grid;

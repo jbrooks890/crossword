@@ -4,11 +4,17 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 5rem;
+  height: 95vh;
+  border: 1px solid red;
+  box-sizing: border-box;
 }
 
 #cw-grid-wrap {
   position: relative;
   box-sizing: border-box;
+  flex-grow: 1;
+  /* border: 1px solid orange; */
+  overflow: hidden;
 }
 
 #cw-grid-wrap.mini {
@@ -41,7 +47,8 @@
   height: var(--size); */
   /* justify-self: center;
   align-self: center; */
-  flex-grow: 1;
+  align-self: stretch;
+  flex-grow: 0;
   flex-shrink: 0;
   margin: 0 auto;
   padding: 1rem;
@@ -100,6 +107,8 @@ h1.puzzle-title.editable:hover::after {
 .cell {
   position: relative;
   visibility: hidden;
+  /* max-width: 48px;
+  max-height: 48px; */
 }
 
 /* .cell.junction:hover {

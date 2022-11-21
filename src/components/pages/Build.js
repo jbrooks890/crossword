@@ -335,7 +335,7 @@ export default function Build() {
                 togglePreviewing={() => togglePreviewMode(prev => !prev)}
                 clearAnswers={clearAnswers}
               />
-              <div id="cw-grid-wrap" className="flex center">
+              <div id="cw-grid-wrap" className="flex">
                 <div id="puzzle-window" className="flex">
                   <DragDropProvider>
                     <Grid

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../../styles/Grid.css";
 import { debounce, getLetter } from "../../utility/helperFuncs";
 import { useDragDrop } from "../contexts/DragDropProvider";
@@ -34,7 +34,8 @@ export default function Grid({
   });
   // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const [dropPreview, setDropPreview] = useState([]);
-  const [fitFrame, setFitFrame] = useState(false);
+  const [fitFrame, setFitFrame] = useState(true);
+  const gridRef = useRef();
 
   const $DnD = useDragDrop();
   const { holding, setHolding } = $DnD ? $DnD : {};
@@ -44,6 +45,13 @@ export default function Grid({
   // -----------------------------------------------
 
   useEffect(() => setGrid(createGrid()), [answerKey]);
+  useEffect(
+    () =>
+      (gridRef.current.style.width = fitFrame
+        ? gridRef.current.getBoundingClientRect().height + "px"
+        : "auto"),
+    []
+  );
 
   // =========== GET GROUPS ===========
 
@@ -265,18 +273,23 @@ export default function Grid({
   return (
     <div
       id="cw-grid"
+      ref={gridRef}
       className={[
         "grid",
         mini ? "mini" : "",
         preview ? "preview" : "",
         fitFrame && "fit",
-      ].join(" ")}
+      ]
+        .filter(Boolean)
+        .join(" ")}
       style={{
         gridTemplate: `repeat(${
           editing && !preview ? rows : grid.activeRows.length
-        }, ${mini || fitFrame ? "1fr" : "48px"}) / repeat(${
-          editing && !preview ? cols : grid.activeCols.length
-        }, ${mini || fitFrame ? "1fr" : "48px"})`,
+        }, ${
+          mini || fitFrame ? "minmax(min-content,48px)" : "48px"
+        }) / repeat(${editing && !preview ? cols : grid.activeCols.length}, ${
+          mini || fitFrame ? "minmax(min-content,48px)" : "48px"
+        })`,
       }}
     >
       {renderGrid()}

@@ -24,9 +24,12 @@ export default function BuildWindow({ children }) {
           </button>
         ))}
       </div>
-      <div className="build-window flex">
+      <div className="build-window flex col">
         {children.map((child, i) => (
-          <div key={i} className={i === activeSection ? "active" : ""}>
+          <div
+            key={i}
+            className={`flex col ${i === activeSection ? "active" : ""}`}
+          >
             {child}
           </div>
         ))}

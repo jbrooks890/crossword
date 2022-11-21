@@ -32,13 +32,15 @@ export default function UserGate({ isLogin, inline }) {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+  const UNAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
-  const instructions = {
-    username: "",
-    password: "", // TODO
+  const criteria = {
+    username:
+      "Must be between 3-23 characters. No spaces or special characters.",
+    password:
+      "Must be between 8-24 characters. Must include alphanumeric characters and an allowed special character (!@#$%)", // TODO
     firstName: "",
     lastName: "",
     email: "",
@@ -83,7 +85,6 @@ export default function UserGate({ isLogin, inline }) {
       // setAuth({ username, accessToken });
       setUser(accessToken);
       setUserGateForm(prev => ({ ...prev, username: "", password: "" }));
-      console.log({ from }); //TODO
 
       navigate(from, { replace: true });
     } catch (err) {

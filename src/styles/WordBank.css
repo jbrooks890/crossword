@@ -36,6 +36,7 @@
 
 .word-bank-new button {
   --size: 2rem;
+  flex-shrink: 0;
   width: var(--size);
   height: var(--size);
   align-self: center;

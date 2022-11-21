@@ -34,7 +34,7 @@ export default function Grid({
   });
   // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
   const [dropPreview, setDropPreview] = useState([]);
-  const [fitFrame, setFitFrame] = useState(true);
+  const [fitFrame, setFitFrame] = useState(false);
   const gridRef = useRef();
 
   const $DnD = useDragDrop();
@@ -45,13 +45,14 @@ export default function Grid({
   // -----------------------------------------------
 
   useEffect(() => setGrid(createGrid()), [answerKey]);
-  useEffect(
-    () =>
-      (gridRef.current.style.width = fitFrame
-        ? gridRef.current.getBoundingClientRect().height + "px"
-        : "auto"),
-    []
-  );
+
+  // useEffect(
+  //   () =>
+  //     (gridRef.current.style.width = fitFrame
+  //       ? gridRef.current.getBoundingClientRect().height + "px"
+  //       : "auto"),
+  //   [createGrid]
+  // );
 
   // =========== GET GROUPS ===========
 

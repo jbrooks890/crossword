@@ -6,7 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
 
 :root{
-  --grid: 48px;
+  --grid: 40px;
   /* ========== COLORS ========== */
   --colorA: #eaedff;
   --colorB: #51f23f;

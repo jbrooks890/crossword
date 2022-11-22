@@ -13,6 +13,7 @@ import { ReactComponent as HELP_ICON } from "../../assets/icons/xword-help.svg";
 import { ReactComponent as LIST_ICON } from "../../assets/icons/list-icon.svg";
 import { ReactComponent as EYE_ICON } from "../../assets/icons/eye-con.svg";
 import { ReactComponent as AXIS_ICON } from "../../assets/icons/orientation-icon.svg";
+import { ReactComponent as CANCEL_ICON } from "../../assets/icons/x-icon.svg";
 
 export default function Icons() {
   return (
@@ -32,6 +33,7 @@ export default function Icons() {
       <LIST_ICON />
       <EYE_ICON />
       <AXIS_ICON />
+      <CANCEL_ICON />
     </svg>
   );
 }

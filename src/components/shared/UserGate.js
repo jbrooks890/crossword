@@ -1,20 +1,20 @@
 import "../../styles/UserGate.css";
 import { useEffect, useRef, useState } from "react";
-import Password from "../frags/Password";
 import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo-2.svg";
-import apiUrl from "../../config";
-// import axios from "axios";
 import axios, { axiosPrivate } from "../../apis/axios";
 import { useAuth } from "../contexts/AuthContextProvider";
-import Checkbox from "../frags/Checkbox";
 import { Link, useLocation, useNavigate, useNvigate } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
+import Password from "./form/Password";
+import TextField from "./form/TextField";
+import FieldSet from "./form/FieldSet";
+import Checkbox from "./form/Checkbox";
 
 export default function UserGate({ isLogin, inline }) {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
   const [loginMode, setLoginMode] = useState(
-    isLogin || location.path.contains("/login")
+    isLogin || location?.path?.contains("/login")
   );
   const [userGateForm, setUserGateForm] = useState({
     username: "",
@@ -29,8 +29,6 @@ export default function UserGate({ isLogin, inline }) {
 
   const [formValidation, setFormValidation] = useState({});
   const [loginErr, setLoginErr] = useState("");
-  const LOGIN_URL = `${apiUrl}/login`;
-  const SIGNUP_URL = `${apiUrl}/users`;
   const { auth, setUser, persist, setPersist } = useAuth();
   const errorMsg = useRef();
 
@@ -74,7 +72,7 @@ export default function UserGate({ isLogin, inline }) {
   // <><><><><><><><> LOGIN <><><><><><><><>
 
   const logIn = async () => {
-    console.log(`%cLOG IN!`, "color:lime");
+    // console.log(`%cLOG IN!`, "color:lime");
     const { username, password } = userGateForm;
     try {
       const response = await axiosPrivate.post("/login", {
@@ -180,7 +178,7 @@ export default function UserGate({ isLogin, inline }) {
   // <><><><><><><><> REGISTER (USER) <><><><><><><><>
 
   const registerUser = async () => {
-    console.log(`%cLOG IN!`, "color:coral");
+    // console.log(`%cREGISTER USER!`, "color:coral");
     if (validateRegistration()) {
       try {
         await fetch({
@@ -193,6 +191,7 @@ export default function UserGate({ isLogin, inline }) {
           lastName,
           email,
         });
+        setFormValidation({});
         setLoginMode(true);
         resetForm(username);
       } catch (err) {
@@ -204,6 +203,88 @@ export default function UserGate({ isLogin, inline }) {
   const togglePersist = () => setPersist(prev => !prev);
 
   useEffect(() => localStorage.setItem("persist", persist), [persist]);
+
+  const registrationForm = {
+    username: {
+      type: "text",
+      placeholder: !loginMode ? "jane_doe01" : "",
+      forLogin: true,
+      criteria:
+        "Must be between 3-23 characters. No spaces or special characters.",
+    },
+    name: {
+      type: "set",
+      fields: {
+        firstName: {
+          type: "text",
+          placeholder: "Jane",
+          forLogin: false,
+          criteria: "",
+        },
+        lastName: {
+          type: "text",
+          placeholder: "Doe",
+          forLogin: false,
+          criteria: "",
+        },
+      },
+    },
+
+    email: {
+      type: "text",
+      placeholder: "janedoe@domain.com",
+      forLogin: false,
+      criteria: "Enter a valid email",
+    },
+    password: {
+      type: "password",
+      placeholder: "",
+      forLogin: true,
+      criteria:
+        "Must be between 8-24 characters. Must include alphanumeric characters and an allowed special character (!@#$%)",
+    },
+    confirmPassword: {
+      type: "password",
+      placeholder: "",
+      forLogin: false,
+      criteria: "Passwords must match",
+    },
+  };
+
+  // <><><><><><><><> RENDER EACH (FIELD) <><><><><><><><>
+
+  const renderEach = (field, entry, i) => {
+    const { type } = entry;
+    const specs = {
+      ...entry,
+      field,
+      required: Boolean(criteria),
+      label: field.replace(/([A-Z])/g, " $1").toLowerCase(),
+      validation: !loginMode && Boolean(Object.keys(formValidation).length),
+      isValid: !formValidation[field],
+      value: userGateForm[field],
+      onChange: e => handleInput(e),
+    };
+
+    switch (type) {
+      case "password":
+        return <Password key={i} {...specs} />;
+        break;
+      case "set":
+        return (
+          <FieldSet key={i} {...specs} fields={renderFields(entry.fields)} />
+        );
+        break;
+      default:
+        return <TextField key={i} {...specs} />;
+        break;
+    }
+  };
+
+  // <><><><><><><><> RENDER FIELDS <><><><><><><><>
+
+  const renderFields = fields =>
+    Object.keys(fields).map((entry, i) => renderEach(entry, fields[entry], i));
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
@@ -228,82 +309,17 @@ export default function UserGate({ isLogin, inline }) {
           {loginErr}
         </p>
       )}
-      {/* ------- USERNAME ------- */}
-      <label
-        htmlFor="username"
-        data-label={loginMode ? "username / email" : "username"}
-        className={`required`}
-      >
-        <input
-          name="username"
-          type="text"
-          placeholder={!loginMode ? "jane_doe01" : ""}
-          onChange={e => handleInput(e)}
-          autoComplete={loginMode ? "off" : "on"}
-          value={username}
-        />
-      </label>
 
-      {!loginMode && (
-        <div className="name-section wrapper flex ">
-          {/* ------- FIRST NAME ------- */}
-          <label
-            htmlFor="firstName"
-            data-label="first name"
-            className={`required`}
-          >
-            <input
-              name="firstName"
-              type="text"
-              placeholder="Jane"
-              value={firstName}
-              onChange={e => handleInput(e)}
-            />
-          </label>
+      {/* ==========/ FORM FIELDS \========== */}
 
-          {/* ------- LAST NAME ------- */}
-          <label
-            htmlFor="lastName"
-            data-label="last name"
-            className={`required`}
-          >
-            <input
-              name="lastName"
-              type="text"
-              placeholder="Doe"
-              value={lastName}
-              onChange={e => handleInput(e)}
-            />
-          </label>
-        </div>
-      )}
-
-      {/* ------- EMAIL ------- */}
-      {!loginMode && (
-        <label htmlFor="email" data-label="email">
-          <input
-            type="email"
-            name="email"
-            placeholder="janedoe@domain.com"
-            onChange={e => handleInput(e)}
-            value={email}
-          />
-        </label>
-      )}
-      {/* ------- PASSWORD ------- */}
-      <Password
-        label={"password"}
-        handleInput={e => handleInput(e)}
-        value={password}
-      />
-
-      {/* ------- CONFIRM PASSWORD ------- */}
-      {!loginMode && (
-        <Password
-          label={"confirmPassword"}
-          handleInput={e => handleInput(e)}
-          value={confirmPassword}
-        />
+      {renderFields(
+        loginMode
+          ? Object.fromEntries(
+              Object.entries(registrationForm).filter(
+                ([field, entry]) => entry.forLogin
+              )
+            )
+          : registrationForm
       )}
 
       {/* ------- REMEMBER ME CHECKBOX ------- */}

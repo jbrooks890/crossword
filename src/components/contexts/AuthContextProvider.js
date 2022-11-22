@@ -12,11 +12,7 @@ export default function AuthContextProvider({ children }) {
 
   // --------- SET USER (decrypts access token) ---------
 
-  const setUser = token => {
-    const { credentials } = jwt_decode(token);
-    const { username, roles } = credentials;
-    setAuth({ username, roles, token });
-  };
+  const setUser = token => setAuth({ ...jwt_decode(token).credentials, token });
 
   // --------- CLEAR AUTH (for logout) ---------
 

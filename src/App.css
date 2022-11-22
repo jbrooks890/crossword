@@ -91,9 +91,13 @@ a:hover, a:focus {
   outline: none;
 }
 
-button {
+button, input, textarea, fieldset, legend {
   -webkit-appearance: none;
   appearance: none;
+}
+
+button {
+  
   cursor: pointer;
   margin: 0;
   padding: 0;
@@ -139,6 +143,12 @@ input:auto-fill {
   background-color: transparent !important;
   color: inherit;
   mix-blend-mode: darken;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: inherit;
 }
 
 

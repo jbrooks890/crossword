@@ -36,22 +36,23 @@
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  margin-block: 1rem;
+  margin-bottom: 1rem;
 }
 
-#user-gate label:not(.custom-checkbox)::before {
-  content: attr(data-label);
-  display: block;
-  position: absolute;
-  top:0;
-  /* margin-bottom: .5em; */
+#user-gate label:not(.custom-checkbox) > span {
+  display: flex;
+  align-items: center;
   padding-bottom: .5em;
+  height: 1.5em;
   font-family: var(--keyFont);
   font-size: small;
   letter-spacing: .05em;
   text-transform: uppercase;
-  transform: translateY(-100%);
   text-align: left;
+}
+
+#user-gate label .password-wrap input {
+  flex-grow: 1;
 }
 
 #user-gate label .show-password {
@@ -61,6 +62,7 @@
   inset: 0 0 0 auto;
   border: none;
 }
+
 
 #user-gate label .show-password svg {
   --size: 60%;

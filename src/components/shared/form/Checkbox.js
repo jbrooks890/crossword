@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import "../../styles/Checkbox.css";
+import "../../../styles/Checkbox.css";
 
 export default function Checkbox({ id, classList, label, onChange, def }) {
   const input = useRef();

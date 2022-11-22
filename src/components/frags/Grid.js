@@ -45,13 +45,6 @@ export default function Grid({
   // -----------------------------------------------
 
   useEffect(() => setGrid(createGrid()), [answerKey]);
-  useEffect(
-    () =>
-      (gridRef.current.style.width = fitFrame
-        ? gridRef.current.getBoundingClientRect().height + "px"
-        : "auto"),
-    []
-  );
 
   // =========== GET GROUPS ===========
 

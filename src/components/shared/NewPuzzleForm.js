@@ -174,7 +174,7 @@ function NumInput({ dir, linked, defaultValue, updatePuzzle }) {
         className="num-input"
         type="number"
         min={10}
-        max={30}
+        max={20}
         defaultValue={defaultValue}
         onMouseEnter={e => e.currentTarget.focus()}
         onMouseLeave={e => e.currentTarget.blur()}

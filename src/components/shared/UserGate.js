@@ -3,13 +3,19 @@ import { useEffect, useRef, useState } from "react";
 import Password from "../frags/Password";
 import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo-2.svg";
 import apiUrl from "../../config";
-import axios from "axios";
+// import axios from "axios";
+import axios, { axiosPrivate } from "../../apis/axios";
 import { useAuth } from "../contexts/AuthContextProvider";
 import Checkbox from "../frags/Checkbox";
 import { Link, useLocation, useNavigate, useNvigate } from "react-router-dom";
+import useAxios from "../../hooks/useAxios";
 
 export default function UserGate({ isLogin, inline }) {
-  const [loginMode, toggleLoginMode] = useState(isLogin);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const [loginMode, setLoginMode] = useState(
+    isLogin || location.path.contains("/login")
+  );
   const [userGateForm, setUserGateForm] = useState({
     username: "",
     firstName: "",
@@ -29,8 +35,8 @@ export default function UserGate({ isLogin, inline }) {
   const errorMsg = useRef();
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+
+  const [response, error, loading, fetch] = useAxios();
 
   const UNAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -41,8 +47,6 @@ export default function UserGate({ isLogin, inline }) {
       "Must be between 3-23 characters. No spaces or special characters.",
     password:
       "Must be between 8-24 characters. Must include alphanumeric characters and an allowed special character (!@#$%)", // TODO
-    firstName: "",
-    lastName: "",
     email: "",
   };
 
@@ -64,25 +68,23 @@ export default function UserGate({ isLogin, inline }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    loginMode ? logIn() : validateRegistration();
+    loginMode ? logIn() : registerUser();
   };
 
+  // <><><><><><><><> LOGIN <><><><><><><><>
+
   const logIn = async () => {
+    console.log(`%cLOG IN!`, "color:lime");
     const { username, password } = userGateForm;
     try {
-      const response = await axios({
-        url: LOGIN_URL,
-        method: "POST",
-        data: { username, password },
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
+      const response = await axiosPrivate.post("/login", {
+        username,
+        password,
       });
       const { accessToken } = response.data;
-      console.log(response.data); // TODO: remove in prod
 
       loginErr && setLoginErr("");
 
-      // setAuth({ username, accessToken });
       setUser(accessToken);
       setUserGateForm(prev => ({ ...prev, username: "", password: "" }));
 
@@ -109,6 +111,8 @@ export default function UserGate({ isLogin, inline }) {
     }
   };
 
+  // <><><><><><><><> VALIDATE REGISTRATION <><><><><><><><>
+
   const validateRegistration = () => {
     const keys = Object.keys(userGateForm);
     const { username, firstName, lastName, email, password, confirmPassword } =
@@ -116,12 +120,15 @@ export default function UserGate({ isLogin, inline }) {
     const errors = {};
 
     keys.forEach(key => {
+      if (criteria[key] && !userGateForm[key]) errors[key] = "required field";
+
       switch (key) {
         case "username":
           // query database for a matching username
           if (!username) {
-            errors.username = "Username required.";
+            errors.username = "Username required";
           }
+          if (!UNAME_REGEX.test(username)) errors.username = "Invalid username";
           break;
         case "firstName":
           if (!firstName) errors.firstName = "Required field";
@@ -130,7 +137,7 @@ export default function UserGate({ isLogin, inline }) {
           if (!lastName) errors.lastName = "Required field";
           break;
         case "email":
-          console.log(EMAIL_REGEX.test(email));
+          if (!EMAIL_REGEX.test(email)) errors.email = "Invalid email address";
           break;
         case "password":
           if (password.length < 8) {
@@ -149,8 +156,49 @@ export default function UserGate({ isLogin, inline }) {
           break;
       }
     });
+
     console.log("errors:", errors);
     if (Object.keys(errors).length) setFormValidation(errors);
+
+    console.log(!Object.keys(errors).length);
+    return !Object.keys(errors).length;
+  };
+
+  // <><><><><><><><> RESET FORM <><><><><><><><>
+
+  const resetForm = (entries = {}) =>
+    setUserGateForm({
+      username: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      ...entries,
+    });
+
+  // <><><><><><><><> REGISTER (USER) <><><><><><><><>
+
+  const registerUser = async () => {
+    console.log(`%cLOG IN!`, "color:coral");
+    if (validateRegistration()) {
+      try {
+        await fetch({
+          instance: axios,
+          method: "POST",
+          url: "/users",
+          username,
+          password,
+          firstName,
+          lastName,
+          email,
+        });
+        setLoginMode(true);
+        resetForm(username);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   const togglePersist = () => setPersist(prev => !prev);
@@ -189,6 +237,7 @@ export default function UserGate({ isLogin, inline }) {
         <input
           name="username"
           type="text"
+          placeholder={!loginMode ? "jane_doe01" : ""}
           onChange={e => handleInput(e)}
           autoComplete={loginMode ? "off" : "on"}
           value={username}
@@ -206,8 +255,9 @@ export default function UserGate({ isLogin, inline }) {
             <input
               name="firstName"
               type="text"
-              onChange={e => handleInput(e)}
+              placeholder="Jane"
               value={firstName}
+              onChange={e => handleInput(e)}
             />
           </label>
 
@@ -220,8 +270,9 @@ export default function UserGate({ isLogin, inline }) {
             <input
               name="lastName"
               type="text"
-              onChange={e => handleInput(e)}
+              placeholder="Doe"
               value={lastName}
+              onChange={e => handleInput(e)}
             />
           </label>
         </div>
@@ -276,11 +327,11 @@ export default function UserGate({ isLogin, inline }) {
       {/* ------- REGISTER USER ------- */}
       {loginMode ? (
         <p className="register-user">
-          Not a member? <a onClick={() => toggleLoginMode(false)}>Sign up</a>.
+          Not a member? <a onClick={() => setLoginMode(false)}>Sign up</a>.
         </p>
       ) : (
         <p className="register-user">
-          Have an account? <a onClick={() => toggleLoginMode(true)}>Log in</a>.
+          Have an account? <a onClick={() => setLoginMode(true)}>Log in</a>.
         </p>
       )}
     </form>

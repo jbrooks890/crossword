@@ -133,6 +133,14 @@ textarea::-webkit-resizer{
   display: none;
 }
 
+input:-webkit-auto-fill,
+input:auto-fill {
+  appearance: none !important;
+  background-color: transparent !important;
+  color: inherit;
+  mix-blend-mode: darken;
+}
+
 
 /* header, footer {
   padding: 2rem;

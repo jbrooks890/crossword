@@ -11,12 +11,14 @@ export default function useAxios() {
     const ctrl = new AbortController();
 
     setController(ctrl);
+
     try {
       setLoading(true);
       const res = await instance[method.toLowerCase()](url, {
         ...config,
         signal: ctrl.signal,
       });
+      // console.log(res.data);
       setResponse(res.data);
     } catch (err) {
       console.log(err.message); // TODO: remove after test

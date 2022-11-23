@@ -225,7 +225,6 @@ export default function UserGate({ isLogin, inline }) {
     const fields = Object.keys(userGateForm).filter(
       field => registrationForm[field]?.required
     );
-    console.log(fields);
     const errors = {};
 
     for (const field of fields) {
@@ -237,7 +236,7 @@ export default function UserGate({ isLogin, inline }) {
       if (validated) errors[field] = validated;
     }
 
-    console.log("errors:", errors);
+    // console.log("errors:", errors);
     if (Object.keys(errors).length)
       setFormValidation({ ...errors, attempted: true });
 

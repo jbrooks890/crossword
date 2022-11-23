@@ -40,6 +40,7 @@
 }
 
 #user-gate label:not(.custom-checkbox) > span {
+  cursor: pointer;
   display: flex;
   align-items: center;
   padding-bottom: .5em;
@@ -132,6 +133,52 @@
   cursor: pointer;
   filter: brightness(1.25);
   font-weight: 500;
+}
+
+#user-gate .criteria {
+  margin: 0;
+  padding-left: 0;
+  text-align: left;
+  list-style-type: none;
+  list-style-position: inside;
+  box-sizing: border-box;
+  /* border: 1px solid red; */
+  transition: 
+    max-height .1s ease-out, 
+    opacity .1s ease-out .1s
+}
+
+#user-gate .criteria.hide {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+#user-gate .criteria.show{
+  opacity: 1;
+}
+
+#user-gate .criteria li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: .25em;
+  padding-bottom: .25em;
+  font-size: .75em;
+  line-height: 1em;
+  /* color: var(--pop); */
+  filter: brightness(1.25);
+}
+
+#user-gate .criteria li::before {
+  --size: .5em;
+  content: "";
+  display: block;
+  margin-right: .75em;
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--mid);
+  border-radius: 1.5px;
 }
 
 /* ================= HOVER ================= */

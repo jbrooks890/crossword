@@ -2,16 +2,21 @@ import { useRef, useState } from "react";
 import ValidMarker from "./ValidMarker";
 
 export default function Password({
+  field,
   label,
-  display,
   validation,
-  isValid,
+  // isValid,
+  error,
   value,
+  criteria,
+  required,
   onChange,
 }) {
   const [showing, toggleShowing] = useState(false);
+  const [showCriteria, setShowCriteria] = useState(false);
 
   const target = useRef();
+  const criteriaRef = useRef();
 
   const ShowPassword = () => (
     <button
@@ -29,15 +34,32 @@ export default function Password({
     </button>
   );
 
+  const toggleCriteria = () => setShowCriteria(prev => !prev);
+
   return (
-    <label
-      htmlFor={label}
-      data-label={display ? display : label.replace(/([A-Z])/g, " $1")}
-    >
-      <span>
-        {display ? display : label.replace(/([A-Z])/g, " $1")}
-        {validation && <ValidMarker isValid={isValid} />}
+    <label htmlFor={field} data-label={label}>
+      <span onClick={toggleCriteria}>
+        {label}
+        {/* isValid, */}
+        {validation && <ValidMarker error={error} />}
       </span>
+      {criteria && (
+        <ul
+          ref={criteriaRef}
+          className={`criteria ${showCriteria ? "show" : "hide"}`}
+          style={
+            showCriteria
+              ? {
+                  maxHeight: criteriaRef.current.scrollHeight + "px",
+                }
+              : null
+          }
+        >
+          {criteria.split("; ").map((entry, i) => (
+            <li key={i}>{entry}</li>
+          ))}
+        </ul>
+      )}
       <div
         className="password-wrap flex middle"
         style={{ position: "relative", boxSizing: "border-box" }}
@@ -45,7 +67,8 @@ export default function Password({
         <input
           ref={target}
           type={showing ? "text" : "password"}
-          name={label}
+          name={field}
+          id={field}
           className={showing ? "showing" : ""}
           onChange={onChange}
           value={value}

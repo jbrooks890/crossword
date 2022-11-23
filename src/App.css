@@ -42,7 +42,7 @@
   --phantom: hsla(0,0%,0%,0.05);
   /* ========== FONTS ========== */
   --keyFont: 'Russo', sans-serif;
-  --bodyFont: 'Odibee Sans', cursive;
+  --bodyFont: Calibri;
   --fontSize: 21px;
   font-family: var(--bodyFont);
   font-size: var(--fontSize);
@@ -185,8 +185,20 @@ fieldset {
 .violation {
   margin-bottom: .5em;
   color: red;
-  font-size: .75rem;
+  font-size: .75em;
   text-align: inherit;
+}
+
+span.error {
+  color: red;
+  display: inline-block;
+  margin-left: .5em;
+  font-family: Calibri;
+  font-size: .75rem;
+  font-weight: normal;
+  line-height: 1em;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 p.error {

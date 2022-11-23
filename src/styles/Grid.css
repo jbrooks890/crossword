@@ -12,8 +12,8 @@
   position: relative;
   box-sizing: border-box;
   flex-grow: 1;
-  /* border: 1px solid orange; */
-  overflow: hidden;
+  /* overflow: hidden; */ 
+  /* ^^ 'STICKY' ^^ DOESN'T WORK IF OVERFLOW IS SPECIFIED W/O HEIGHT */
 }
 
 #cw-grid-wrap.mini {

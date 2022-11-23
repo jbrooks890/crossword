@@ -155,7 +155,6 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
             className={`select-${dir}`}
             onClick={e => {
               e.preventDefault();
-              // focusCell(id, axisGroups.get(dir));
               focusCell(id, name); // TODO: replace w/ useRef
             }}
           ></button>

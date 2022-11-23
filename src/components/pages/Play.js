@@ -11,6 +11,7 @@ import CommentSection from "../frags/CommentSection";
 import AnswerInput from "../frags/AnswerInput";
 import { PlayMasterProvider } from "../contexts/PlayMasterProvider";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { useAuth } from "../contexts/AuthContextProvider";
 
 export default function Play() {
   const location = useLocation();
@@ -30,6 +31,8 @@ export default function Play() {
   const $MOBILE = useMediaQuery();
   const [gridMini, toggleGridMini] = useState($MOBILE);
 
+  const { auth, gameplay, setGameplay } = useAuth();
+
   const wrapper = useRef();
 
   // const $CAN_HOVER = useMediaQuery("hover");
@@ -39,19 +42,48 @@ export default function Play() {
   useEffect(() => activePuzzle && console.log(activePuzzle), []);
 
   useEffect(() => {
-    LOADED &&
-      !game &&
-      setGame({
-        user: "",
-        input: activePuzzle ? clearUserInput(puzzle.answerKey) : null,
-        assists: [],
-        history: [],
-        startTime: 0, // Date obj
-        timer: 0,
-        completed: false,
-        READY: true,
-      });
+    if (LOADED && !game) {
+      setGame(
+        auth?.username && gameplay.has(id)
+          ? gameplay.get(id)
+          : {
+              user: auth?.username ?? "",
+              input: activePuzzle
+                ? clearUserInput(activePuzzle?.answerKey)
+                : null,
+              assists: [],
+              history: [],
+              startTime: 0, // Date obj
+              // timer: 0,
+              completed: false,
+              READY: true,
+            }
+      );
+    }
   }, [activePuzzle]);
+
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><>
+  // %%%%%%%%%%%%%%%%%%%%/ UNMOUNT \%%%%%%%%%%%%%%%%%%%%%
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+  // TUTORIAL:
+  // https://blog.joshsoftware.com/2021/08/09/react-tricks-customizing-your-useeffect-to-run-only-when-you-want/
+
+  const unmounting = useRef(false);
+
+  useEffect(() => {
+    return () => (unmounting.current = true);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (unmounting.current && game) {
+        auth?.username
+          ? setGameplay(prev => new Map([...prev]).set(id, game))
+          : sessionStorage.setItem(id, game);
+      }
+    };
+  }, [game]);
 
   // =========== FETCH DATA ===========
 
@@ -415,9 +447,8 @@ export default function Play() {
 
   const cellOperations = {
     controls: e => buttonControls(e),
-    // hoverGroup: hoverGroup,
-    focusCell: focusCell,
-    getLetter: getLetter,
+    focusCell,
+    getLetter,
   };
 
   // --------------------------------

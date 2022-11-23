@@ -9,6 +9,7 @@ export default function AuthContextProvider({ children }) {
   const [persist, setPersist] = useState(
     JSON.parse(localStorage.getItem("persist")) || false
   );
+  const [gameplay, setGameplay] = useState(new Map([]));
 
   // --------- SET USER (decrypts access token) ---------
 
@@ -18,9 +19,27 @@ export default function AuthContextProvider({ children }) {
 
   const clearAuth = () => setAuth({});
 
+  // useEffect(() => {
+  //   console.log(`%cUPDATE GAMEPLAY !!`, "color: aqua");
+  //   console.log("gameplay:", gameplay);
+  //   const prev = JSON.parse(localStorage.getItem(auth.username));
+  //   console.log(prev);
+  //   // prev && setGameplay(prev);
+  // }, [gameplay]);
+
+  useEffect(() => console.log(gameplay), [gameplay]);
+
   return (
     <AuthContext.Provider
-      value={{ auth, setUser, persist, setPersist, clearAuth }}
+      value={{
+        auth,
+        setUser,
+        persist,
+        setPersist,
+        clearAuth,
+        gameplay,
+        setGameplay,
+      }}
     >
       {children}
     </AuthContext.Provider>

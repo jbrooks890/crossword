@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { debounce, getLetter } from "../../utility/helperFuncs";
 import { useBuildMaster } from "../contexts/BuildMasterProvider";
 import { usePlayMaster } from "../contexts/PlayMasterProvider";
+import { ReactComponent as AXIS_SELECTOR } from "../../assets/icons/orientation-icon.svg";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   const {
@@ -23,15 +24,22 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   } = props;
   const { active: editing, phase } = editorMode;
   const $PLAY = usePlayMaster();
-  const [activeGroup, _, previewGroup, setPreviewGroup, game, setGame] = $PLAY
-    ? $PLAY
-    : [];
+  const [
+    activeGroup,
+    setActiveGroup,
+    previewGroup,
+    setPreviewGroup,
+    game,
+    setGame,
+  ] = $PLAY ? $PLAY : [];
   const $BUILD = useBuildMaster();
   const [newPuzzle, setNewPuzzle, orientation, setOrientation] = $BUILD
     ? $BUILD
     : [];
 
   const cellInput = useRef();
+
+  // console.log(groups);
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -144,24 +152,30 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     };
   };
 
-  const AxisSelector = () => (
-    <div className="axis-select">
-      {groups.map((group, i) => {
-        // const dir = group.split("-")[0];
-        const { name, dir } = group;
-        return (
-          <button
-            key={i}
-            className={`select-${dir}`}
-            onClick={e => {
-              e.preventDefault();
-              focusCell(id, name); // TODO: replace w/ useRef
-            }}
-          ></button>
-        );
-      })}
-    </div>
-  );
+  const AxisSelector = () => {
+    const selectAxis = e => {
+      const { target } = e;
+      const classes = target.parentElement.classList;
+      const arbiter = groups.reduce((prev, entry) =>
+        entry.group.indexOf(id) <= prev.group.indexOf(id) ? entry : prev
+      ).dir;
+
+      const axis = classes.contains("horizontal")
+        ? "across"
+        : classes.contains("vertical")
+        ? "down"
+        : arbiter;
+
+      const { name } = groups.find(group => group.dir === axis);
+      setActiveGroup(name);
+      cellInput.current.focus();
+    };
+    return (
+      <div className="axis-select" onClick={e => selectAxis(e)}>
+        <AXIS_SELECTOR />
+      </div>
+    );
+  };
   // =========== FORMAT CLASS LIST ===========
   const formatClassList = arr =>
     arr

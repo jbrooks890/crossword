@@ -254,6 +254,22 @@ h1.puzzle-title.editable:hover::after {
   z-index: -1;
 }
 
+.axis-select > svg {
+  cursor: pointer;
+}
+
+.axis-select .eye {
+  visibility: hidden;
+} 
+
+.axis-select .arrows {
+  fill: var(--faint);
+}
+
+.axis-select .arrows > g:hover {
+  fill: var(--pop);
+}
+
 .cell.junction:hover .axis-select{
   opacity: 1;
   z-index: 2;

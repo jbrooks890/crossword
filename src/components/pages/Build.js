@@ -11,6 +11,7 @@ import axios from "axios";
 import WordBank from "../frags/WordBank";
 import BuildWindow from "../frags/BuildWindow";
 import DragDropProvider from "../contexts/DragDropProvider";
+import { useAuth } from "../contexts/AuthContextProvider";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
@@ -38,6 +39,8 @@ export default function Build() {
   const [previewMode, togglePreviewMode] = useState(false);
   const [wordList, setWordList] = useState([]);
   const { phase } = newPuzzle.editorMode;
+
+  const { auth } = useAuth();
 
   // console.log(grid);
   useEffect(
@@ -286,10 +289,9 @@ export default function Build() {
           method: "POST",
           data: {
             ...newPuzzle,
+            author: auth.username,
             answers: [...newPuzzle.answers.values()],
             editorMode: { active: false, phase: 0 },
-            likes: 0,
-            comments: [],
           },
         })
       : console.log("Puzzle has errors!");

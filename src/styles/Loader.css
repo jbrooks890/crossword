@@ -1,0 +1,75 @@
+.loader {
+  min-width: 10vmin;
+  /* background-color: var(--darker); */
+}
+
+.loader .xword-logo-2 {
+  width: 100%;
+}
+
+.loader .xword-logo-2 {
+  /* fill: url(#linGradLoop); */
+  fill: url(#gradScroll);
+}
+
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes hue-shift {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.loader .xword-logo-2 #linGrad2 {
+  animation: rotate 1s linear infinite;  
+}
+
+@keyframes glow {
+  from {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+  to {
+    filter: brightness(1);
+    transform: scale(1);
+    }
+}
+
+@keyframes turn {
+  from {
+    /* color: var(--mid); */
+    transform: scale(1.25);
+  }
+  to {
+    /* color: var(--dark); */
+    transform: scale(1);
+    }
+}
+
+.loader.loading .xword-logo-2 {
+  animation: glow 1s infinite ease-in-out alternate-reverse;
+  /* animation: hue-shift 5s infinite linear; */
+}
+
+.loader .loading-word span {
+  --totalDelay: calc(var(--delay)*1.5);
+  display: inline-block;
+  transform-origin: center;
+  animation: turn 1s infinite linear alternate-reverse;
+  animation-delay: calc( var(--i)*.3s);
+}
+
+.loader .loading-word span:not(:last-of-type){
+  margin-right: .25em;
+}

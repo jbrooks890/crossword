@@ -39,13 +39,23 @@ export default function Play() {
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
 
-  useEffect(() => activePuzzle && console.log(activePuzzle), []);
+  // useEffect(() => activePuzzle && console.log(activePuzzle), []);
+  useEffect(() => game && console.log(game), [game]);
+
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><><>
+  // ::::::::::::::::::::\ LOAD GAME /::::::::::::::::::::
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
   useEffect(() => {
+    const session = JSON.parse(sessionStorage.getItem(id));
+    // console.log(session);
+
     if (LOADED && !game) {
       setGame(
         auth?.username && gameplay.has(id)
           ? gameplay.get(id)
+          : session
+          ? { ...session, input: new Map(Object.entries(session.input)) }
           : {
               user: auth?.username ?? "",
               input: activePuzzle
@@ -53,10 +63,11 @@ export default function Play() {
                 : null,
               assists: [],
               history: [],
+              errors: [],
               startTime: 0, // Date obj
-              // timer: 0,
-              completed: false,
               READY: true,
+              FINISHED: false,
+              COMPLETED: false,
             }
       );
     }
@@ -80,7 +91,13 @@ export default function Play() {
       if (unmounting.current && game) {
         auth?.username
           ? setGameplay(prev => new Map([...prev]).set(id, game))
-          : sessionStorage.setItem(id, game);
+          : sessionStorage.setItem(
+              id,
+              JSON.stringify({
+                ...game,
+                input: Object.fromEntries([...game.input]),
+              })
+            );
       }
     };
   }, [game]);
@@ -298,9 +315,9 @@ export default function Play() {
 
   // =========== FIND REMAINING ===========
   const findRemaining = () => {
-    return [...document.querySelectorAll(".cell-input.show")].filter(
-      cell => cell.value.length === 0
-    );
+    const remainder = [...game.input.values()].filter(userInput => !userInput);
+    setGame(prev => ({ ...prev, FINISHED: !remainder.length }));
+    return remainder;
   };
 
   // =========== FOCUS NEXT GROUP ===========
@@ -444,6 +461,22 @@ export default function Play() {
         ])
       ),
     }));
+
+  // =========== CHECK WORK ===========
+  const checkWork = () => {
+    // CHECK USER ENTRIES MATCHES EXACTLY THE ANSWER KEY
+    const { input } = game;
+    input.forEach((userInput, cell) => {
+      if (userInput !== answerKey[cell]) return false;
+    });
+    return true;
+  };
+
+  // <><><><><><><><><><><> WIN PUZZLE <><><><><><><><><><><>
+  const evalGame = () => {
+    if (checkWork()) {
+    }
+  };
 
   const cellOperations = {
     controls: e => buttonControls(e),

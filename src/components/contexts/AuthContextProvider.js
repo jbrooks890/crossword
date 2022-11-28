@@ -17,7 +17,10 @@ export default function AuthContextProvider({ children }) {
 
   // --------- CLEAR AUTH (for logout) ---------
 
-  const clearAuth = () => setAuth({});
+  const clearAuth = () => {
+    setAuth({});
+    setPersist(false);
+  };
 
   // useEffect(() => {
   //   console.log(`%cUPDATE GAMEPLAY !!`, "color: aqua");

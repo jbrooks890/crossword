@@ -7,7 +7,8 @@ import Grid from "../frags/Grid";
 import HintInput from "../frags/HintInput";
 import { BuildMasterProvider } from "../contexts/BuildMasterProvider";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
-import axios from "axios";
+// import axios from "axios";
+import axios from "../../apis/axios";
 import WordBank from "../frags/WordBank";
 import BuildWindow from "../frags/BuildWindow";
 import DragDropProvider from "../contexts/DragDropProvider";
@@ -33,7 +34,6 @@ export default function Build() {
     answers: new Map(),
     attempted: false,
   });
-  const sectionTabs = ["Grid", "Hints", "Preview"];
   const [formActive, setFormActive] = useState(true);
   const [orientation, setOrientation] = useState(true); // ACROSS(T) / DOWN(F)
   const [previewMode, togglePreviewMode] = useState(false);
@@ -70,6 +70,31 @@ export default function Build() {
     window.addEventListener("keydown", toggleAxis);
     return () => window.removeEventListener("keydown", toggleAxis);
   }, []);
+
+  // =========== INITIALIZE (PUZZLE) ===========
+
+  const init = () => {
+    setNewPuzzle({
+      name: "",
+      type: "Crossword",
+      description: "",
+      cols: 10,
+      rows: 10,
+      version: 1,
+      editorMode: { active: true, phase: 0 },
+      answerKey: {},
+      answers: new Map(),
+      tags: [],
+    });
+    setPuzzleValidation({
+      name: "",
+      description: "",
+      answerKey: "",
+      answers: new Map(),
+      attempted: false,
+    });
+    setWordList([]);
+  };
 
   // =========== CLEAR ANSWERS ===========
   function clearAnswers() {
@@ -280,21 +305,28 @@ export default function Build() {
 
   // =========== NEW PUZZLE SUBMIT ===========
 
-  const newPuzzleSubmit = e => {
+  const newPuzzleSubmit = async e => {
     e.preventDefault();
+    const { username } = auth;
 
-    validatePuzzle()
-      ? axios({
-          url: `${apiUrl}/puzzles`,
-          method: "POST",
-          data: {
-            ...newPuzzle,
-            author: auth.username,
-            answers: [...newPuzzle.answers.values()],
-            editorMode: { active: false, phase: 0 },
-          },
-        })
-      : console.log("Puzzle has errors!");
+    if (!username) {
+      console.log("Must be signed in to create a new puzzle.");
+    }
+    if (validatePuzzle()) {
+      try {
+        const puzzle = await axios.post("/puzzles", {
+          ...newPuzzle,
+          username,
+          answers: [...newPuzzle.answers.values()],
+        });
+        console.log(`New puzzle '%c${puzzle?.name}%c' created!`, "color:aqua");
+        init();
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      console.warning("Puzzle has errors!");
+    }
 
     // console.log(newPuzzle);
   };

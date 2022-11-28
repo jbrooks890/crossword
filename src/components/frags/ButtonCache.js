@@ -3,6 +3,7 @@ import { usePlayMaster } from "../contexts/PlayMasterProvider";
 
 export default function ButtonCache({ giveHint, clear }) {
   const game = usePlayMaster()[4];
+  const setGame = usePlayMaster()[5];
 
   const hasContent = () =>
     game &&
@@ -27,7 +28,7 @@ export default function ButtonCache({ giveHint, clear }) {
       </button>
       {/* ------ SUBMIT ------ */}
       <button
-        className="cw-button submit"
+        className={`cw-button submit ${game?.FINISHED ? "active" : "inactive"}`}
         onClick={e => e.preventDefault()}
         type="submit"
       >
@@ -38,7 +39,9 @@ export default function ButtonCache({ giveHint, clear }) {
       {/* ------ HELP/ASSIST ------ */}
       <button
         className={`cw-button help ${
-          game && game.assists.length < 3 ? "active" : "inactive"
+          game && !game?.FINISHED && game.assists.length < 3
+            ? "active"
+            : "inactive"
         }`}
         onClick={e => {
           e.preventDefault();

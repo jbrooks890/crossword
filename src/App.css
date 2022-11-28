@@ -156,6 +156,10 @@ fieldset {
   padding: 2rem;
 } */
 
+.xword-logo-2 {
+  fill: url(#linGrad2);
+}
+
 .flex {
   display: flex;
 }

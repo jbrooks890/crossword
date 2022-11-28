@@ -1,9 +1,9 @@
-import UserGate from "../shared/UserGate";
+import Loader from "../graphics/Loader";
 
 export default function Sandbox() {
   return (
     <div id="sandbox" className="flex col center">
-      <UserGate />
+      <Loader />
     </div>
   );
 }

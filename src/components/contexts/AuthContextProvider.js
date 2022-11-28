@@ -30,7 +30,7 @@ export default function AuthContextProvider({ children }) {
   //   // prev && setGameplay(prev);
   // }, [gameplay]);
 
-  useEffect(() => console.log(gameplay), [gameplay]);
+  // useEffect(() => console.log(gameplay), [gameplay]);
 
   return (
     <AuthContext.Provider

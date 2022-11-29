@@ -77,6 +77,23 @@ body {
   overflow-x: hidden;
 }
 
+/* --------- MAIN --------- */
+
+main {
+  /* display: flex;
+  flex-direction: column; */
+  flex-grow: 1;
+  /* min-height: 100vh; */
+  /* justify-content: center; */
+  padding: 2rem;
+  /* overflow: hidden visible;  */
+  /* border: 3px solid red */
+}
+
+main.flex {
+  flex-grow: 1;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }
@@ -225,17 +242,7 @@ p.error.show{
   opacity: .5;
 }
 
-/* --------- MAIN --------- */
 
-main {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  /* min-height: 100vh; */
-  justify-content: center;
-  padding: 2rem;
-  /* overflow: hidden visible;  */
-}
 
 /* ========================================= *\
 || >> PORTRAIT MODE <<

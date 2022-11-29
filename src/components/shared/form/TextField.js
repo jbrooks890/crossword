@@ -5,7 +5,6 @@ const TextField = ({
   field,
   placeholder,
   validation,
-  // isValid,
   error,
   label,
   required,
@@ -53,7 +52,6 @@ const TextField = ({
         name={field}
         type="text"
         placeholder={!loginMode ? placeholder : ""}
-        autoComplete={!loginMode ? "off" : "on"}
         {...{ value }}
         {...{ onChange }}
         onBlur={() => required && validator()}

@@ -13,13 +13,17 @@ import Dashboard from "../pages/Dashboard";
 import axios from "../../apis/axios";
 import useAxios from "../../hooks/useAxios";
 import PersistLogin from "./PersistLogin";
+import Loader from "../graphics/Loader";
 
 export default function Main() {
   const [games, setGames] = useState([]);
   const [response, error, loading, fetch] = useAxios();
+  console.log({ loading });
+  const [finishedLoading, setFinishedLoading] = useState(Boolean(games.length));
 
   useEffect(
     () =>
+      !games.length &&
       fetch({
         instance: axios,
         method: "GET",
@@ -28,16 +32,45 @@ export default function Main() {
     []
   );
 
+  // console.log({ finishedLoading });
   useEffect(
-    () => response?.puzzles?.length && setGames(response.puzzles),
+    () =>
+      games.length &&
+      console.table(
+        games.map(puzzle => {
+          const { name, description, type } = puzzle;
+          return { name, description, type };
+        })
+      ),
+    [games]
+  );
+
+  useEffect(
+    () =>
+      finishedLoading &&
+      response?.puzzles?.length &&
+      setGames(response.puzzles),
     [fetch]
   );
 
   return (
-    <main>
+    <main className="flex col middle">
       <Routes>
         <Route element={<PersistLogin />}>
-          <Route path="/" element={<Home games={games} />} />
+          <Route
+            path="/"
+            element={
+              finishedLoading ? (
+                <Home games={games} />
+              ) : (
+                <Loader
+                  isLoading={loading}
+                  finish={() => setFinishedLoading(true)}
+                />
+              )
+            }
+          />
+
           <Route path="/puzzles/:id" element={<Play />} />
           <Route path="/build" element={<Build />} />
           <Route path="/about" element={<About />} />

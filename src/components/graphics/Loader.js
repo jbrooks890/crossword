@@ -3,8 +3,8 @@ import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo-2.sv
 import { loadingWords } from "../../utility/misc";
 import { useEffect, useRef, useState } from "react";
 
-export default function Loader({ isLoading = true }) {
-  const [loaded, setLoaded] = useState(!isLoading);
+export default function Loader({ isLoading, finish }) {
+  const [loaded, setLoaded] = useState(false);
   const wordList = loadingWords.split(" ");
   const [loadWord, setLoadWord] = useState("Loading");
   const loader = useRef();
@@ -16,28 +16,44 @@ export default function Loader({ isLoading = true }) {
     return word === prev ? getWord() : word;
   }
 
-  // useEffect(() => !loaded && refreshWord(), [loaded, loadWord]);
-
-  // useEffect(() => !loaded && setTimeout(() => setLoaded(true), 5000), []);
+  // CYCLE LOADING WORDS
   useEffect(() => {
-    const timer =
-      !loaded && setTimeout(() => setLoadWord(prev => getWord(prev)), 5000);
+    // console.log({ isLoading, loadWord });
+    const timer = setTimeout(
+      () => isLoading && setLoadWord(prev => getWord(prev)),
+      5000
+    );
     return () => clearTimeout(timer);
   }, [loadWord]);
 
-  // useEffect(() => {
-  //   const refreshWord = () =>
-  //     setTimeout(() => setLoadWord(prev => getWord(prev)), 500);
-  //   !loaded && word.current.addEventListener("animationend", refreshWord);
-  //   return () => word.current.removeEventListener("animationend", refreshWord);
-  // });
+  useEffect(() => {
+    console.log({ loadWord });
+    const finishLoading = () =>
+      setTimeout(() => {
+        setLoaded(true);
+        finish();
+      }, 300);
+    word.current.lastElementChild.addEventListener(
+      "transitionend",
+      finishLoading
+    );
+
+    return () =>
+      isLoading &&
+      word.current.lastElementChild.removeEventListener(
+        "transitionend",
+        finishLoading
+      );
+  }, [isLoading]);
 
   return (
-    <div ref={loader} className={`loader ${loaded ? "loaded" : "loading"}`}>
+    <div
+      ref={loader}
+      className={`loader ${
+        isLoading ? "loading" : loaded ? "loaded" : "dismounting"
+      }`}
+    >
       <XWORD_LOGO ref={logo} />
-      {/* <svg>
-        <text>{getWord()}</text>
-      </svg> */}
       <h3 ref={word} className="loading-word">
         {loadWord
           .concat("...")

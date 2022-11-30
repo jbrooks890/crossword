@@ -18,7 +18,6 @@ import Loader from "../graphics/Loader";
 export default function Main() {
   const [games, setGames] = useState([]);
   const [response, error, loading, fetch] = useAxios();
-  console.log({ loading });
   const [finishedLoading, setFinishedLoading] = useState(Boolean(games.length));
 
   useEffect(
@@ -33,17 +32,17 @@ export default function Main() {
   );
 
   // console.log({ finishedLoading });
-  useEffect(
-    () =>
-      games.length &&
-      console.table(
-        games.map(puzzle => {
-          const { name, description, type } = puzzle;
-          return { name, description, type };
-        })
-      ),
-    [games]
-  );
+  // useEffect(
+  //   () =>
+  //     games.length &&
+  //     console.table(
+  //       games.map(puzzle => {
+  //         const { name, description, type } = puzzle;
+  //         return { name, description, type };
+  //       })
+  //     ),
+  //   [games]
+  // );
 
   useEffect(
     () =>

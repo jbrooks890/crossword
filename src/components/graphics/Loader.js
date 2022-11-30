@@ -27,7 +27,6 @@ export default function Loader({ isLoading, finish }) {
   }, [loadWord]);
 
   useEffect(() => {
-    console.log({ loadWord });
     const finishLoading = () =>
       setTimeout(() => {
         setLoaded(true);

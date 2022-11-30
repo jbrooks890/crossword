@@ -23,33 +23,96 @@ export default function Nav() {
     </NavLink>
   ));
 
-  return (
-    <nav>
-      {
-        <>
-          {$MOBILE ? <MobileNav links={links} /> : links}
-          {auth?.username ? (
-            <a
-              className="login"
-              onClick={e => {
-                e.preventDefault();
-                logout();
-              }}
-            >
-              {auth.username}
-            </a>
-          ) : (
+  // console.clear();
+
+  const $LINKS = new Map([
+    ["Play", "/"],
+    ["Build", "/build"],
+    [
+      "About",
+      [
+        ["$", "/about"],
+        ["Game", "/about"],
+        ["Demo", "/about"],
+      ],
+    ],
+    !auth.username
+      ? [
+          "Login",
+          {
+            to: "/login",
+            classList: ["login"],
+            state: { from: location },
+          },
+        ]
+      : [
+          auth.username,
+          [
+            [
+              "$",
+              {
+                // to: "/dashboard",
+                classList: ["login"],
+              },
+            ], // DEFAULT
+            ["Dashboard", "/dashboard"], // "$" use the default link'
+            ["Logout", { button: { onClick: logout } }],
+          ],
+        ],
+  ]);
+
+  const buildNav = nav => {
+    // console.log("nav:", nav);
+    return [...nav].map(([display, destination], i) => {
+      if (display === "$") return;
+      const type = typeof destination;
+
+      const submenu = Array.isArray(destination) ? new Map(destination) : null;
+      // submenu && console.table(Object.fromEntries([...submenu]));
+
+      if (type === "string") {
+        return (
+          <NavLink key={display} to={destination}>
+            {display}
+          </NavLink>
+        );
+      } else if (submenu) {
+        const linkRoot = submenu.get("$");
+        const defTo = linkRoot?.to ?? linkRoot ?? [...submenu.values()][1];
+
+        return (
+          <div className="submenu-wrap">
             <NavLink
-              className="login"
-              to="/login"
-              state={{ from: location }}
-              // replace
+              key={display}
+              {...(typeof linkRoot === "object" && {
+                ...linkRoot,
+                className: linkRoot.classList?.join(" "),
+              })}
+              to={defTo}
             >
-              Login
+              {display}
             </NavLink>
-          )}
-        </>
+            <div className="submenu flex col">{buildNav(submenu)}</div>
+          </div>
+        );
+      } else if (type === "object") {
+        return destination.button ? (
+          <a key={display} {...destination.button}>
+            {display}
+          </a>
+        ) : (
+          <NavLink
+            key={display}
+            {...{ ...destination, className: destination.classList.join(" ") }}
+          >
+            {display}
+          </NavLink>
+        );
       }
-    </nav>
-  );
+    });
+  };
+
+  // console.log("nav object:\n", buildNav($LINKS));
+
+  return <nav className="flex middle">{buildNav($LINKS)}</nav>;
 }

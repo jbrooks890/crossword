@@ -1,9 +1,13 @@
 /* --------- NAV --------- */
 nav a {
-  margin-right: 1.5em;
+  /* margin-right: 1.5em; */
   color: var(--lite);
   font-family: var(--keyFont);
   letter-spacing: 0.1em;
+}
+
+nav > * {
+  padding-inline: .75em;
 }
 
 /* nav a:not(:last-of-type) {
@@ -13,6 +17,41 @@ nav a {
 nav a.login {
   cursor: pointer;
   color: var(--mid);
+}
+
+nav .submenu-wrap {
+  position: relative;
+}
+
+nav .submenu {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  min-width: 100%;
+  background-color: var(--darker);
+  transform: translateY(100%);
+  box-sizing: border-box;
+  /* border: 2px solid red; */
+}
+
+nav .submenu-wrap:not(:hover) .submenu{
+  display: none;
+}
+
+nav .submenu a {
+  cursor: pointer;
+  font-family: var(--bodyFont);
+  font-size: smaller;
+  box-sizing: border-box;
+  height: 1.5em;
+  margin: 0;
+  padding-inline: .5em;
+  /* border: 2px solid orange; */
+  letter-spacing: normal;
+}
+
+nav .submenu a:hover {
+  background-color: var(--mid);
 }
 
 /* --------- MOBILE NAV --------- */

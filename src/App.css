@@ -42,7 +42,7 @@
   --phantom: hsla(0,0%,0%,0.05);
   /* ========== FONTS ========== */
   --keyFont: 'Russo', sans-serif;
-  --bodyFont: Calibri;
+  --bodyFont: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen';
   --fontSize: 21px;
   font-family: var(--bodyFont);
   font-size: var(--fontSize);

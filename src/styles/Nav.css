@@ -40,12 +40,12 @@ nav .submenu-wrap:not(:hover) .submenu{
 
 nav .submenu a {
   cursor: pointer;
-  font-family: var(--bodyFont);
+  /* font-family: var(--bodyFont); */
   font-size: smaller;
   box-sizing: border-box;
-  height: 1.5em;
+  /* height: 1.5em; */
   margin: 0;
-  padding-inline: .5em;
+  padding: .5em 1em;
   /* border: 2px solid orange; */
   letter-spacing: normal;
 }

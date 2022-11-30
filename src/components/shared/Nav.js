@@ -32,7 +32,7 @@ export default function Nav() {
       "About",
       [
         ["$", "/about"],
-        ["Game", "/about"],
+        ["Controls", "/about"],
         ["Demo", "/about"],
       ],
     ],
@@ -63,11 +63,11 @@ export default function Nav() {
 
   const buildNav = nav => {
     // console.log("nav:", nav);
-    return [...nav].map(([display, destination], i) => {
+    return [...nav].map(([display, destination]) => {
       if (display === "$") return;
       const type = typeof destination;
 
-      const submenu = Array.isArray(destination) ? new Map(destination) : null;
+      const submenu = Array.isArray(destination) && new Map(destination);
       // submenu && console.table(Object.fromEntries([...submenu]));
 
       if (type === "string") {

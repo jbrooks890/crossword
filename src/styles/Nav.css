@@ -6,8 +6,13 @@ nav a {
   letter-spacing: 0.1em;
 }
 
-nav > * {
-  padding-inline: .75em;
+/* nav > a, .submenu-wrap > a:first-child {
+  padding-block: 1em;
+} */
+
+nav > *:not(.mobileNav) {
+  /* padding-inline: .75em; */
+  padding: .75em;
 }
 
 /* nav a:not(:last-of-type) {
@@ -40,14 +45,11 @@ nav .submenu-wrap:not(:hover) .submenu{
 
 nav .submenu a {
   cursor: pointer;
-  /* font-family: var(--bodyFont); */
   font-size: smaller;
-  box-sizing: border-box;
-  /* height: 1.5em; */
   margin: 0;
   padding: .5em 1em;
-  /* border: 2px solid orange; */
-  letter-spacing: normal;
+  letter-spacing: 0.05em;
+  box-sizing: border-box;
 }
 
 nav .submenu a:hover {
@@ -74,7 +76,7 @@ nav .mobileNav.open {
 nav .mobileNav > * {
   position: absolute;
   width: 100%;
-  height: 3px;
+  height: 2.5px;
   background-color: var(--mid);
   border-radius: 100px;
   /* transition: 0.2s ease-out; */
@@ -85,8 +87,20 @@ nav .mobileNav > * {
 nav .mobileNav .top {
   top: 0;
   transition:
-    top .1s .1s ease-in-out,
-    transform .1s .2s ease-in-out;
+    top .1s ease-in-out .1s,
+    transform .1s ease-in-out .2s;
+}
+
+nav .mobileNav.open .top {
+  transition:
+    top .1s ease-in-out .1s,
+    transform .1s ease-in-out .2s;
+}
+
+nav .mobileNav.closed .top {
+  transition:
+    top .1s ease-in-out .2s,
+    transform .1s ease-in-out .1s;
 }
 
 nav .mobileNav.open .top {
@@ -105,9 +119,18 @@ nav .mobileNav.open .middle {
 
 nav .mobileNav .bottom {
   bottom: 0;
+}
+
+nav .mobileNav.open .bottom {
   transition:
-    bottom .1s .1s ease-in-out,
-    transform .1s .2s ease-in-out;
+    bottom .1s ease-in-out .1s,
+    transform .1s ease-in-out .2s;
+}
+
+nav .mobileNav.closed .bottom {
+  transition:
+    bottom .1s ease-in-out .2s,
+    transform .1s ease-in-out .1s;
 }
 
 nav .mobileNav.open .bottom {
@@ -141,4 +164,13 @@ nav .mobileNav.open .bottom {
 
 .nav-modal .modal a.active {
   color: var(--pop);
+}
+
+.nav-modal .mobile-nav-wrap > * {
+  padding-bottom: 1em;
+  text-align: center;
+}
+
+.nav-modal .modal .submenu a {
+  color: var(--brite)
 }

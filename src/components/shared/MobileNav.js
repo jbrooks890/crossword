@@ -7,19 +7,23 @@ export default function MobileNav({ links }) {
   const { isShowing, toggle } = useModal();
 
   return (
-    <div
-      className={`mobileNav ${isShowing ? "open" : "closed"}`}
-      onClick={toggle}
-    >
-      <div className="top" />
-      <div className="middle" />
-      <div className="bottom" />
+    <>
+      <div
+        className={`mobileNav ${isShowing ? "open" : "closed"}`}
+        onClick={toggle}
+      >
+        <div className="top" />
+        <div className="middle" />
+        <div className="bottom" />
+      </div>
       {isShowing && (
         <Modal isShowing={isShowing} hide={toggle} classList={"nav-modal"}>
-          <h3>Nav</h3>
-          {links}
+          <div className="mobile-nav-wrap flex col">
+            <h3>Nav</h3>
+            {links}
+          </div>
         </Modal>
       )}
-    </div>
+    </>
   );
 }

@@ -2,7 +2,7 @@
   flex-grow: 1;
   align-self: stretch;
   margin-left: 1rem;
-  width: calc(var(--grid)*8);
+  /* width: calc(var(--grid)*8); */
   max-width: 560px;
   /* border: 1px solid blue; */
 }

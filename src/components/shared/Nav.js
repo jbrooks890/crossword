@@ -4,6 +4,7 @@ import MobileNav from "./MobileNav";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContextProvider";
 import useLogout from "../../hooks/useLogout";
+import { useEffect } from "react";
 
 export default function Nav() {
   const $MOBILE = useMediaQuery();
@@ -11,21 +12,7 @@ export default function Nav() {
   const logout = useLogout();
   const location = useLocation();
 
-  const links = Array.from(
-    new Map([
-      ["Play", "/"],
-      ["Build", "/build"],
-      ["About", "/about"],
-    ])
-  ).map(([title, path]) => (
-    <NavLink key={title.toLowerCase()} to={path}>
-      {title}
-    </NavLink>
-  ));
-
-  // console.clear();
-
-  const $LINKS = new Map([
+  const LINKS = new Map([
     ["Play", "/"],
     ["Build", "/build"],
     [
@@ -41,7 +28,7 @@ export default function Nav() {
           "Login",
           {
             to: "/login",
-            classList: ["login"],
+            className: "login",
             state: { from: location },
           },
         ]
@@ -51,8 +38,8 @@ export default function Nav() {
             [
               "$",
               {
-                // to: "/dashboard",
-                classList: ["login"],
+                to: "/dashboard",
+                className: "login",
               },
             ], // DEFAULT
             ["Dashboard", "/dashboard"], // "$" use the default link'
@@ -60,6 +47,8 @@ export default function Nav() {
           ],
         ],
   ]);
+
+  // =========== Build Nav ===========
 
   const buildNav = nav => {
     // console.log("nav:", nav);
@@ -77,19 +66,13 @@ export default function Nav() {
           </NavLink>
         );
       } else if (submenu) {
-        const linkRoot = submenu.get("$");
-        const defTo = linkRoot?.to ?? linkRoot ?? [...submenu.values()][1];
+        const root = submenu.get("$");
+        const defTo = root?.to ?? root ?? [...submenu.values()][0];
+        // console.log({ defTo });
 
         return (
-          <div className="submenu-wrap">
-            <NavLink
-              key={display}
-              {...(typeof linkRoot === "object" && {
-                ...linkRoot,
-                className: linkRoot.classList?.join(" "),
-              })}
-              to={defTo}
-            >
+          <div key={display} className="submenu-wrap">
+            <NavLink {...(typeof root === "object" && root)} to={defTo}>
               {display}
             </NavLink>
             <div className="submenu flex col">{buildNav(submenu)}</div>
@@ -101,10 +84,7 @@ export default function Nav() {
             {display}
           </a>
         ) : (
-          <NavLink
-            key={display}
-            {...{ ...destination, className: destination.classList.join(" ") }}
-          >
+          <NavLink key={display} {...destination}>
             {display}
           </NavLink>
         );
@@ -112,7 +92,13 @@ export default function Nav() {
     });
   };
 
-  // console.log("nav object:\n", buildNav($LINKS));
+  // useEffect(() => console.log("nav object:\n", buildNav(LINKS)), []);
 
-  return <nav className="flex middle">{buildNav($LINKS)}</nav>;
+  const NAV = buildNav(LINKS);
+
+  return (
+    <nav className="flex middle">
+      {$MOBILE ? <MobileNav links={NAV} /> : NAV}
+    </nav>
+  );
 }

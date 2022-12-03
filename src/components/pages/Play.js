@@ -40,7 +40,7 @@ export default function Play() {
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
 
   // useEffect(() => activePuzzle && console.log(activePuzzle), []);
-  useEffect(() => game && console.log(game), [game]);
+  // useEffect(() => game && console.log(game), [game]);
 
   // <><><><><><><><><><><><><><><><><><><><><><><><><><><>
   // ::::::::::::::::::::\ LOAD GAME /::::::::::::::::::::

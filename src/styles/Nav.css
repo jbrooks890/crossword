@@ -4,6 +4,7 @@ nav a {
   color: var(--lite);
   font-family: var(--keyFont);
   letter-spacing: 0.1em;
+  white-space: nowrap;
 }
 
 /* nav > a, .submenu-wrap > a:first-child {
@@ -18,6 +19,11 @@ nav > *:not(.mobileNav) {
 /* nav a:not(:last-of-type) {
   margin-right: 1.5em;
 } */
+
+nav a.active {
+  cursor: default;
+  color: var(--pop);
+}
 
 nav a.login {
   cursor: pointer;
@@ -52,9 +58,7 @@ nav .submenu a {
   box-sizing: border-box;
 }
 
-nav .submenu a:hover {
-  background-color: var(--mid);
-}
+
 
 /* --------- MOBILE NAV --------- */
 
@@ -163,7 +167,7 @@ nav .mobileNav.open .bottom {
 }
 
 .nav-modal .modal a.active {
-  color: var(--pop);
+  color: var(--mid);
 }
 
 .nav-modal .mobile-nav-wrap > * {
@@ -173,4 +177,18 @@ nav .mobileNav.open .bottom {
 
 .nav-modal .modal .submenu a {
   color: var(--brite)
+}
+
+/* ========================================= *\
+|| >> HOVER <<
+\* ========================================= */
+
+@media (hover:hover){
+  nav a:not(.active):not(.login):not(.submenu a):hover {
+    color: var(--pop);
+  }
+
+  nav .submenu a:hover {
+    background-color: var(--pop);
+  }
 }

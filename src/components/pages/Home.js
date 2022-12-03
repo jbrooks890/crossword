@@ -18,11 +18,11 @@ export default function Home({ games }) {
 
   return (
     <div id="home-page">
+      <h2>Play</h2>
+      <div id="game-list">{games.length > 0 && gamesData}</div>
       <h1 className="home-page-logo">
         <XWORD_FULL />
       </h1>
-      <h2>Play</h2>
-      <div id="game-list">{games.length > 0 && gamesData}</div>
     </div>
   );
 }

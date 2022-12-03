@@ -19,8 +19,9 @@ export default function Nav() {
       "About",
       [
         ["$", "/about"],
+        ["XWord", "/about"],
+        ["How To", "/about"],
         ["Controls", "/about"],
-        ["Demo", "/about"],
       ],
     ],
     !auth.username

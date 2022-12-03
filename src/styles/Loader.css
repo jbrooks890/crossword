@@ -1,12 +1,14 @@
 .loader {
   width: 25vmin;
+  padding: 1em;
   /* background-color: var(--darker); */
-
+  /* border: 2px solid red; */
 }
 
 .flex .loader {
-  justify-self: center;
   align-self: center;
+  /* flex-grow: 0 !important; */
+  height: auto;
 }
 
 @keyframes glow {

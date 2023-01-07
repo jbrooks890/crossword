@@ -23,7 +23,7 @@ export default function PersistLogin() {
       }
     };
 
-    !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
+    !auth?.token && persist ? verifyRefreshToken() : setIsLoading(false);
 
     return () => (isMounted = false);
   }, []);

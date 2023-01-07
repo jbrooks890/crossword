@@ -10,6 +10,7 @@ export default function useRefreshToken() {
     });
 
     const token = response.data.accessToken;
+    console.log({ token });
     setUser(token);
 
     return token;

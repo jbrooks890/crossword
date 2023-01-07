@@ -14,11 +14,31 @@ import axios from "../../apis/axios";
 import useAxios from "../../hooks/useAxios";
 import PersistLogin from "./PersistLogin";
 import Loader from "../graphics/Loader";
+import Sandbox from "../pages/Sandbox";
+import UserGate from "./UserGate";
+import Unauthorized from "../pages/Unauthorized";
+import ProtectedContent from "./ProtectedContent";
+import Dashboard from "../pages/Dashboard";
+import axios from "../../apis/axios";
+import useAxios from "../../hooks/useAxios";
+import PersistLogin from "./PersistLogin";
+import Loader from "../graphics/Loader";
 
 export default function Main() {
   const [games, setGames] = useState([]);
   const [response, error, loading, fetch] = useAxios();
   const [finishedLoading, setFinishedLoading] = useState(Boolean(games.length));
+
+  useEffect(() => {
+    console.log({ finishedLoading });
+    games.length &&
+      console.table(
+        games.map(game => {
+          const { name, description } = game;
+          return { name, description };
+        })
+      );
+  }, [games]);
 
   useEffect(
     () =>

@@ -253,7 +253,6 @@ export default function UserGate({ isLogin, inline }) {
   const registerUser = async () => {
     // console.log(`%cREGISTER USER!`, "color:coral");
     if (await validateRegistration()) {
-      console.log(`%cTEST`, "color: lime");
       try {
         await fetch({
           instance: axios,

@@ -147,6 +147,7 @@ export default function UserGate({ isLogin, inline }) {
               break;
           }
         };
+        console.error(err);
         setLoginErr(message());
       }
     }

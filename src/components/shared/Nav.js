@@ -27,11 +27,23 @@ export default function Nav() {
     !auth.username
       ? [
           "Login",
-          {
-            to: "/login",
-            className: "login",
-            state: { from: location },
-          },
+          [
+            [
+              "$",
+              {
+                to: "/login",
+                className: "login",
+                state: { from: location },
+              },
+            ],
+            [
+              "Register",
+              {
+                to: "/register",
+                state: { from: location },
+              },
+            ],
+          ],
         ]
       : [
           auth.username,

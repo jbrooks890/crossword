@@ -51,10 +51,12 @@ nav .submenu-wrap:not(:hover) .submenu{
 
 nav .submenu a {
   cursor: pointer;
+  font-family: var(--bodyFont);
   font-size: smaller;
   margin: 0;
   padding: .5em 1em;
-  letter-spacing: 0.05em;
+  /* letter-spacing: 0.05em; */
+  letter-spacing: normal;
   box-sizing: border-box;
 }
 
@@ -190,5 +192,9 @@ nav .mobileNav.open .bottom {
 
   nav .submenu a:hover {
     background-color: var(--pop);
+  }
+
+  nav .login+.submenu a:hover {
+    background-color: var(--mid);
   }
 }

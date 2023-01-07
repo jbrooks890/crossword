@@ -14,7 +14,7 @@ export default function UserGate({ isLogin, inline }) {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
   const [loginMode, setLoginMode] = useState(
-    isLogin || location?.pathname?.contains("/login")
+    isLogin || location?.pathname?.includes("/login")
   );
   const [userGateForm, setUserGateForm] = useState({
     username: "",

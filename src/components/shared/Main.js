@@ -20,6 +20,17 @@ export default function Main() {
   const [response, error, loading, fetch] = useAxios();
   const [finishedLoading, setFinishedLoading] = useState(Boolean(games.length));
 
+  useEffect(() => {
+    console.log({ finishedLoading });
+    games.length &&
+      console.table(
+        games.map(game => {
+          const { name, description } = game;
+          return { name, description };
+        })
+      );
+  }, [games]);
+
   useEffect(
     () =>
       !games.length &&
@@ -31,21 +42,9 @@ export default function Main() {
     []
   );
 
-  // console.log({ finishedLoading });
-  // useEffect(
-  //   () =>
-  //     games.length &&
-  //     console.table(
-  //       games.map(puzzle => {
-  //         const { name, description, type } = puzzle;
-  //         return { name, description, type };
-  //       })
-  //     ),
-  //   [games]
-  // );
-
   useEffect(
     () =>
+      !games.length &&
       finishedLoading &&
       response?.puzzles?.length &&
       setGames(response.puzzles),

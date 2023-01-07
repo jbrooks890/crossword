@@ -29,17 +29,6 @@ export default function Main() {
   const [response, error, loading, fetch] = useAxios();
   const [finishedLoading, setFinishedLoading] = useState(Boolean(games.length));
 
-  useEffect(() => {
-    console.log({ finishedLoading });
-    games.length &&
-      console.table(
-        games.map(game => {
-          const { name, description } = game;
-          return { name, description };
-        })
-      );
-  }, [games]);
-
   useEffect(
     () =>
       !games.length &&

@@ -5,31 +5,81 @@ import Build from "../pages/Build";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import Play from "../pages/Play";
-import axios from "axios";
-import apiUrl from "../../config";
+import Sandbox from "../pages/Sandbox";
+import UserGate from "./UserGate";
+import Unauthorized from "../pages/Unauthorized";
+import ProtectedContent from "./ProtectedContent";
+import Dashboard from "../pages/Dashboard";
+import axios from "../../apis/axios";
+import useAxios from "../../hooks/useAxios";
+import PersistLogin from "./PersistLogin";
+import Loader from "../graphics/Loader";
 
 export default function Main() {
-  const [isLoading, setIsLoading] = useState(true);
   const [games, setGames] = useState([]);
+  const [response, error, loading, fetch] = useAxios();
+  const [finishedLoading, setFinishedLoading] = useState(Boolean(games.length));
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/puzzles`);
-      setGames(response.data.puzzles);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  useEffect(() => {
+    console.log({ finishedLoading });
+    games.length &&
+      console.table(
+        games.map(game => {
+          const { name, description } = game;
+          return { name, description };
+        })
+      );
+  }, [games]);
 
-  useEffect(async () => fetchData(), []);
+  useEffect(
+    () =>
+      !games.length &&
+      fetch({
+        instance: axios,
+        method: "GET",
+        url: "/puzzles",
+      }),
+    []
+  );
+
+  useEffect(
+    () =>
+      !games.length &&
+      finishedLoading &&
+      response?.puzzles?.length &&
+      setGames(response.puzzles),
+    [fetch]
+  );
 
   return (
-    <main>
+    <main className="flex col middle">
       <Routes>
-        <Route path="/" element={<Home games={games} />} />
-        <Route path="/puzzles/:id" element={<Play games={games} />} />
-        <Route path="/build" element={<Build />} />
-        <Route path="/about" element={<About />} />
+        <Route element={<PersistLogin />}>
+          <Route
+            path="/"
+            element={
+              finishedLoading ? (
+                <Home games={games} />
+              ) : (
+                <Loader
+                  isLoading={loading}
+                  finish={() => setFinishedLoading(true)}
+                />
+              )
+            }
+          />
+
+          <Route path="/puzzles/:id" element={<Play />} />
+          <Route path="/build" element={<Build />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/sandbox" element={<Sandbox />} />
+          <Route path="/login" element={<UserGate isLogin={true} />} />
+          <Route path="/register" element={<UserGate isLogin={false} />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route element={<ProtectedContent allowedRoles={[8737]} />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </main>

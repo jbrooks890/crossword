@@ -1,0 +1,189 @@
+.word-bank {
+  flex-grow: 1;
+  text-align: left;
+  overflow: hidden;
+  box-sizing: border-box;
+  /* border: 2px solid magenta; */
+}
+
+.word-bank-new h5{
+  margin: 0;
+  margin-bottom: 0.1em;
+  color: var(--mid);
+  font-family: var(--keyFont);
+  font-weight: normal;
+  line-height: 1em;
+}
+
+.word-bank-new input {
+  cursor: pointer;
+  flex-grow: 1;
+  padding: .5em;
+  background-color: transparent;
+  color: var(--mid);
+  caret-color: var(--faint);
+  font-size: 1rem;
+  font-family: var(--keyFont);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 2px solid var(--faint);
+  border-radius: 5px;
+}
+
+.word-bank-new input::placeholder {
+  color: var(--faint);
+}
+
+.word-bank-new button {
+  --size: 2rem;
+  flex-shrink: 0;
+  width: var(--size);
+  height: var(--size);
+  align-self: center;
+  margin-left: .25rem;
+  background-color: var(--faint);
+  color: var(--lite);
+  font-size: x-large;
+  font-weight: normal;
+  line-height: 1em;
+  border: none;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transition: .1s ease-out;
+}
+
+.word-bank-new button.active {
+  background-color: var(--mid);
+}
+
+.word-bank-list {
+  margin-block: 1em 0;
+  padding-left: 0;
+  padding-inline: .5rem;
+  overflow-y: scroll;
+  list-style-type: none;
+}
+
+.word-bank-list li {
+  cursor: move;
+  position: relative;
+  margin-bottom: .5rem;
+  padding: .5em 1em;
+  background-color: var(--mid);
+  color: var(--lite);
+  font-family: var(--keyFont);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  border-radius: 5px;
+}
+
+.word-bank-list li::selection{
+  background-color: transparent;
+}
+
+.word-bank-list li.placed, 
+.word-bank-list li.floating {
+  cursor: pointer;
+  background-color: var(--faint);
+}
+
+.word-bank-list li.holding {
+  position: absolute;
+}
+
+.word-bank-list .word-bank-entry-edit-cache {
+  position: absolute;
+  inset: 0 0 0 auto;
+  padding-left: .5em;
+  opacity: 0;
+  transform: translateX(50%);
+  transition: .1s ease-out;
+  z-index: -1;
+}
+
+.word-bank-list li:not(.floating):hover .word-bank-entry-edit-cache,
+.word-bank-list .word-bank-entry-edit-cache.active {
+  transform: translateX(100%);
+  transition-delay: .5s;
+  opacity: 1;
+  z-index: 0;
+}
+
+.word-bank-list .word-bank-entry-edit-cache button {
+  --size: 1rem;
+  --color: var(--faint);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: var(--size);
+  height: var(--size);
+  color: var(--color);
+  fill: var(--color);
+  box-sizing: border-box;
+  border: none;
+}
+
+.word-bank-list .word-bank-entry-edit-cache button.active{
+  display: flex;
+}
+
+.word-bank-list .word-bank-entry-edit-cache button:hover{
+  --color: var(--pop);
+  color: var(--color);
+  fill: var(--color);
+}
+
+.word-bank-list .word-bank-entry-edit-cache button:not(:last-of-type){
+  margin-right: .5em;
+}
+
+.word-bank-list .word-bank-entry-edit-cache button svg {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.word-bank-list .word-bank-entry-edit-cache button.delete-entry {
+  font-family: var(--bodyFont);
+  font-size: 2rem;
+  line-height: 1em;
+}
+
+/* .word-bank-list li.floating span {
+  --size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--mid);
+  letter-spacing: 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+.word-bank-list li.floating span:not(:last-of-type) {
+  margin-right: 4px;
+} */
+
+.word-bank-error {
+  color: red;
+  height: 1em;
+  font-size: .75rem;
+  opacity: 0;
+  transition: .3s ease-out;
+}
+
+.word-bank-error.active{
+  opacity: 1;
+  /* transition: none; */
+}
+
+/* ================================= *\
+|| HOVER
+\* ================================= */
+
+@media (hover:hover) {
+
+}

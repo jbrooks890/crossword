@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../styles/NewPuzzleForm.css"
+import "../../styles/NewPuzzleForm.css";
 
 export default function NewPuzzleForm({
   puzzle,
@@ -11,6 +11,8 @@ export default function NewPuzzleForm({
   deleteTag,
   active,
   setFormActive,
+  validation,
+  validate,
 }) {
   const [gridLink, setGridLink] = useState(true);
   const { name: title, description, cols, rows, tags } = puzzle;
@@ -40,6 +42,9 @@ export default function NewPuzzleForm({
       <h2>Build</h2>
       <label htmlFor="name">
         <h4>Title</h4>
+        {validation.name && (
+          <span className="violation">{validation.name}</span>
+        )}
         <input
           name="name"
           type="text"
@@ -48,7 +53,8 @@ export default function NewPuzzleForm({
           onInput={e => updatePuzzle(e)}
           onMouseEnter={e => e.currentTarget.focus()}
           defaultValue={title} //TODO
-          required
+          onChange={() => validation.attempted && validate()}
+          // required
         />
       </label>
 
@@ -85,13 +91,17 @@ export default function NewPuzzleForm({
         <div className="newPuzzle-complete">
           <label htmlFor="description">
             <h4>Description</h4>
+            {validation.description && (
+              <span className="violation">{validation.description}</span>
+            )}
             <textarea
               name="description"
               defaultValue={description}
               placeholder="What's your puzzle about?"
               onMouseEnter={e => e.target.focus()}
               onInput={e => updatePuzzle(e)}
-              required
+              onChange={() => validation.attempted && validate()}
+              // required
             />
           </label>
 
@@ -164,7 +174,7 @@ function NumInput({ dir, linked, defaultValue, updatePuzzle }) {
         className="num-input"
         type="number"
         min={10}
-        max={30}
+        max={20}
         defaultValue={defaultValue}
         onMouseEnter={e => e.currentTarget.focus()}
         onMouseLeave={e => e.currentTarget.blur()}

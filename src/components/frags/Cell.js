@@ -1,29 +1,45 @@
-import { useState, useEffect, useCallback } from "react";
-import { getLetter } from "../../services/customHooks";
-import { useActiveGroup } from "../shared/ActiveGroupProvider";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { debounce, getLetter } from "../../utility/helperFuncs";
+import { useBuildMaster } from "../contexts/BuildMasterProvider";
+import { usePlayMaster } from "../contexts/PlayMasterProvider";
+import { ReactComponent as AXIS_SELECTOR } from "../../assets/icons/orientation-icon.svg";
 
 export default function Cell({ cell_name: id, index, editorMode, ...props }) {
-  const { activeGroup, setActiveGroup } = useActiveGroup();
-  // console.log({ activeGroup });
-
   const {
     isJunction,
     answer,
     groups,
     display,
     crop,
+    dropPreview,
+    dragEnter,
+    dragLeave,
+    drop,
+    member,
     controls,
-    hoverGroup,
     focusCell,
     axis,
     toggleAxis,
-    operations,
     preview,
-    updateGrid,
-    updateAnswerKey,
-    captureAnswer,
   } = props;
   const { active: editing, phase } = editorMode;
+  const $PLAY = usePlayMaster();
+  const [
+    activeGroup,
+    setActiveGroup,
+    previewGroup,
+    setPreviewGroup,
+    game,
+    setGame,
+  ] = $PLAY ? $PLAY : [];
+  const $BUILD = useBuildMaster();
+  const [newPuzzle, setNewPuzzle, orientation, setOrientation] = $BUILD
+    ? $BUILD
+    : [];
+
+  const cellInput = useRef();
+
+  // console.log(groups);
 
   // =========== EDITOR CONTROLS ===========
   const editControls = e => {
@@ -51,8 +67,9 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         // console.log(key);
         switch (key) {
           case " ":
+            // console.log(`%cTOGGLE AXIS!`, "color:lime");
             e.preventDefault();
-            toggleAxis(prev => !prev);
+            toggleAxis();
             break;
           case "Backspace":
             if (content.length < 1) {
@@ -61,18 +78,22 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
           case "ArrowLeft":
             e.preventDefault();
             navTo(index, [-1, 0]);
+            !orientation && toggleAxis();
             break;
           case "ArrowRight":
             e.preventDefault();
             navTo(index, [1, 0]);
+            !orientation && toggleAxis();
             break;
           case "ArrowUp":
             e.preventDefault();
             navTo(index, [0, -1]);
+            orientation && toggleAxis();
             break;
           case "ArrowDown":
             e.preventDefault();
             navTo(index, [0, 1]);
+            orientation && toggleAxis();
             break;
         }
         break;
@@ -98,24 +119,26 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
   // =========== FORMAT CELL ===========
 
   const formatCell = () => {
+    // console.log(groups);
+    const groupNames = groups.map(group => group.name);
     return {
       cell: {
         classes: formatClassList(
           [
-            answer && "show",
-            groups.map(group => group.name).join(" "),
+            member && "show",
+            groupNames.join(" "),
             groups.map(group => group.dir).join(" "),
-            isJunction && "junction",
+            // isJunction && "junction",
             display && display.join(" "),
-            crop && "crop ",
+            activeGroup && groupNames.includes(activeGroup) && "active",
+            game && game.input.get(id) && "user-entry",
+            game && game.assists.includes(id) && "assisted",
           ].filter(entry => entry)
         ),
         attributes: {
-          ["data-groups"]: groups.map(group => group.name).join(" "),
-          onMouseEnter: () =>
-            groups.forEach(group => hoverGroup(group.name, group.dir)),
-          onMouseLeave: () =>
-            groups.forEach(group => hoverGroup(group.name, group.dir)),
+          ["data-groups"]: groupNames.join(" "),
+          onMouseEnter: () => setPreviewGroup(groupNames),
+          onMouseLeave: () => setPreviewGroup([]),
         },
       },
       input: {
@@ -129,26 +152,31 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
     };
   };
 
-  const AxisSelector = () => (
-    <div className="axis-select">
-      {groups.map((group, i) => {
-        // const dir = group.split("-")[0];
-        const { name, dir } = group;
-        return (
-          <button
-            key={i}
-            className={`select-${dir}`}
-            onClick={e => {
-              e.preventDefault();
-              // focusCell(id, axisGroups.get(dir));
-              focusCell(id, name);
-            }}
-          ></button>
-        );
-      })}
-    </div>
-  );
+  const AxisSelector = () => {
+    const selectAxis = e => {
+      const { target } = e;
+      const classes = target.parentElement.classList;
+      const arbiter = groups.reduce((prev, entry) =>
+        entry.group.indexOf(id) <= prev.group.indexOf(id) ? entry : prev
+      ).dir;
 
+      const axis = classes.contains("horizontal")
+        ? "across"
+        : classes.contains("vertical")
+        ? "down"
+        : arbiter;
+
+      const { name } = groups.find(group => group.dir === axis);
+      setActiveGroup(name);
+      cellInput.current.focus();
+    };
+    return (
+      <div className="axis-select" onClick={e => selectAxis(e)}>
+        <AXIS_SELECTOR />
+      </div>
+    );
+  };
+  // =========== FORMAT CLASS LIST ===========
   const formatClassList = arr =>
     arr
       .filter(entry => entry)
@@ -158,6 +186,13 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
 
   // id === "H2" && console.log(formatCell());
 
+  // =========== UPDATE USER INPUT ===========
+  const updateUserInput = (id, value) =>
+    setGame(prev => ({
+      ...prev,
+      input: new Map([...prev.input, [id, value]]),
+    }));
+
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
   return (
@@ -166,7 +201,14 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
       className={formatClassList([
         "cell",
         axis ? "edit-across" : "edit-down",
-        editing && !preview ? "build" : formatCell().cell.classes,
+        // editing && !preview ? "build" : formatCell().cell.classes,
+        editing && "build",
+        crop && "crop",
+        member && "member",
+        dropPreview && "drop-preview",
+        isJunction && "junction",
+        member && formatCell().cell.classes,
+        // groups && groups.length && groups.map(group => group.name).join(" "),
       ])}
       data-coord-x={index[0]}
       data-coord-y={index[1]}
@@ -182,6 +224,14 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
                 `${dir}-box`,
                 "axis-box",
                 target && target.name,
+                activeGroup &&
+                  target &&
+                  target.name === activeGroup &&
+                  "active",
+                previewGroup &&
+                  target &&
+                  previewGroup.includes(target.name) &&
+                  "preview",
               ])}
               onFocus={e =>
                 document.querySelector(`#${id} .cell-input`).focus()
@@ -191,21 +241,45 @@ export default function Cell({ cell_name: id, index, editorMode, ...props }) {
         })}
       {!editing && isJunction && <AxisSelector />}
       <input
-        className={`cell-input ${id} ${answer ? "show" : null}`}
+        ref={cellInput}
+        className={`cell-input ${id} ${answer ? "show" : ""}`}
         type="text"
         size="1"
         maxLength="1"
         tabIndex="-1"
         onFocus={e => e.currentTarget.select()}
-        // onChange={updateGrid} // UPDATE GRID + FIND GROUPS
-        // onChange={updateAnswerKey}
-        onChange={editing && !preview ? captureAnswer : undefined}
-        onClick={() =>
-          !editing && focusCell(id, !isJunction ? groups[0].name : undefined)
+        onChange={
+          editing && !preview
+            ? e =>
+                setNewPuzzle(prev => ({
+                  ...prev,
+                  answerKey: {
+                    ...prev.answerKey,
+                    [id]: e.target.value.toUpperCase(),
+                  },
+                }))
+            : game
+            ? e => updateUserInput(id, e.target.value)
+            : undefined
+        }
+        onClick={
+          () =>
+            !editing && focusCell(id, !isJunction ? groups[0].name : undefined) //TODO
         }
         onKeyDown={e => (editing ? editControls(e) : controls(e))}
         onKeyUp={e => (editing ? editControls(e) : controls(e))}
-        placeholder={editing ? id : undefined}
+        onDragOver={e => editing && !preview && e.preventDefault()}
+        onDragEnter={e => (dragEnter ? dragEnter(e, index) : null)}
+        onDragLeave={dragLeave ? dragLeave : null}
+        onDrop={drop ? drop : null}
+        placeholder={dropPreview ? dropPreview : editing ? id : undefined}
+        value={
+          game && game.input.has(id)
+            ? game.input.get(id)
+            : editing && newPuzzle.answerKey[id]
+            ? newPuzzle.answerKey[id]
+            : ""
+        }
       />
     </div>
   );

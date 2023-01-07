@@ -1,0 +1,195 @@
+#user-gate {
+  /* width: 50vw; */
+  align-self: center;
+  min-width: 240px;
+  max-width: 640px;
+  background-color: var(--darker);
+  padding: 2rem 3rem;
+  border-radius: 15px;
+  transition: .2s ease-out;
+  box-sizing: border-box;
+}
+
+#user-gate.sign-in {
+  width: 25vw;
+  min-width: 432px;
+  max-width: 520px;
+}
+
+#user-gate.sign-up {
+  width: 50vw; 
+}
+
+#user-gate h2.logo {
+  align-self: center;
+  width: 10rem;
+  max-width: 50%;
+  /* margin-bottom: 2rem; */
+}
+
+#user-gate .wrapper label:not(:last-of-type) {
+  margin-right: 1em;
+}
+
+#user-gate label:not(.custom-checkbox) {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+#user-gate label:not(.custom-checkbox) > span {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding-bottom: .5em;
+  height: 1.5em;
+  font-family: var(--keyFont);
+  font-size: small;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+#user-gate label .password-wrap input {
+  flex-grow: 1;
+}
+
+#user-gate label .show-password {
+  --size: 2rem;
+  width: var(--size);
+  position: absolute;
+  inset: 0 0 0 auto;
+  border: none;
+}
+
+
+#user-gate label .show-password svg {
+  --size: 60%;
+  width: var(--size);
+  height: var(--size);
+  fill: var(--mid);
+  transition: opacity .1s ease-out;
+}
+
+#user-gate label .showing+.show-password svg{
+  opacity: .5;
+}
+
+#user-gate input,
+#user-gate button[type="submit"]{
+  --color: var(--colorH);
+  background-color: transparent;
+  color: var(--brite);
+  border: 2px solid var(--mid);
+  /* filter: brightness(1.5); */
+  border-radius: 5px;
+}
+
+#user-gate button[type="submit"]{
+  align-self: center;
+  margin-top: 1rem;
+  line-height: 1em;
+  padding-inline: 1rem;
+  transition: .1s ease-out;
+}
+
+#user-gate button[type="submit"]:focus {
+  background-color: var(--colorH);
+  color: var(--darker);
+}
+
+#user-gate input[type="checkbox"]:checked{
+  background-color: var(--mid);
+}
+
+#user-gate .persist-check {
+  --color: var(--mid);
+}
+
+#user-gate input:not([type="checkbox"]) {
+  padding: 1em;
+  font-size: .75rem;
+}
+
+#user-gate input::selection{
+  background-color: var(--mid);
+  color: var(--darker);
+}
+
+#user-gate input::placeholder{
+  color: var(--mid);
+  font-style: italic;
+  opacity: .75;
+}
+
+
+#user-gate .register-user{
+  font-size: .75rem;
+}
+
+#user-gate .register-user a {
+  cursor: pointer;
+  filter: brightness(1.25);
+  font-weight: 500;
+}
+
+#user-gate .criteria {
+  margin: 0;
+  padding-left: 0;
+  text-align: left;
+  list-style-type: none;
+  list-style-position: inside;
+  box-sizing: border-box;
+  /* border: 1px solid red; */
+  transition: 
+    max-height .1s ease-out, 
+    opacity .1s ease-out .1s
+}
+
+#user-gate .criteria.hide {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+#user-gate .criteria.show{
+  opacity: 1;
+}
+
+#user-gate .criteria li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: .25em;
+  padding-bottom: .25em;
+  font-size: .75em;
+  line-height: 1em;
+  /* color: var(--pop); */
+  filter: brightness(1.25);
+}
+
+#user-gate .criteria li::before {
+  --size: .5em;
+  content: "";
+  display: block;
+  margin-right: .75em;
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--mid);
+  border-radius: 1.5px;
+}
+
+/* ================= HOVER ================= */
+
+@media (hover:hover){
+  #user-gate button[type="submit"]:hover {
+      background-color: var(--colorH);
+      color: var(--darker);
+    }
+
+  #user-gate .register-user a:hover{
+    color: var(--pop);
+  }
+}

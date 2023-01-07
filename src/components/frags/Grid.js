@@ -1,17 +1,22 @@
-import { useEffect, useState } from "react";
-import useMediaQuery from "../../hooks/useMediaQuery";
+import { useEffect, useRef, useState } from "react";
 import "../../styles/Grid.css";
+import { debounce, getLetter } from "../../utility/helperFuncs";
+import { useDragDrop } from "../contexts/DragDropProvider";
 import Cell from "./Cell";
 
 export default function Grid({
   puzzle,
+  mini,
+  toggleMini,
   controls,
   hoverGroup,
   focusCell,
   operations,
   updatePuzzleGroups,
-  updateAnswerKey,
   preview,
+  axis,
+  toggleAxis,
+  setNewPuzzle,
   ...props
 }) {
   const { cols, rows, editorMode, answerKey, answers } = puzzle;
@@ -27,44 +32,31 @@ export default function Grid({
     activeCols: [],
     activeRows: [],
   });
-  const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
-  const $MOBILE = useMediaQuery();
-  const [mini, toggleMini] = useState($MOBILE);
+  // const [axis, toggleAxis] = useState(true); // TRUE = across, FALSE = down
+  const [dropPreview, setDropPreview] = useState([]);
+  const [fitFrame, setFitFrame] = useState(false);
+  const gridRef = useRef();
 
-  useEffect(() => setGrid(createGrid()), [answerKey, answers.group]);
+  const $DnD = useDragDrop();
+  const { holding, setHolding } = $DnD ? $DnD : {};
 
-  // ------------------------------------------------
-  // <><><><><><><><> TESTING (TODO) <><><><><><><><>
-  // ------------------------------------------------
+  // -----------------------------------------------
+  // @@@@@@@@@@@@@@@@@ CREATE GRID @@@@@@@@@@@@@@@@@
+  // -----------------------------------------------
 
-  // console.log(
-  //   `%c${"<>".repeat(8)}\\ GRID /${"<>".repeat(8)}`,
-  //   "color: coral; text-transform: uppercase"
-  // );
+  useEffect(() => setGrid(createGrid()), [answerKey]);
 
-  // console.log(grid);
+  // =========== GET GROUPS ===========
 
-  // =========== GET LETTER ===========
-  function getLetter(n) {
-    const first = "a".charCodeAt(0);
-    const last = "z".charCodeAt(0);
-    const length = last - first + 1; // letter range
-
-    return String.fromCharCode(first + n).toUpperCase();
-  }
-
-  // =========== FORMAT CELL DATA ===========
-  function formatCellData(id, col, x, y) {
-    // id === "A0" && console.log("%cNOT SUPPOSED TO BE RUNNING!!!", "color: red");
-    // console.log(`%cFORMAT CELL: ${id}`, "color: red");
-    // console.log(answers);
-    const groupNames = [...answers.keys()];
-    const groups = groupNames
+  const getGroups = id =>
+    [...answers.keys()]
       .filter(entry => answers.get(entry).group.includes(id))
       .map(entry => answers.get(entry));
-    let display = [];
 
-    groups.size && console.log({ id }, "GROUPS", groups); // TODO
+  // =========== FORMAT CELL DATA ===========
+  function formatCellData(id) {
+    const groups = getGroups(id);
+    let display = [];
 
     groups.forEach(entry => {
       let { group, dir } = entry;
@@ -86,18 +78,123 @@ export default function Grid({
     });
 
     return {
-      isJunction: groups.length > 1,
+      // isJunction: groups.length > 1,
       answer: answerKey[id] ? answerKey[id] : null,
       groups,
       display: display.length && display,
-      crop: !grid.activeCols.includes(col) || !grid.activeRows.includes(y),
+      member: grid.activeCells.includes(id),
     };
   }
+
+  // =========== GROUP ANSWERS ===========
+  const groupAnswers = (activeCols, activeRows) => {
+    // console.log(`%cTEST!`, "color:coral");
+    // console.log("answers:\n", answerKey);
+    const { cols, rows } = grid;
+
+    const groups = [];
+
+    const search = (track, active) => {
+      let group = [];
+      let dir = track === rows ? "across" : "down";
+
+      // console.log(active, track);
+
+      active.forEach(set => {
+        for (let i = 0; i <= track[set].length; i++) {
+          const cell = track[set][i];
+          // console.log({ cell });
+          if (answerKey[cell]) {
+            group.push(cell);
+          } else {
+            if (group.length > 1) {
+              // console.log(`%cGROUPING ANSWERS!`, "color:lime");
+              const name = `${dir}-${group[0]}`;
+              groups.push([
+                name,
+                {
+                  name,
+                  dir,
+                  group,
+                  sum: group.map(cell => answerKey[cell]).join(""),
+                  hint: answers.has(name) ? answers.get(name).hint : "",
+                },
+              ]);
+            }
+            group = [];
+          }
+        }
+      });
+    };
+
+    search(cols, activeCols);
+    search(rows, activeRows);
+    setNewPuzzle(prev => ({
+      ...prev,
+      answers: new Map(groups),
+    }));
+  };
+
+  // =========== GET DROP TARGETS ===========
+  const getDropTargets = (x, y, across, length) => {
+    let targets = [];
+    let base = across ? x : y;
+    let range = base + length;
+
+    for (across ? x : y; across ? x < range : y < range; across ? x++ : y++) {
+      targets.push(getLetter(x) + y);
+    }
+    // console.log("targets:", targets);
+    setDropPreview(targets);
+  };
+
+  // =========== HANDLE DRAG PREVIEW ===========
+  const handleDragPreview = (e, index) => {
+    // console.log(`%cHANDLE DRAG PREVIEW!`, "color: lime");
+    // console.log("holding:", holding.entry);
+    const { cols, rows } = puzzle;
+    const { entry, axis } = holding;
+    const [x, y] = index;
+    const dir = axis ? x : y;
+    const track = axis ? rows : cols;
+    const range = dir + entry.length;
+
+    range <= track && getDropTargets(x, y, axis, entry.length);
+  };
+
+  // =========== HANDLE DROP ===========
+  const handleDrop = e => {
+    e.preventDefault();
+    const { entry, axis } = holding;
+    const newEntires = Object.fromEntries(
+      dropPreview.map(id => [id, entry.charAt(dropPreview.indexOf(id))])
+    );
+
+    // callback(entry, `${orientation}-${dropPreview[0]}`);
+
+    setHolding({});
+    setDropPreview([]);
+    setNewPuzzle(prev => ({
+      ...prev,
+      answerKey: {
+        ...prev.answerKey,
+        ...newEntires,
+      },
+    }));
+  };
+
+  const wordDrop = {
+    dragEnter: handleDragPreview,
+    dragLeave: () => setDropPreview([]),
+    drop: e => handleDrop(e),
+  };
 
   // =========== CREATE GRID ===========
   function createGrid() {
     console.log("%cCREATE GRID", "color:red");
+    // console.log("answers:\n", answerKey);
     const $answerKey = Object.keys(answerKey);
+    // console.log("answers:\n", $answerKey);
     const totalCells = cols * rows;
 
     let $grid = {
@@ -126,6 +223,8 @@ export default function Grid({
       }
     }
 
+    const { activeCols, activeRows } = $grid;
+    editing && groupAnswers(activeCols, activeRows);
     return $grid;
   }
 
@@ -133,130 +232,33 @@ export default function Grid({
   const renderGrid = () => {
     return grid.cells.map((cell, count) => {
       const { id, col, x, y } = cell;
+      const groups = getGroups(id);
       return (
         <Cell
           key={count}
           cell_name={id}
           index={[x, y]}
-          {...((!editing || phase >= 2) && formatCellData(id, col, x, y))}
+          {...((!editing || preview) && formatCellData(id, col, x, y))}
+          {...(groups.length && { groups })}
+          crop={!grid.activeCols.includes(col) || !grid.activeRows.includes(y)}
+          dropPreview={
+            editing && dropPreview.includes(id) && holding.entry
+              ? holding.entry.charAt(dropPreview.indexOf(id))
+              : null
+          }
+          {...(editing && wordDrop)}
+          isJunction={groups.length > 1}
+          // member={grid.activeCells.includes(id)}
           controls={e => controls(e)}
           editorMode={editorMode}
-          hoverGroup={hoverGroup} // BOTH
           focusCell={focusCell} // PLAY
           axis={axis} // EDITOR
           toggleAxis={toggleAxis} // EDITOR
-          operations={operations}
           preview={preview}
-          updateGrid={e => updateGrid(e, id, col, y)} // EDITOR
-          updateAnswerKey={e => editing && updateAnswerKey(e, id)}
-          captureAnswer={e => e.target.value && captureAnswer(e, id, col, y)}
-          // captureAnswers={captureAnswers}
         />
       );
     });
   };
-
-  // =========== UPDATE GRID ===========
-
-  const updateGrid = (e, id, col, row) => {
-    const { value } = e.target;
-    setGrid(prev => {
-      const { content } = prev;
-      if (value) {
-        return {
-          ...prev,
-          content: content.set(id, value),
-        };
-      } else {
-        content.delete(id);
-        return { ...prev };
-      }
-    });
-  };
-
-  // =========== FIND GROUP ===========
-  // "SET" = ROW or COLUMN
-  const findGroups = (sets, isRow, $keys) => {
-    const dir = isRow ? "across" : "down";
-    let groups = [];
-
-    // loop thru each row/column...
-    // collect entries until it hits a break (empty cell)...
-    // --OR hits the end of the row/column...
-    // THEN save the group.
-
-    sets.forEach(arr => {
-      let set = {
-        group: [],
-        sum: "",
-      };
-
-      for (let i = 0; i <= arr.length; i++) {
-        const cell = arr[i];
-        if ($keys[cell]) {
-          set.group.push(cell);
-          // set.sum += content.get(cell).toUpperCase();
-          set.sum += $keys[cell].toUpperCase();
-        } else {
-          // if the new group has at least 2 entries...
-          if (set.group.length > 1) {
-            // set.name = `${dir}-${set.group[0]}`;
-            groups.push({
-              ...set,
-              name: `${dir}-${set.group[0]}`,
-              dir: dir,
-              hint: "",
-            });
-          }
-          set = {
-            group: [],
-            sum: "",
-          };
-        }
-      }
-    });
-
-    return groups;
-  };
-
-  // =========== CAPTURE ANSWER ===========
-  function captureAnswer(e, id, _col, _row) {
-    // console.log(`%cCAPTURE ANSWERS`, "color: orange");
-    // console.log(`%cTEST---`, "color: red");
-    const { value } = e.target;
-    const { cols, rows, activeCols, activeRows } = grid;
-    const { answerKey } = puzzle;
-    const $answer = { [id]: value.toUpperCase() };
-    const $answerKey = { ...answerKey, ...$answer };
-    const $activeCols = [...activeCols, _col];
-    const $activeRows = [...activeRows, _row];
-
-    const $cols = Object.keys(cols)
-      .filter(col => $activeCols.includes(col))
-      .map(id => cols[id]);
-    const $rows = Object.keys(rows)
-      .filter(row => $activeRows.includes(Number(row)))
-      .map(id => rows[id]);
-
-    // console.log($cols, $rows);
-
-    updatePuzzleGroups($answer, [
-      ...findGroups($rows, true, $answerKey),
-      ...findGroups($cols, false, $answerKey),
-    ]);
-  }
-
-  // useEffect(() => phase >= 1 && captureAnswers(), [grid]);
-  // editing && phase >= 1 && captureAnswers();
-
-  // console.log(grid);
-
-  // preview && console.log(`%cPREVIEW MODE`, "color: cyan");
-  // preview &&
-  //   console.log(
-  //     `%cwidth: ${grid.activeRows.length}\nheight: ${grid.activeCols.length}`,
-  //     "color: cyan"
-  //   );
 
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
@@ -264,15 +266,23 @@ export default function Grid({
   return (
     <div
       id="cw-grid"
-      className={["grid", mini ? "mini" : "", preview ? "preview" : ""].join(
-        " "
-      )}
+      ref={gridRef}
+      className={[
+        "grid",
+        mini ? "mini" : "",
+        preview ? "preview" : "",
+        fitFrame && "fit",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       style={{
         gridTemplate: `repeat(${
           editing && !preview ? rows : grid.activeRows.length
-        }, ${mini ? "1fr" : "48px"}) / repeat(${
-          editing && !preview ? cols : grid.activeCols.length
-        }, ${mini ? "1fr" : "48px"})`,
+        }, ${
+          mini || fitFrame ? "minmax(min-content,48px)" : "48px"
+        }) / repeat(${editing && !preview ? cols : grid.activeCols.length}, ${
+          mini || fitFrame ? "minmax(min-content,48px)" : "48px"
+        })`,
       }}
     >
       {renderGrid()}

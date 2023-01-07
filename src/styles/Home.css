@@ -54,3 +54,13 @@ h1.home-page-logo {
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
+
+/* ================================= *\
+|| MOBILE
+\* ================================= */
+
+@media only screen and (max-width:480px) {
+  #home-page {
+    padding-inline: 1rem;
+  }
+}

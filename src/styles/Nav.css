@@ -1,13 +1,66 @@
 /* --------- NAV --------- */
 nav a {
-  color: var(--lite) !important;
+  /* margin-right: 1.5em; */
+  color: var(--lite);
   font-family: var(--keyFont);
   letter-spacing: 0.1em;
+  white-space: nowrap;
 }
 
-nav a:not(:last-of-type) {
-  margin-right: 1.5em;
+/* nav > a, .submenu-wrap > a:first-child {
+  padding-block: 1em;
+} */
+
+nav > *:not(.mobileNav) {
+  /* padding-inline: .75em; */
+  padding: .75em;
 }
+
+/* nav a:not(:last-of-type) {
+  margin-right: 1.5em;
+} */
+
+nav a.active {
+  cursor: default;
+  color: var(--pop);
+}
+
+nav a.login {
+  cursor: pointer;
+  color: var(--mid);
+}
+
+nav .submenu-wrap {
+  position: relative;
+}
+
+nav .submenu {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  min-width: 100%;
+  background-color: var(--darker);
+  transform: translateY(100%);
+  box-sizing: border-box;
+  /* border: 2px solid red; */
+}
+
+nav .submenu-wrap:not(:hover) .submenu{
+  display: none;
+}
+
+nav .submenu a {
+  cursor: pointer;
+  font-family: var(--bodyFont);
+  font-size: smaller;
+  margin: 0;
+  padding: .5em 1em;
+  /* letter-spacing: 0.05em; */
+  letter-spacing: normal;
+  box-sizing: border-box;
+}
+
+
 
 /* --------- MOBILE NAV --------- */
 
@@ -29,7 +82,7 @@ nav .mobileNav.open {
 nav .mobileNav > * {
   position: absolute;
   width: 100%;
-  height: 3px;
+  height: 2.5px;
   background-color: var(--mid);
   border-radius: 100px;
   /* transition: 0.2s ease-out; */
@@ -40,8 +93,20 @@ nav .mobileNav > * {
 nav .mobileNav .top {
   top: 0;
   transition:
-    top .1s .1s ease-in-out,
-    transform .1s .2s ease-in-out;
+    top .1s ease-in-out .1s,
+    transform .1s ease-in-out .2s;
+}
+
+nav .mobileNav.open .top {
+  transition:
+    top .1s ease-in-out .1s,
+    transform .1s ease-in-out .2s;
+}
+
+nav .mobileNav.closed .top {
+  transition:
+    top .1s ease-in-out .2s,
+    transform .1s ease-in-out .1s;
 }
 
 nav .mobileNav.open .top {
@@ -60,9 +125,18 @@ nav .mobileNav.open .middle {
 
 nav .mobileNav .bottom {
   bottom: 0;
+}
+
+nav .mobileNav.open .bottom {
   transition:
-    bottom .1s .1s ease-in-out,
-    transform .1s .2s ease-in-out;
+    bottom .1s ease-in-out .1s,
+    transform .1s ease-in-out .2s;
+}
+
+nav .mobileNav.closed .bottom {
+  transition:
+    bottom .1s ease-in-out .2s,
+    transform .1s ease-in-out .1s;
 }
 
 nav .mobileNav.open .bottom {
@@ -95,5 +169,32 @@ nav .mobileNav.open .bottom {
 }
 
 .nav-modal .modal a.active {
-  color: var(--pop);
+  color: var(--mid);
+}
+
+.nav-modal .mobile-nav-wrap > * {
+  padding-bottom: 1em;
+  text-align: center;
+}
+
+.nav-modal .modal .submenu a {
+  color: var(--brite)
+}
+
+/* ========================================= *\
+|| >> HOVER <<
+\* ========================================= */
+
+@media (hover:hover){
+  nav a:not(.active):not(.login):not(.submenu a):hover {
+    color: var(--pop);
+  }
+
+  nav .submenu a:hover {
+    background-color: var(--pop);
+  }
+
+  nav .login+.submenu a:hover {
+    background-color: var(--mid);
+  }
 }

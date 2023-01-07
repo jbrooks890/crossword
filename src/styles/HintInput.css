@@ -1,8 +1,11 @@
 #hint-input {
-  display: none;
-  width: 100%;
-  max-width: 560px;
-  opacity: 0;
+  /* display: none; */
+  display: block;
+  /* width: calc(var(--grid)*8);
+  max-width: 560px; */
+  /* width: 100%; */
+  /* margin-left: 1rem; */
+  /* opacity: 0; */
   transition: 0.1s ease-out;
 }
 
@@ -71,7 +74,8 @@ li.hint-input-entry h4::before {
 .hint-input-entry textarea {
   appearance: none;
   padding: 1em;
-  color: var(--pop);
+  background-color: var(--lite);
+  color: var(--mid);
   caret-color: var(--faint);
   font-family: inherit;
   font-size: 0.9rem;
@@ -82,9 +86,9 @@ li.hint-input-entry h4::before {
 }
 
 .hint-input-entry textarea::placeholder {
-  color: var(--mid);
-  ;
+  color: black;
   font-style: italic;
+  opacity: 0.25;
 }
 
 .hint-input-entry textarea::-webkit-resizer {

@@ -85,8 +85,8 @@
 
 #newPuzzleForm input {
   background-color: transparent;
-  color: var(--pop);
-  outline-color: var(--pop);
+  color: var(--mid);
+  outline-color: var(--mid);
 }
 
 #newPuzzleForm label input {
@@ -109,6 +109,7 @@
 
 #newPuzzleForm textarea {
   background-color: transparent;
+  color: var(--mid);
 }
 
 .newPuzzle-gridSize-wrap {
@@ -182,9 +183,9 @@
 }
 
 #newPuzzleForm button.newPuzzle-submit:hover {
-  background-color: var(--pop);
+  background-color: var(--mid);
   color: var(--lite);
-  border-color: var(--pop);
+  border-color: var(--mid);
 }
 
 .newPuzzle-complete {
@@ -210,10 +211,12 @@
   font-size: 0.9rem;
   text-align: center;
   border-radius: 10px;
-  outline-color: var(--pop);
+  outline-color: var(--mid);
+  /* outline-style: solid; */
 }
 
 #newPuzzleForm #tag-input {
+  margin-bottom: 1rem;
   padding: 1em;
   caret-color: var(--faint);
   font-family: var(--keyFont);

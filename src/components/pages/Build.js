@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
+import apiUrl from "../../config";
 import "../../styles/Build.css";
 import BuildNav from "../frags/BuildNav";
 import Frame from "../frags/Frame";
 import Grid from "../frags/Grid";
 import HintInput from "../frags/HintInput";
+import { BuildMasterProvider } from "../contexts/BuildMasterProvider";
 import NewPuzzleForm from "../shared/NewPuzzleForm";
+// import axios from "axios";
+import axios from "../../apis/axios";
+import WordBank from "../frags/WordBank";
+import BuildWindow from "../frags/BuildWindow";
+import DragDropProvider from "../contexts/DragDropProvider";
+import { useAuth } from "../contexts/AuthContextProvider";
 
 export default function Build() {
   const [newPuzzle, setNewPuzzle] = useState({
-    name: "Boogie",
+    name: "",
     type: "Crossword",
     description: "",
     cols: 10,
@@ -16,20 +24,87 @@ export default function Build() {
     version: 1,
     editorMode: { active: true, phase: 0 },
     answerKey: {},
-    answers: [],
+    answers: new Map(),
     tags: [],
   });
-  const sectionTabs = ["Grid", "Hints", "Preview"];
-  const [activeSection, setActiveSection] = useState(0);
+  const [puzzleValidation, setPuzzleValidation] = useState({
+    name: "",
+    description: "",
+    answerKey: "",
+    answers: new Map(),
+    attempted: false,
+  });
   const [formActive, setFormActive] = useState(true);
+  const [orientation, setOrientation] = useState(true); // ACROSS(T) / DOWN(F)
+  const [previewMode, togglePreviewMode] = useState(false);
+  const [wordList, setWordList] = useState([]);
   const { phase } = newPuzzle.editorMode;
+
+  const { auth } = useAuth();
 
   // console.log(grid);
   useEffect(
     () => console.log(newPuzzle),
-    [newPuzzle.answers.group, activeSection, newPuzzle.answerKey]
+    [newPuzzle.answers.group, newPuzzle.answerKey]
   );
   // console.log(newPuzzle);
+
+  useEffect(
+    () => puzzleValidation.attempted && console.log(puzzleValidation),
+    [puzzleValidation]
+  );
+
+  // console.log(wordList);
+
+  // =========== TOGGLE AXIS WITH [ SPACE ] KEY ===========
+
+  useEffect(() => {
+    const toggleAxis = e => {
+      const { code, target } = e;
+      if (code === "Space" && target == document.body) {
+        e.preventDefault();
+        setOrientation(prev => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", toggleAxis);
+    return () => window.removeEventListener("keydown", toggleAxis);
+  }, []);
+
+  // =========== INITIALIZE (PUZZLE) ===========
+
+  const init = () => {
+    setNewPuzzle({
+      name: "",
+      type: "Crossword",
+      description: "",
+      cols: 10,
+      rows: 10,
+      version: 1,
+      editorMode: { active: true, phase: 0 },
+      answerKey: {},
+      answers: new Map(),
+      tags: [],
+    });
+    setPuzzleValidation({
+      name: "",
+      description: "",
+      answerKey: "",
+      answers: new Map(),
+      attempted: false,
+    });
+    setWordList([]);
+  };
+
+  // =========== CLEAR ANSWERS ===========
+  function clearAnswers() {
+    setWordList([...newPuzzle.answers.values()].map(group => group.sum));
+    setNewPuzzle(prev => ({
+      ...prev,
+      answerKey: {},
+      answers: new Map(),
+    }));
+  }
 
   // =========== UPDATE PUZZLE ===========
 
@@ -99,16 +174,16 @@ export default function Build() {
 
   // ============ UPDATE ANSWERS ============
 
-  const updateAnswerKey = (e, id, $answers) => {
-    const { value } = e.target;
-    if (value.length) {
-      console.log(`%cTEST`, "color:red");
-      setNewPuzzle(prev => ({
-        ...prev,
-        answerKey: { ...prev.answerKey, [id]: value.toUpperCase() },
-      }));
-    }
-  };
+  // const updateAnswerKey = (e, id, $answers) => {
+  //   const { value } = e.target;
+  //   if (value.length) {
+  //     console.log(`%cTEST`, "color:red");
+  //     setNewPuzzle(prev => ({
+  //       ...prev,
+  //       answerKey: { ...prev.answerKey, [id]: value.toUpperCase() },
+  //     }));
+  //   }
+  // };
 
   // =========== NEW PUZZLE START ===========
 
@@ -119,18 +194,6 @@ export default function Build() {
       ...prev,
       editorMode: { ...prev.editorMode, phase: 1 },
     }));
-  };
-
-  // =========== NEW PUZZLE SUBMIT ===========
-
-  const newPuzzleSubmit = e => {
-    e.preventDefault();
-    console.log(`%cSUBMIT PUZZLE`, "color: cyan");
-    console.log(e);
-    // setNewPuzzle(prev => ({
-    //   ...prev,
-    //   editorMode: { ...prev.editorMode, phase: 1 },
-    // }));
   };
 
   // =========== ADD TAG ===========
@@ -168,130 +231,178 @@ export default function Build() {
     });
   };
 
-  // -------------------------------------------------
-  // <><><><><><><><> CELL OPERATIONS <><><><><><><><>
-  // -------------------------------------------------
+  // =========== VALIDATE NEW PUZZLE!! ===========
 
-  // =========== CONTROLS ===========
-  // const editControls = e => {
-  //   const {
-  //     type,
-  //     key,
-  //     altKey,
-  //     ctrlKey,
-  //     shiftKey,
-  //     currentTarget: input,
-  //     which,
-  //   } = e;
-  //   const { parentElement: cell } = input;
-  //   const { id } = cell;
-  //   const content = input.value;
-  //   const printable = which >= 65 && which <= 90;
+  function validatePuzzle() {
+    const { name, description, answerKey, answers } = newPuzzle;
+    let errors = {};
 
-  //   switch (type) {
-  //     // ++++++ KEY UP ++++++
-  //     case "keyup":
-  //       printable && toNext();
-  //       break;
-  //     // ++++++ KEY DOWN ++++++
-  //     case "keydown":
-  //       // console.log(key);
-  //       switch (key) {
-  //         case " ":
-  //           e.preventDefault();
-  //           toggleAxis(prev => !prev);
-  //           break;
-  //         case "Backspace":
-  //           if (content.length < 1) {
-  //           }
-  //           break;
-  //         case "ArrowLeft":
-  //           e.preventDefault();
-  //           navTo(index, [-1, 0]);
-  //           break;
-  //         case "ArrowRight":
-  //           e.preventDefault();
-  //           navTo(index, [1, 0]);
-  //           break;
-  //         case "ArrowUp":
-  //           e.preventDefault();
-  //           navTo(index, [0, -1]);
-  //           break;
-  //         case "ArrowDown":
-  //           e.preventDefault();
-  //           navTo(index, [0, 1]);
-  //           break;
-  //       }
-  //       break;
-  //   }
-  // };
+    // NAME
+    if (!name || name.length < 5)
+      errors.name = "Name must be at least 5 characters";
 
-  // =========== TO NEXT ===========
-  // const toNext = () => {
-  //   const [x, y] = index;
-  //   const next = axis ? getLetter(x + 1) + y : getLetter(x) + (y + 1);
-  //   document.querySelector(`.${next}.cell-input`).focus();
-  // };
+    // DESCRIPTION
+    if (!description || description.length < 10)
+      errors.description = "Description must be at least 10 characters";
 
-  // =========== TO CELL ===========
-  // const navTo = (index, diff) => {
-  //   //DIFF = [x,y]
-  //   const [x, y] = index;
-  //   const [a, b] = diff;
-  //   const destination = getLetter(x + a) + (y + b);
-  //   document.querySelector(`.${destination}.cell-input`).focus();
-  // };
+    // ANSWER KEY
+    if (Object.keys(answerKey).length === 0)
+      errors.answerKey = "Puzzle has no content.";
 
-  // console.log(`%c${activeSection}`, "color: lime");
+    // ANSWERS
+    let answerErrors = [];
+    answers.forEach((content, groupName) => {
+      const { name, dir, group, sum, hint } = content;
+      let groupErrors = {};
+
+      Object.keys(content).forEach(type => {
+        switch (type) {
+          case "name":
+            if (!name) groupErrors["name"] = `${groupName} has no group name.`;
+            break;
+          case "dir":
+            if (!dir) {
+              groupErrors["dir"] = `${groupName} has no directional axis.`;
+            } else if (!(dir === "across" || dir === "down")) {
+              groupErrors[
+                "dir"
+              ] = `${groupName} has invalid directional axis: ${dir}`;
+            }
+            break;
+          case "group":
+            if (!group.length) {
+              groupErrors["group"] = `${groupName} has no content.`;
+            }
+            break;
+          case "sum":
+            if (!sum) groupErrors.sum = `${groupName} has no answer sum.`;
+            break;
+          case "hint":
+            // console.log("HINT");
+            if (!hint) {
+              groupErrors["hint"] = `hint required.`;
+            } else if (hint.length < 10) {
+              groupErrors["hint"] = `hint must be at least 10 characters.`;
+            }
+            break;
+        }
+      });
+
+      if (Object.keys(groupErrors).length > 0) {
+        answerErrors.push([groupName, groupErrors]);
+      }
+    });
+
+    if (answerErrors.length) {
+      console.log(answerErrors);
+      errors.answers = new Map(answerErrors);
+    }
+
+    setPuzzleValidation({ ...errors, attempted: true });
+
+    return !Object.keys(errors).length;
+  }
+
+  // =========== NEW PUZZLE SUBMIT ===========
+
+  const newPuzzleSubmit = async e => {
+    e.preventDefault();
+    const { username } = auth;
+
+    if (!username) {
+      console.log("Must be signed in to create a new puzzle.");
+    }
+    if (validatePuzzle()) {
+      try {
+        const puzzle = await axios.post("/puzzles", {
+          ...newPuzzle,
+          username,
+          answers: [...newPuzzle.answers.values()],
+        });
+        console.log(`New puzzle '%c${puzzle?.name}%c' created!`, "color:aqua");
+        init();
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      console.warning("Puzzle has errors!");
+    }
+
+    // console.log(newPuzzle);
+  };
+
   // --------------------------------
   // :::::::::::: RENDER ::::::::::::
 
   return (
     <div id="build-page">
-      <Frame
-        puzzle={newPuzzle}
-        submit={newPuzzleSubmit}
-        setFormActive={setFormActive}
+      <BuildMasterProvider
+        state={[newPuzzle, setNewPuzzle, orientation, setOrientation]}
       >
-        {(phase === 0 || formActive) && (
-          <NewPuzzleForm
-            puzzle={newPuzzle}
-            phase={phase}
-            updatePuzzle={e => updatePuzzle(e)}
-            start={e => newPuzzleStart(e)}
-            addTag={e => addTag(e)}
-            editTag={editTag}
-            deleteTag={deleteTag}
-            active={formActive}
-            setFormActive={setFormActive}
-          />
-        )}
-        {phase > 0 && (
-          <>
-            <BuildNav
-              sections={sectionTabs}
-              active={activeSection}
-              changeSection={setActiveSection}
+        <Frame
+          puzzle={newPuzzle}
+          submit={newPuzzleSubmit}
+          setFormActive={setFormActive}
+        >
+          {(phase === 0 || formActive) && (
+            <NewPuzzleForm
+              puzzle={newPuzzle}
+              phase={phase}
+              updatePuzzle={e => updatePuzzle(e)}
+              start={e => newPuzzleStart(e)}
+              addTag={e => addTag(e)}
+              editTag={editTag}
+              deleteTag={deleteTag}
+              active={formActive}
+              setFormActive={setFormActive}
+              validation={puzzleValidation}
+              validate={validatePuzzle}
             />
-            <div id="cw-grid-wrap">
-              <Grid
+          )}
+          {phase > 0 && (
+            <>
+              <BuildNav
                 puzzle={newPuzzle}
-                active={activeSection === 0 || activeSection === 2}
-                preview={activeSection === 2}
-                updatePuzzleGroups={updatePuzzleGroups}
-                updateAnswerKey={updateAnswerKey}
+                axis={orientation}
+                toggleAxis={() => setOrientation(prev => !prev)}
+                previewing={previewMode}
+                togglePreviewing={() => togglePreviewMode(prev => !prev)}
+                clearAnswers={clearAnswers}
               />
-              {phase === 2 && (
-                <HintInput
-                  active={activeSection === 1}
-                  groups={newPuzzle.answers}
-                  update={updateHint}
-                />
-              )}
-            </div>
-          </>
-        )}
-      </Frame>
+              <div id="cw-grid-wrap" className="flex">
+                <div id="puzzle-window" className="flex">
+                  <DragDropProvider>
+                    <Grid
+                      puzzle={newPuzzle}
+                      preview={previewMode}
+                      updatePuzzleGroups={updatePuzzleGroups}
+                      setNewPuzzle={setNewPuzzle}
+                      axis={orientation}
+                      toggleAxis={() => setOrientation(prev => !prev)}
+                    />
+                    <BuildWindow>
+                      <WordBank
+                        section="Words"
+                        puzzle={newPuzzle}
+                        wordList={wordList}
+                        axis={orientation}
+                        toggleAxis={() => setOrientation(prev => !prev)}
+                      />
+                      <HintInput
+                        groups={newPuzzle.answers}
+                        update={updateHint}
+                        validation={puzzleValidation}
+                        validate={validatePuzzle}
+                        section="Hints"
+                      />
+                    </BuildWindow>
+                  </DragDropProvider>
+                </div>
+              </div>
+            </>
+          )}
+        </Frame>
+      </BuildMasterProvider>
     </div>
   );
 }

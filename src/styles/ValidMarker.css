@@ -1,0 +1,21 @@
+.valid-marker {
+  --size: .9em;
+  display: inline-block;
+  margin-left: .5em;
+  width: 1em;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.valid-marker svg {
+  width: 100%;
+  height: 100%;
+}
+
+.valid-marker.valid svg {
+  fill: var(--pop-alt);
+}
+
+.valid-marker.invalid svg {
+  fill: red;
+}

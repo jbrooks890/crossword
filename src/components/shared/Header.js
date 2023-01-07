@@ -1,4 +1,3 @@
-// import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo.svg";
 import { ReactComponent as XWORD_LOGO } from "../../assets/icons/xword-logo-2.svg";
 import "../../styles/Header.css";
 import Nav from "./Nav";

@@ -3,26 +3,66 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 5rem;
+  /* border: 1px solid red; */
+  box-sizing: border-box;
 }
 
 #cw-grid-wrap {
   position: relative;
-  display: flex;
-  flex-direction: column;
   box-sizing: border-box;
+  flex-grow: 1;
+  /* overflow: hidden; */ 
+  /* ^^ 'STICKY' ^^ DOESN'T WORK IF OVERFLOW IS SPECIFIED W/O HEIGHT */
+}
+
+#cw-grid-wrap.mini {
+  overflow: hidden;
+}
+
+#cw-grid-wrap.mini.viewing-hints > :not(#hint-cache-wrap) {
+  opacity: 0;
+  z-index: -1;
+}
+
+#puzzle-window {
+  --size: 80vh;
+  position: relative;
+  /* width: var(--size); */
+  /* height: var(--size); */
+  box-sizing: border-box;
+  transition: 0.2s ease-in-out;
+  overflow: hidden;
+  /* border: 1px solid red; */
+}
+
+#puzzle-window.flex {
+  align-items: flex-start;
 }
 
 #cw-grid {
+  /* --size: inherit;
+  width: var(--size);
+  height: var(--size); */
+  /* justify-self: center;
+  align-self: center; */
+  align-self: stretch;
+  flex-grow: 0;
+  flex-shrink: 0;
   margin: 0 auto;
   padding: 1rem;
+  background-color: transparent;
   border: 2px solid var(--faint);
   border-radius: 10px;
+  box-sizing: border-box;
+  overflow: scroll;
+  transition: .2s ease-in-out;
 }
 
 #cw-grid.grid {
   display: grid;
   grid-gap: 4px;
-  justify-content: center;
+  place-content: center;
 }
 
 h1.puzzle-title {
@@ -34,6 +74,11 @@ h1.puzzle-title {
   line-height: 1em;
   outline: 2px solid transparent;
   border-radius: 5px;
+}
+
+#play-page h1.puzzle-title {
+  margin-block: 0 0.5em;
+  padding: 0;
 }
 
 h1.puzzle-title.editable {
@@ -67,6 +112,8 @@ h1.puzzle-title.editable:hover::after {
 .cell {
   position: relative;
   visibility: hidden;
+  /* max-width: 48px;
+  max-height: 48px; */
 }
 
 /* .cell.junction:hover {
@@ -87,7 +134,7 @@ h1.puzzle-title.editable:hover::after {
 }
 
 .cell.show,
-.cell.build {
+.cell.build:not(.preview .cell) {
   display: block;
   visibility: visible;
 }
@@ -119,14 +166,22 @@ h1.puzzle-title.editable:hover::after {
   border-right: var(--border);
 }
 
+.cell.drop-preview .cell-input {
+  border-color: var(--pop);
+}
+
+.cell.drop-preview .cell-input::placeholder{
+  color: var(--pop);
+}
+
 .cell-input {
   cursor: pointer;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--grid);
-  height: var(--grid);
+  width: 100%;
+  height: 100%;
   background-color: transparent;
   caret-color: transparent;
   color: var(--mid);
@@ -137,9 +192,10 @@ h1.puzzle-title.editable:hover::after {
   line-height: 1em;
   outline-color: var(--pop);
   outline: none;
-  border-width: 2.5px;
   box-sizing: border-box;
-  border-radius: 5px;
+  border-width: 2.5px;
+  /* border: none; */
+  border-radius: 10%;
   z-index: 1;
 }
 
@@ -165,6 +221,12 @@ h1.puzzle-title.editable:hover::after {
 
 .cell.assisted .cell-input {color: var(--pop-alt)}
 
+.cell.build.member:not(.preview .cell) .cell-input {
+  background-color: var(--mid);
+  color: var(--lite);
+  border-color: transparent;
+}
+
 .axis-box {
   content: '';
   position: absolute;
@@ -185,14 +247,27 @@ h1.puzzle-title.editable:hover::after {
   position: absolute;
   display: flex;
   align-items: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   box-sizing: border-box;
   transition: 0.1s ease-out;
   opacity: 0;
   z-index: -1;
+}
+
+.axis-select > svg {
+  cursor: pointer;
+}
+
+.axis-select .eye {
+  visibility: hidden;
+} 
+
+.axis-select .arrows {
+  fill: var(--faint);
+}
+
+.axis-select .arrows > g:hover {
+  fill: var(--pop);
 }
 
 .cell.junction:hover .axis-select{
@@ -289,14 +364,46 @@ form#crossword .across.last .across-box {
 }
 
 /* ================================= *\
+|| HOVER
+\* ================================= */
+
+@media (hover:hover){
+  .cell.build:hover .cell-input {
+    border-color: var(--mid);
+  }
+}
+
+/* ================================= *\
 || MOBILE
 \* ================================= */
 
 @media only screen and (max-width:480px){
+
+  #crossword {
+    overflow: hidden;
+    padding-inline: 1rem;
+    box-sizing: border-box;
+    align-items: stretch;
+  }
+
   #cw-grid-wrap {
-    width: 100vw;
+    width: auto;
     box-sizing: border-box;
     /* overflow: hidden; */
+  }
+
+  #puzzle-window::before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+  }
+
+  #puzzle-window #cw-grid.mini {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
   }
 }
 
@@ -305,7 +412,7 @@ form#crossword .across.last .across-box {
 \* <><><><><><><><><><><><> */
 
 :root{
-  --miniGrid-cells: 5px;
+  --miniGrid-cells: 25%;
 }
 
 #cw-grid.mini {
@@ -317,7 +424,19 @@ form#crossword .across.last .across-box {
 }
 
 #cw-grid.mini .cell {
+  background-color: var(--dark);
+  border: 5px solid transparent;
+}
+
+#cw-grid.mini .cell.user-entry {
   background-color: var(--mid);
+}
+#cw-grid.mini .cell.assisted {
+  background-color: var(--pop-alt);
+}
+
+#cw-grid.mini .cell.active{
+  background-color: var(--pop);
 }
 
 #cw-grid.mini .axis-box,

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import Frame from "../frags/Frame";
 import HintBox from "../frags/HintBox";
@@ -9,29 +9,98 @@ import HintCache from "../frags/HintCache";
 import apiUrl from "../../config";
 import CommentSection from "../frags/CommentSection";
 import AnswerInput from "../frags/AnswerInput";
-import { ActiveGroupProvider } from "../shared/ActiveGroupProvider";
+import { PlayMasterProvider } from "../contexts/PlayMasterProvider";
+import useMediaQuery from "../../hooks/useMediaQuery";
+import { useAuth } from "../contexts/AuthContextProvider";
 
-export default function Play({ games }) {
+export default function Play() {
+  const location = useLocation();
+  const { state: puzzle } = location;
   const { id } = useParams();
-  const puzzle = games ? games.find(game => game._id === id) : null;
   const [activePuzzle, setActivePuzzle] = useState(
-    puzzle ? format(puzzle) : {}
+    puzzle ? initialize(puzzle) : {}
   );
-  const [commentsLoaded, setCommentsLoaded] = useState(false);
-  const [game, setGame] = useState({
-    user: "",
-    input: { ...activePuzzle.answerKey },
-    assists: [],
-    startTime: 0, // Date obj
-    timer: 0,
-    completed: false,
-  });
+  const { LOADED, answerKey, answers, comments } = activePuzzle;
+  const [game, setGame] = useState();
   const [activeGroup, setActiveGroup] = useState(
     puzzle ? puzzle.answers[0].name : ""
   );
-  const { answerKey, answers, comments } = activePuzzle;
+  const [preview, setPreview] = useState([]);
+  const [hintCacheOpen, setHintCacheOpen] = useState(false);
+
+  const $MOBILE = useMediaQuery();
+  const [gridMini, toggleGridMini] = useState($MOBILE);
+
+  const { auth, gameplay, setGameplay } = useAuth();
+
+  const wrapper = useRef();
+
+  // const $CAN_HOVER = useMediaQuery("hover");
   const PUZZLE_LINK = `${apiUrl}/puzzles/${id}`;
   const COMMENTS_LINK = `${apiUrl}/puzzle/comments/${id}`;
+
+  // useEffect(() => activePuzzle && console.log(activePuzzle), []);
+  // useEffect(() => game && console.log(game), [game]);
+
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><><>
+  // ::::::::::::::::::::\ LOAD GAME /::::::::::::::::::::
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+  useEffect(() => {
+    const session = JSON.parse(sessionStorage.getItem(id));
+    // console.log(session);
+
+    if (LOADED && !game) {
+      setGame(
+        auth?.username && gameplay.has(id)
+          ? gameplay.get(id)
+          : session
+          ? { ...session, input: new Map(Object.entries(session.input)) }
+          : {
+              user: auth?.username ?? "",
+              input: activePuzzle
+                ? clearUserInput(activePuzzle?.answerKey)
+                : null,
+              assists: [],
+              history: [],
+              errors: [],
+              startTime: 0, // Date obj
+              READY: true,
+              FINISHED: false,
+              COMPLETED: false,
+            }
+      );
+    }
+  }, [activePuzzle]);
+
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><>
+  // %%%%%%%%%%%%%%%%%%%%/ UNMOUNT \%%%%%%%%%%%%%%%%%%%%%
+  // <><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+  // TUTORIAL:
+  // https://blog.joshsoftware.com/2021/08/09/react-tricks-customizing-your-useeffect-to-run-only-when-you-want/
+
+  const unmounting = useRef(false);
+
+  useEffect(() => {
+    return () => (unmounting.current = true);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (unmounting.current && game) {
+        auth?.username
+          ? setGameplay(prev => new Map([...prev]).set(id, game))
+          : sessionStorage.setItem(
+              id,
+              JSON.stringify({
+                ...game,
+                input: Object.fromEntries([...game.input]),
+              })
+            );
+      }
+    };
+  }, [game]);
 
   // =========== FETCH DATA ===========
 
@@ -40,7 +109,7 @@ export default function Play({ games }) {
     try {
       const response = await axios.get(PUZZLE_LINK);
       const { puzzle } = response.data;
-      setActivePuzzle(format(puzzle));
+      setActivePuzzle(initialize(puzzle));
       setActiveGroup(puzzle.answers[0].name);
     } catch (e) {
       console.log(e);
@@ -62,24 +131,39 @@ export default function Play({ games }) {
     }
   };
 
-  const generate = () => {
+  // =========== GENERATE ===========
+
+  const getComments = () => {
     // setActiveGroup(puzzle.answers[0].name);
     comments.length && fetchComments();
   };
 
-  useEffect(() => (puzzle ? generate() : fetchData()), []);
+  useEffect(() => (puzzle ? getComments() : fetchData()), []);
 
-  function format(puzzle) {
+  // =========== INITIALIZE ===========
+
+  function initialize(puzzle) {
     return {
       ...puzzle,
       answers: new Map(puzzle.answers.map(entry => [entry.name, { ...entry }])),
+      LOADED: true,
     };
   }
 
-  /* console.log(
-    `%c${"=".repeat(15)}/ ${activeGroup} \\${"=".repeat(15)}`,
-    "color: lime; text-transform: uppercase"
-  ); */
+  // =========== CLEAR USER INPUT ===========
+
+  function clearUserInput(answerKey) {
+    return new Map(Object.keys(answerKey).map(id => [id, ""]));
+  }
+
+  // =========== RESET USER INPUT ===========
+
+  function resetUserInput(answerKey) {
+    setGame(prev => ({
+      ...prev,
+      input: clearUserInput(answerKey),
+    }));
+  }
 
   // =========== GET CELL DATA ===========
   const cellData = id => {
@@ -101,26 +185,7 @@ export default function Play({ games }) {
 
   // =========== SET GROUP ===========
   const setGroup = name => {
-    // console.log(
-    //   `%cSET GROUP: ${activeGroup}`,
-    //   "color: plum; text-transform: uppercase"
-    // );
-    // console.log(name);
-
     if (name !== activeGroup) {
-      // console.log(`%cChange groups: ${activeGroup} --> ${name}`, "color: cyan");
-      // console.log({ name });
-
-      if (answers.has(name)) {
-        document
-          .querySelectorAll(".active")
-          .forEach(cell => cell.classList.remove("active"));
-      }
-      document
-        .querySelectorAll(`.axis-box.${name}`)
-        .forEach(cell => cell.classList.add("active"));
-      document.querySelector(`#hint-${name}`).classList.add("active");
-
       setActiveGroup(name);
     }
   };
@@ -211,6 +276,14 @@ export default function Play({ games }) {
             e.preventDefault();
             focusNearest(id, index, [0, 1]);
             break;
+          case "0":
+            e.preventDefault();
+            focusFirst(undefined, true);
+            break;
+          case ".":
+            e.preventDefault();
+            focusLast(undefined, true);
+            break;
         }
         break;
     }
@@ -242,9 +315,9 @@ export default function Play({ games }) {
 
   // =========== FIND REMAINING ===========
   const findRemaining = () => {
-    return [...document.querySelectorAll(".cell-input.show")].filter(
-      cell => cell.value.length === 0
-    );
+    const remainder = [...game.input.values()].filter(userInput => !userInput);
+    setGame(prev => ({ ...prev, FINISHED: !remainder.length }));
+    return remainder;
   };
 
   // =========== FOCUS NEXT GROUP ===========
@@ -276,13 +349,13 @@ export default function Play({ games }) {
   };
 
   // =========== FOCUS LAST ===========
-  const focusLast = (name, strict = false) => {
+  const focusLast = (name = activeGroup, strict = false) => {
     const { group } = answers.get(name);
     const targets = group.filter(id => cellData(id).input.value.length === 0);
 
     targets.length
       ? focusCell(
-          strict ? group[group.length - 1] : targets[targets.lengt - 1],
+          strict ? group[group.length - 1] : targets[targets.length - 1],
           name
         )
       : focusNextGroup(name);
@@ -355,32 +428,60 @@ export default function Play({ games }) {
     return list;
   };
 
-  // =========== ON HOVER ===========
-  const hoverGroup = (name, direction) => {
-    answers.get(name).group.forEach(id => {
-      const axis = direction === "across" ? ".across-box" : ".down-box";
-      const cell = document.querySelector(`#${id} ${axis}`);
-      cell.classList.toggle("preview");
-    });
-    document.getElementById("hint-" + name).classList.toggle("preview");
-  };
-
   // =========== GIVE HINT ===========
   const giveHint = () => {
-    const remaining = Object.keys(answerKey).filter(
-      id => cellData(id).input.value.length === 0
+    const remaining = [...game.input.keys()].filter(
+      id => game.input.get(id).length === 0
     );
-    const cell = remaining[Math.floor(Math.random() * remaining.length)];
-    const { element, input } = cellData(cell);
-    element.classList.add("assisted");
-    input.value = answerKey[cell];
+    const id = remaining[Math.floor(Math.random() * remaining.length)];
+
+    game.assists.length < 3 &&
+      setGame(prev => ({
+        ...prev,
+        input: new Map([...prev.input, [id, answerKey[id]]]),
+        assists: [...prev.assists, id],
+      }));
+  };
+
+  // =========== UPDATE USER INPUT ===========
+  const updateUserInput = (id, value) =>
+    setGame(prev => ({
+      ...prev,
+      input: new Map([...prev.input, [id, value]]),
+    }));
+
+  // =========== CLEAR PUZZLE ===========
+  const clearPuzzle = () =>
+    setGame(prev => ({
+      ...prev,
+      input: new Map(
+        [...prev.input].map(([id, value]) => [
+          id,
+          game.assists.includes(id) ? value : "",
+        ])
+      ),
+    }));
+
+  // =========== CHECK WORK ===========
+  const checkWork = () => {
+    // CHECK USER ENTRIES MATCHES EXACTLY THE ANSWER KEY
+    const { input } = game;
+    input.forEach((userInput, cell) => {
+      if (userInput !== answerKey[cell]) return false;
+    });
+    return true;
+  };
+
+  // <><><><><><><><><><><> WIN PUZZLE <><><><><><><><><><><>
+  const evalGame = () => {
+    if (checkWork()) {
+    }
   };
 
   const cellOperations = {
     controls: e => buttonControls(e),
-    hoverGroup: hoverGroup,
-    focusCell: focusCell,
-    getLetter: getLetter,
+    focusCell,
+    getLetter,
   };
 
   // --------------------------------
@@ -388,34 +489,94 @@ export default function Play({ games }) {
 
   return (
     <div id="play-page">
-      {activeGroup && (
+      {LOADED && activeGroup && (
         <>
-          <Frame
-            puzzle={activePuzzle}
-            submit={e => console.log("Puzzle completed!")}
+          <PlayMasterProvider
+            state={[
+              activeGroup,
+              setActiveGroup,
+              preview,
+              setPreview,
+              game,
+              setGame,
+            ]}
           >
-            <ActiveGroupProvider>
-              <div id="cw-grid-wrap">
-                <HintBox hint={answers.get(activeGroup).hint} />
-                <Grid
-                  puzzle={activePuzzle}
-                  // setGroup={setGroup}
-                  controls={e => buttonControls(e)}
-                  hoverGroup={hoverGroup}
-                  focusCell={focusCell}
-                  getLetter={getLetter}
-                  operations={cellOperations}
-                />
-                <AnswerInput entry={answers.get(activeGroup)} />
+            <Frame
+              puzzle={activePuzzle}
+              submit={e => console.log("Puzzle completed!")}
+            >
+              <div
+                ref={wrapper}
+                id="cw-grid-wrap"
+                className={`flex col ${gridMini ? "mini" : ""} ${
+                  hintCacheOpen ? "viewing-hints" : ""
+                }`}
+              >
+                {!$MOBILE && (
+                  <HintBox
+                    hint={answers.get(activeGroup).hint}
+                    toggleCache={() => setHintCacheOpen(prev => !prev)}
+                  />
+                )}
+                <div id="puzzle-window" className="flex">
+                  <Grid
+                    puzzle={activePuzzle}
+                    mini={gridMini}
+                    toggleMini={toggleGridMini}
+                    controls={e => buttonControls(e)}
+                    focusCell={focusCell}
+                    getLetter={getLetter}
+                    operations={cellOperations}
+                  />
+                  {!gridMini && (
+                    <HintCache
+                      hints={getHints()}
+                      focusFirst={focusFirst}
+                      open={hintCacheOpen}
+                      close={() => setHintCacheOpen(false)}
+                      gridMini={gridMini}
+                    />
+                  )}
+                </div>
+                {gridMini && game && (
+                  <AnswerInput
+                    entry={answers.get(activeGroup)}
+                    userInput={
+                      new Map(
+                        [...game.input].filter(([id]) =>
+                          answers.get(activeGroup).group.includes(id)
+                        )
+                      )
+                    }
+                    updateInput={updateUserInput}
+                    focusNextGroup={focusNextGroup}
+                    hintCacheOpen={hintCacheOpen}
+                    toggleHintCache={() => setHintCacheOpen(prev => !prev)}
+                  />
+                )}
+                {gridMini && (
+                  <HintCache
+                    hints={getHints()}
+                    focusFirst={focusFirst}
+                    open={hintCacheOpen}
+                    close={() => setHintCacheOpen(false)}
+                    gridMini={gridMini}
+                    groupCells={
+                      new Map(
+                        [...answers].map(([group, entry]) => [
+                          group,
+                          entry.group,
+                        ])
+                      )
+                    }
+                  />
+                )}
               </div>
-              <ButtonCache giveHint={giveHint} />
-              <HintCache
-                hints={getHints()}
-                focusFirst={focusFirst}
-                onHover={hoverGroup}
-              />
-            </ActiveGroupProvider>
-          </Frame>
+              {LOADED && (
+                <ButtonCache giveHint={giveHint} clear={clearPuzzle} />
+              )}
+            </Frame>
+          </PlayMasterProvider>
           {typeof comments[0] === "object" && (
             <CommentSection comments={comments} owner={id} />
           )}

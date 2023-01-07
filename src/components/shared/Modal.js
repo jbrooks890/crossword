@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "../../styles/Modal.css";
-import useMediaQuery from "../../hooks/useMediaQuery";
 
 // TUTORIAL: https://upmostly.com/tutorials/modal-components-react-custom-hooks
 
-export default function Modal({ isShowing, hide, classList, children }) {
+export default function Modal({
+  isShowing,
+  auto = false,
+  classList,
+  children,
+}) {
   const [active, setActive] = useState(false);
   const wrapper = useRef();
 
@@ -13,8 +17,8 @@ export default function Modal({ isShowing, hide, classList, children }) {
   useEffect(() => isShowing && setActive(true), []);
 
   const closeModal = e => {
+    document.body.classList.toggle("modal-lock");
     setActive(false);
-    hide(true);
   };
 
   return isShowing
@@ -30,18 +34,18 @@ export default function Modal({ isShowing, hide, classList, children }) {
             aria-hidden
             tabIndex={-1}
             role="dialog"
-            // style={active ? { maxWidth: window.innerWidth + "px" } : null}
-            // onClick={closeModal}
           >
             <div className="modal flex col">
-              <div
-                className="modal-close flex"
-                data-dismiss="modal"
-                aria-label="close"
-                onClick={closeModal}
-              >
-                &times;
-              </div>
+              {!auto && (
+                <div
+                  className="modal-close flex"
+                  data-dismiss="modal"
+                  aria-label="close"
+                  onClick={() => !auto && closeModal()}
+                >
+                  &times;
+                </div>
+              )}
               {children}
             </div>
           </div>

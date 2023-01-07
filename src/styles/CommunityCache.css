@@ -1,0 +1,49 @@
+.community-cache {
+  margin-bottom: 2rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--dark);
+  border-radius: 100px;
+}
+
+.community-cache button {
+  --size: 2rem;
+  align-items: center;
+  width: var(--size);
+  height: var(--size);
+  border: none;
+  transition: 0.1s ease-out;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.community-cache button:not(:last-child){
+  margin-right: 1rem;
+}
+
+.community-cache button svg {
+  width: 50%;
+  height: 50%;
+  fill: var(--mid);
+  filter: brightness(1.25);
+  /* border: 1px solid red; */
+  /* box-sizing: border-box; */
+  transition: 0.1s ease-out;
+  overflow: auto;
+}
+
+.community-cache .like-button.empty svg {
+  fill: var(--mid);
+  /* stroke: var(--mid);
+  stroke-width: 1;
+  stroke-miterlimit: 20;
+  stroke-linecap: round;
+  stroke-linejoin: round; */
+}
+
+@media (hover:hover){
+  .community-cache button:hover svg {
+    fill: var(--pop);
+    transform: scale(1.1);
+    /* filter: none; */
+  }
+}

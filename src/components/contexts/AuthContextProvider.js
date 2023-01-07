@@ -11,6 +11,8 @@ export default function AuthContextProvider({ children }) {
   );
   const [gameplay, setGameplay] = useState(new Map([]));
 
+  useEffect(() => console.log({ auth }), [auth]);
+
   // --------- SET USER (decrypts access token) ---------
 
   const setUser = token => setAuth({ ...jwt_decode(token).credentials, token });

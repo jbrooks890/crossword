@@ -8,6 +8,8 @@ export default function PersistLogin() {
   const { auth, persist } = useAuth();
   const refresh = useRefreshToken();
 
+  useEffect(() => console.log({ persist }), []);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -15,7 +17,7 @@ export default function PersistLogin() {
       try {
         await refresh();
       } catch (err) {
-        console.log(err);
+        console.error(err);
       } finally {
         isMounted && setIsLoading(false);
       }

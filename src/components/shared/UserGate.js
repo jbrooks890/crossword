@@ -123,6 +123,7 @@ export default function UserGate({ isLogin, inline }) {
         password,
       });
       const { accessToken } = response.data;
+      console.log({ accessToken });
 
       loginErr && setLoginErr("");
 
